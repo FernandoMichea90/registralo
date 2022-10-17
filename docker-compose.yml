@@ -1,11 +1,15 @@
-version: '3'
+version: "3"
+
 services:
-  react:
-    build: .
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    restart: always
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/.next
     ports:
-      - "3000:3031"
-  
-    # environment:
-      #REACT_APP_BASE_API_URL: https://develop.dte.e2l.dev/
-      # REACT_APP_BASE_API_URL: http://localhost/
-   
+      - 3000:3000

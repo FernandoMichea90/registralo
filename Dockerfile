@@ -1,33 +1,17 @@
-#Creates a layer from node:alpine image.
+# Dockerfile
+
 FROM node:alpine
 
-#Creates directories
-# RUN mkdir -p /usr/src/app
+RUN mkdir -p /app
+
 WORKDIR /app
 
-#Sets an environment variable
-# ENV PORT 3000
+COPY package*.json /app
 
-#Sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD commands
-# WORKDIR /usr/src/app
-
-#Copy new files or directories into the filesystem of the container
-COPY package.json yarn.lock ./
-
-#Execute commands in a new layer on top of the current image and commit the results
 RUN yarn install
 
-##Copy new files or directories into the filesystem of the container
-# COPY . /usr/src/app
-COPY next.config.js ./next.config.js ./
-COPY public ./public
-COPY src ./src 
+COPY . /app
 
-#Execute commands in a new layer on top of the current image and commit the results
-# RUN yarn run build
+EXPOSE 3000
 
-#Informs container runtime that the container listens on the specified network ports at runtime
-EXPOSE 3031
-
-#Allows you to configure a container that will run as an executable
 CMD ["yarn", "dev"]
