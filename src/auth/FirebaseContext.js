@@ -52,7 +52,7 @@ const firebaseApp = initializeApp(FIREBASE_API);
 
 const AUTH = getAuth(firebaseApp);
 
-const DB = getFirestore(firebaseApp);
+ const DB = getFirestore(firebaseApp);
 
 const GOOGLE_PROVIDER = new GoogleAuthProvider();
 
@@ -142,9 +142,12 @@ export function AuthProvider({ children }) {
         loginWithTwitter,
         register,
         logout,
+        DB
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
+export {DB}

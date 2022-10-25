@@ -30,7 +30,7 @@ UserCard.propTypes = {
 };
 
 export default function UserCard({ user }) {
-  const { name, cover, role, follower, totalPosts, avatarUrl, following } = user;
+  const { title, cover, role, follower, totalPosts, avatarUrl, following } = user;
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -51,7 +51,7 @@ export default function UserCard({ user }) {
         />
 
         <Avatar
-          alt={name}
+          alt={title}
           src={avatarUrl}
           sx={{
             width: 64,
@@ -71,7 +71,7 @@ export default function UserCard({ user }) {
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6, mb: 0.5 }}>
-        {name}
+        {title}
       </Typography>
 
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -81,7 +81,7 @@ export default function UserCard({ user }) {
       <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mt: 1, mb: 3 }}>
         {_socials.map((social) => (
           <IconButton
-            key={social.name}
+            key={social.title}
             sx={{
               color: social.color,
               '&:hover': {

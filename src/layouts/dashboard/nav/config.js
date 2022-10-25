@@ -90,7 +90,7 @@ const navConfig = [
         children: [
           { title: 'crear', path: PATH_DASHBOARD.registros.crear },
           { title: 'product', path: PATH_DASHBOARD.eCommerce.demoView },
-          { title: 'list', path: PATH_DASHBOARD.eCommerce.list },
+          { title: 'list', path: PATH_DASHBOARD.registros.list },
           { title: 'create', path: PATH_DASHBOARD.eCommerce.new },
           { title: 'edit', path: PATH_DASHBOARD.eCommerce.demoEdit },
           { title: 'checkout', path: PATH_DASHBOARD.eCommerce.checkout },
