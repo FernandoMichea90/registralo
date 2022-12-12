@@ -147,8 +147,8 @@ function Description() {
     <StyledDescription>
       <m.div variants={varFade().in}>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Start a <br />
-          new project with
+          Bienvenidos a <br />
+          
         </Typography>
       </m.div>
 
@@ -162,14 +162,13 @@ function Description() {
             repeat: Infinity,
           }}
         >
-          Minimal
+          Hotel Ecomusic 
         </StyledGradientText>
       </m.div>
 
       <m.div variants={varFade().in}>
         <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The starting point for your next project is based on MUI.Easy customization Helps you build apps faster and
-          better.
+          Ubicados en pleno centro turistico de valparaiso,    a pasos de los miradores y ascensores emblematicos de la ciudad.
         </Typography>
       </m.div>
 
@@ -249,7 +248,7 @@ function Content() {
   const transition = {
     repeatType: 'loop',
     ease: 'linear',
-    duration: 60 * 4,
+    duration: 60*5,
     repeat: Infinity,
   };
 
@@ -265,20 +264,27 @@ function Content() {
       }}
     >
       <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative' }}>
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '100%'] }}
-          transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
-          sx={{ position: 'absolute' }}
-        />
-        <Box
+          <Box
+            component={m.img}
+            animate={{ y: ['0%', '100%'] }}
+            transition={transition}
+            src={`/assets/images/hotel/rollo_imagen.png`}
+            sx={{ position: 'absolute' }}
+          />
+          <Box
+            component={m.img}
+            animate={{ y: ['-100%', '0%'] }}
+            transition={transition}
+            src={`/assets/images/hotel/rollo_imagen.png`}
+            sx={{ position: 'absolute' }}
+          />
+        {/* <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
           src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
           sx={{ position: 'absolute' }}
-        />
+        /> */}
       </Stack>
 
       <Stack component={m.div} variants={varFade().in} sx={{ width: 720, position: 'relative', ml: -2 }}>
@@ -286,14 +292,14 @@ function Content() {
           component={m.img}
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+          src={`/assets/images/hotel/rollo_imagen_2.png`}
           sx={{ position: 'absolute' }}
         />
         <Box
           component={m.img}
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+          src={`/assets/images/hotel/rollo_imagen_2.png`}
           sx={{ position: 'absolute' }}
         />
       </Stack>

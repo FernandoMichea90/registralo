@@ -52,9 +52,9 @@ export default function Header() {
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Logo />
 
-          <Link href={PATH_DOCS.changelog} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
+          {/* <Link href={PATH_DOCS.changelog} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
             <Label color="info"> v4.0.0 </Label>
-          </Link>
+          </Link> */}
 
           <Box sx={{ flexGrow: 1 }} />
 
