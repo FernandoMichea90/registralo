@@ -17,6 +17,8 @@ import { HEADER } from '../../config';
 import SvgColor from '../../components/svg-color';
 import Iconify from '../../components/iconify';
 import { MotionContainer, varFade } from '../../components/animate';
+import IconButton from '@mui/material/IconButton';
+
 
 // ----------------------------------------------------------------------
 
@@ -148,7 +150,7 @@ function Description() {
       <m.div variants={varFade().in}>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
           Bienvenidos a <br />
-          
+
         </Typography>
       </m.div>
 
@@ -162,7 +164,7 @@ function Description() {
             repeat: Infinity,
           }}
         >
-          Hotel Ecomusic 
+          Hotel Ecomusic
         </StyledGradientText>
       </m.div>
 
@@ -189,10 +191,10 @@ function Description() {
                   },
                 }}
               >
-                Live Preview
+                Ofertas
               </Button>
             </NextLink>
-
+            {/* 
             <Link
               color="inherit"
               variant="caption"
@@ -203,33 +205,44 @@ function Description() {
             >
               <Iconify icon="eva:external-link-fill" width={16} sx={{ mr: 0.5 }} />
               Get Free Version
-            </Link>
+            </Link> */}
           </Stack>
 
           <Button
             color="inherit"
             size="large"
             variant="outlined"
-            startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
+            startIcon={<Iconify icon="mdi:bed" width={24} />}
             target="_blank"
             rel="noopener"
             href={PATH_FIGMA_PREVIEW}
             sx={{ borderColor: 'text.primary' }}
           >
-            Design Preview
+            Ver Habitaciones
           </Button>
         </Stack>
       </m.div>
 
-      <Stack spacing={3} sx={{ textAlign: 'center', opacity: 0.4 }}>
+      <Stack spacing={3} sx={{ textAlign: 'center'}}>
         <m.div variants={varFade().in}>
-          <Typography variant="overline">Available For</Typography>
+          <Typography sx={{opacity:0.4}} variant="overline">Redes Sociales</Typography>
         </m.div>
 
         <Stack spacing={2} direction="row" justifyContent="center">
-          {['sketch', 'figma', 'js', 'ts', 'nextjs'].map((platform) => (
+          {['facebook', 'instagram', 'whatsapp'].map((platform) => (
             <m.div key={platform} variants={varFade().in}>
-              <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} />
+
+              <IconButton sx={{
+                 opacity:0.4,
+                '&:hover': {
+                  color: 'primary.main',
+                  opacity:1
+                }
+              }} aria-label="delete" size="small">
+              <Iconify  icon={`mdi:${platform}`} width={24} sx={{ mr: 0.5 }} />
+              </IconButton>
+
+              {/* <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} /> */}
             </m.div>
           ))}
         </Stack>
@@ -248,7 +261,7 @@ function Content() {
   const transition = {
     repeatType: 'loop',
     ease: 'linear',
-    duration: 60*5,
+    duration: 60 * 5,
     repeat: Infinity,
   };
 
@@ -264,20 +277,20 @@ function Content() {
       }}
     >
       <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative' }}>
-          <Box
-            component={m.img}
-            animate={{ y: ['0%', '100%'] }}
-            transition={transition}
-            src={`/assets/images/hotel/rollo_imagen.png`}
-            sx={{ position: 'absolute' }}
-          />
-          <Box
-            component={m.img}
-            animate={{ y: ['-100%', '0%'] }}
-            transition={transition}
-            src={`/assets/images/hotel/rollo_imagen.png`}
-            sx={{ position: 'absolute' }}
-          />
+        <Box
+          component={m.img}
+          animate={{ y: ['0%', '100%'] }}
+          transition={transition}
+          src={`/assets/images/hotel/rollo_imagen.png`}
+          sx={{ position: 'absolute' }}
+        />
+        <Box
+          component={m.img}
+          animate={{ y: ['-100%', '0%'] }}
+          transition={transition}
+          src={`/assets/images/hotel/rollo_imagen.png`}
+          sx={{ position: 'absolute' }}
+        />
         {/* <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
