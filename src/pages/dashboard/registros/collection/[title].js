@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
-import { Box, Divider, Stack, Container, Typography, Pagination } from '@mui/material';
+import { Box, Divider, Stack, Container, Typography, Pagination,Card,CardHeader } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -15,6 +15,12 @@ import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 import { SkeletonPostDetails } from '../../../../components/skeleton';
+import { ObtenerRegistrosCollection } from 'src/functions/registros_db';
+import _mock, { randomInArray } from 'src/_mock';
+import DataGridBasic from './DataGridEstructura';
+
+
+
 // sections
 import {
   BlogPostHero,
@@ -29,6 +35,23 @@ import {
 BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
+
+export const _dataGrid = [...Array(36)].map((_, index) => ({
+  id: _mock.id(index),
+  name: _mock.name.fullName(index),
+  email: _mock.email(index),
+  lastLogin: _mock.time(index),
+  performance: _mock.number.percent(index),
+  rating: _mock.number.rating(index),
+  status: randomInArray(['online', 'away', 'busy']),
+  isAdmin: _mock.boolean(index),
+  lastName: _mock.name.lastName(index),
+  firstName: _mock.name.firstName(index),
+  age: _mock.number.age(index),
+}));
+
+
+
 
 export default function BlogPostPage() {
   const { themeStretch } = useSettingsContext();
@@ -46,13 +69,13 @@ export default function BlogPostPage() {
   const [error, setError] = useState(null);
 
   const getPost = useCallback(async () => {
-    alert('paso por aca')
-    try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
 
-      setPost(response.data.post);
+    try {
+      // const response = await axios.get('/api/blog/post', {
+      //   params: { title },
+      // });
+      const respuesta = await ObtenerRegistrosCollection();
+      setPost(respuesta);
       setLoadingPost(false);
     } catch (error) {
       console.error(error);
@@ -78,7 +101,7 @@ export default function BlogPostPage() {
   }, [getRecentPosts]);
 
   useEffect(() => {
-    alert('paso por aca')
+
     if (title) {
       getPost();
     }
@@ -108,82 +131,18 @@ export default function BlogPostPage() {
           ]}
         />
 
-        {post && (
-          <Stack
-            sx={{
-              borderRadius: 2,
-              boxShadow: (theme) => ({
-                md: theme.customShadows.card,
-              }),
-            }}
-          >
-            <BlogPostHero post={post} />
-
-            <Typography
-              variant="h6"
-              sx={{
-                py: 5,
-                px: { md: 5 },
-              }}
-            >
-              {post.description}
-            </Typography>
-
-            <Markdown
-              children={post.body}
-              sx={{
-                px: { md: 5 },
-              }}
-            />
-
-            <Stack
-              spacing={3}
-              sx={{
-                py: 5,
-                px: { md: 5 },
-              }}
-            >
-              <Divider />
-              <BlogPostTags post={post} />
-              <Divider />
-            </Stack>
-
-            <Stack
-              sx={{
-                px: { md: 5 },
-              }}
-            >
-              <Stack direction="row" sx={{ mb: 3 }}>
-                <Typography variant="h4">Comments</Typography>
-
-                <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                  ({post.comments.length})
-                </Typography>
-              </Stack>
-
-              <BlogPostCommentForm />
-
-              <Divider sx={{ mt: 5, mb: 2 }} />
-            </Stack>
-
-            <Stack
-              sx={{
-                px: { md: 5 },
-              }}
-            >
-              <BlogPostCommentList comments={post.comments} />
-
-              <Pagination
-                count={8}
-                sx={{
-                  my: 5,
-                  ml: 'auto',
-                  mr: { xs: 'auto', md: 0 },
-                }}
-              />
-            </Stack>
+        <Container sx={{ my: 10 }}>
+          <Stack spacing={5}>
+            <Card>
+              <CardHeader title="Basic" sx={{ mb: 2 }} />
+              <Box sx={{ height: 390 }}>
+                <DataGridBasic data={_dataGrid} registros={post} />
+              </Box>
+            </Card>
           </Stack>
-        )}
+        </Container>
+
+
 
         {error && !loadingPost && <Typography variant="h6">404 {error}</Typography>}
 

@@ -47,3 +47,25 @@ export const ObtenerRegistros=async()=>{
     return []
   }
 }
+
+// Obtener la colleccion de un Registro
+export const ObtenerRegistrosCollection=async()=>{
+  try {
+    const q = query(collection(DB, "Registros","3LtZ1nA70fWqXhB8Koaw","collection"));
+    const querySnapshot = await getDocs(q);
+    const response=[];
+    console.log('paso por aqui');
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      response.push({id:doc.id,...doc.data()})
+    });
+    
+    return response;
+  } catch (error) {
+    console.log(error);
+    return []
+  }
+
+
+}
