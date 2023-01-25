@@ -1,9 +1,9 @@
 // next
 import Head from 'next/head';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../../../layouts/dashboard';
 // sections
-import { Mail } from '../../../../sections/@dashboard/mail';
+import { Mail } from '../../../../../sections/@dashboard/mail';
 
 // ----------------------------------------------------------------------
 

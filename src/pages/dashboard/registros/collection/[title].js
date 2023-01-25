@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
-import { Box, Divider, Stack, Container, Typography, Pagination } from '@mui/material';
+import { Box, Divider, Stack, Container, Typography, Pagination, Button,Dialog,DialogTitle } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -23,6 +23,9 @@ import {
   BlogPostCommentList,
   BlogPostCommentForm,
 } from '../../../../sections/@dashboard/blog';
+import { obtenerCollectionRegistros, ObtenerRegistroId } from 'src/functions/registros_db';
+import Iconify from 'src/components/iconify';
+import RegistroForm from '../form/registrosform';
 
 // ----------------------------------------------------------------------
 
@@ -32,7 +35,7 @@ BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function BlogPostPage() {
   const { themeStretch } = useSettingsContext();
-
+  Iconify
   const {
     query: { title },
   } = useRouter();
@@ -41,18 +44,24 @@ export default function BlogPostPage() {
 
   const [post, setPost] = useState(null);
 
+  const [titulo, setTitulo] = useState(null);
+
+  // estado del modal 
+  const [Estado, setEstado] = useState(false)
+
   const [loadingPost, setLoadingPost] = useState(true);
 
   const [error, setError] = useState(null);
 
   const getPost = useCallback(async () => {
-    alert('paso por aca')
-    try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
 
-      setPost(response.data.post);
+    try {
+      // const response = await axios.get('/api/blog/post', {
+      //   params: { title },
+      // });
+      const response = await obtenerCollectionRegistros(title);
+      console.log(response)
+      setPost(response);
       setLoadingPost(false);
     } catch (error) {
       console.error(error);
@@ -63,22 +72,38 @@ export default function BlogPostPage() {
 
   const getRecentPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
+      // const response = await axios.get('/api/blog/posts/recent', {
+      //   params: { title },
+      // });
 
-      setRecentPosts(response.data.recentPosts);
+      // setRecentPosts(response.data.recentPosts);
+
+      const response = await ObtenerRegistroId(title)
+      console.log(response);
+      setTitulo(response);
+
     } catch (error) {
       console.error(error);
     }
   }, [title]);
+
+  //abrir ventana modal 
+  const abrirVentanaModal = () => {
+    setEstado(true)
+  }
+
+  // cerrar ventana modal
+
+  const cerrarVentanaModal = () => {
+    setEstado(false)
+  }
 
   useEffect(() => {
     getRecentPosts();
   }, [getRecentPosts]);
 
   useEffect(() => {
-    alert('paso por aca')
+
     if (title) {
       getPost();
     }
@@ -92,7 +117,7 @@ export default function BlogPostPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Post Details"
+          heading="Registros  Details"
           links={[
             {
               name: 'Dashboard',
@@ -103,12 +128,29 @@ export default function BlogPostPage() {
               href: PATH_DASHBOARD.blog.root,
             },
             {
-              name: post?.title,
+              name: titulo?.title,
             },
           ]}
+
+          action={
+            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={abrirVentanaModal}>
+              Crear Registros
+            </Button>
+          }
         />
 
-        {post && (
+
+        <Dialog fullWidth maxWidth="xs" open={Estado} onClose={cerrarVentanaModal}>
+          <DialogTitle>Crear Registro</DialogTitle>
+          <RegistroForm 
+            registroId={title}
+            onCancel={cerrarVentanaModal}
+          ></RegistroForm>
+         
+        </Dialog>
+
+
+        {/* {post && (
           <Stack
             sx={{
               borderRadius: 2,
@@ -157,7 +199,7 @@ export default function BlogPostPage() {
                 <Typography variant="h4">Comments</Typography>
 
                 <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                  ({post.comments.length})
+                  {/* ({post.comments.length}) 
                 </Typography>
               </Stack>
 
@@ -183,7 +225,7 @@ export default function BlogPostPage() {
               />
             </Stack>
           </Stack>
-        )}
+        )} */}
 
         {error && !loadingPost && <Typography variant="h6">404 {error}</Typography>}
 

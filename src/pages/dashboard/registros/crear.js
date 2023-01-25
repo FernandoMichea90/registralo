@@ -33,6 +33,7 @@ export default function RegistrosCrear() {
   }
 
   const cerrarVentanaModal = () => {
+    console.log('cerrar ventana modal')
     setEstado(false)
   }
 
