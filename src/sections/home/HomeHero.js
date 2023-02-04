@@ -46,6 +46,7 @@ const StyledDescription = styled('div')(({ theme }) => ({
   justifyContent: 'center',
   padding: theme.spacing(15, 0),
   height: '100%',
+ 
 }));
 
 const StyledGradientText = styled(m.h1)(({ theme }) => ({
@@ -98,10 +99,12 @@ export default function HomeHero() {
   const { scrollYProgress } = useScroll();
 
   const [hide, setHide] = useState(false);
+  
 
   useEffect(
     () =>
       scrollYProgress.onChange((scrollHeight) => {
+        console.log(scrollHeight);
         if (scrollHeight > 0.8) {
           setHide(true);
         } else {
@@ -150,7 +153,6 @@ function Description() {
       <m.div variants={varFade().in}>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
           Bienvenidos a <br />
-
         </Typography>
       </m.div>
 

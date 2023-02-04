@@ -1,4 +1,8 @@
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+
+import { m, useScroll } from 'framer-motion';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Button, AppBar, Toolbar, Container, Link } from '@mui/material';
@@ -18,6 +22,7 @@ import Label from '../../components/label';
 import NavMobile from './nav/mobile';
 import navConfig from './nav/config';
 import NavDesktop from './nav/desktop';
+import { hi } from 'date-fns/locale';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +32,27 @@ export default function Header() {
   const isDesktop = useResponsive('up', 'md');
 
   const isOffset = useOffSetTop(HEADER.H_MAIN_DESKTOP);
+
+  const { scrollYProgress } = useScroll();
+
+  const [hideLogo, setHideLogo] = useState(true);
+
+
+  useEffect(
+    () =>
+      scrollYProgress.onChange((scrollHeight) => {
+        console.log(scrollHeight);
+        if (scrollHeight > 0.08) {
+         
+          setHideLogo(false);
+          
+        } else {
+          
+          setHideLogo(true);
+        }
+      }),
+    [scrollYProgress]
+  );
 
   return (
     <AppBar color="transparent" sx={{ boxShadow: 0 }}>
@@ -50,7 +76,9 @@ export default function Header() {
         }}
       >
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Logo />
+           {!hideLogo  &&
+             <Logo />
+           }
 
           {/* <Link href={PATH_DOCS.changelog} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
             <Label color="info"> v4.0.0 </Label>
