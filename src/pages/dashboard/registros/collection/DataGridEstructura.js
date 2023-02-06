@@ -16,8 +16,8 @@ const columns = [
     width: 120,
   },
   {
-    field: 'firstName',
-    headerName: 'First name',
+    field: 'fecha_codigo',
+    headerName: 'Fecha',
     width: 160,
     editable: true,
   },
@@ -66,6 +66,7 @@ export default function DataGridBasic({ data,registros }) {
 
   console.log('DataGridBasic',registros);
   const [columnas, setcolumnas] = useState([])
+  const[cargando,setcargando] = useState(false)
   useEffect(() => {
     console.log('paso por el use effect');
     if(registros?.length > 0){
@@ -79,11 +80,15 @@ export default function DataGridBasic({ data,registros }) {
         editable: true,
       });
     });
+    setcargando(true)
     }
     
     
   }, [registros]);
-  
+   
 
-  return <DataGrid columns={columnas} rows={registros} checkboxSelection disableSelectionOnClick />;
-}
+  return (<>
+  {cargando &&
+     <DataGrid columns={columnas} rows={registros} checkboxSelection disableSelectionOnClick />}
+     </>)
+} 

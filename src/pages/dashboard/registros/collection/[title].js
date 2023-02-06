@@ -3,22 +3,25 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
-import { Box, Divider, Stack, Container, Typography, Pagination,Card,CardHeader } from '@mui/material';
+// import {Card as CardDiente} from '../componentes/Card';
+import { Box, Divider, Stack, Container, Typography, Pagination, Card, CardHeader } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import axios from '../../../../utils/axios';
 // layouts
-import DashboardLayout from '../../../../layouts/dashboard';
+import DashboardLayout from '../../../../layouts/dashboard'
+
+
 // components
 import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 import { SkeletonPostDetails } from '../../../../components/skeleton';
-import { ObtenerRegistrosCollection } from 'src/functions/registros_db';
+import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection,EditarRegistrosCollection } from 'src/functions/registros_db';
 import _mock, { randomInArray } from 'src/_mock';
 import DataGridBasic from './DataGridEstructura';
-
+import { Grid } from '@mui/material';
 
 
 // sections
@@ -29,6 +32,8 @@ import {
   BlogPostCommentList,
   BlogPostCommentForm,
 } from '../../../../sections/@dashboard/blog';
+import { AnalyticsWidgetSummary } from 'src/sections/@dashboard/general/analytics';
+import CardDiente from '../componentes/CardDiente';
 
 // ----------------------------------------------------------------------
 
@@ -51,10 +56,26 @@ export const _dataGrid = [...Array(36)].map((_, index) => ({
 }));
 
 
+function useCounter() {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount(prevCount => prevCount + 1);
+  };
+
+  const decrement = () => {
+    setCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+  };
+
+  return [count, increment, decrement, setCount];
+}
 
 
 export default function BlogPostPage() {
   const { themeStretch } = useSettingsContext();
+  const [count, increment, decrement,setCount] = useCounter();
+  const [titulo, setTitulo] = useState([]);
+
 
   const {
     query: { title },
@@ -62,19 +83,19 @@ export default function BlogPostPage() {
 
   const [recentPosts, setRecentPosts] = useState([]);
 
-  const [post, setPost] = useState(null);
+  const [post, setPost] = useState([]);
 
   const [loadingPost, setLoadingPost] = useState(true);
 
   const [error, setError] = useState(null);
 
-  const getPost = useCallback(async () => {
+  const getPost = useCallback(async (id) => {
 
     try {
       // const response = await axios.get('/api/blog/post', {
       //   params: { title },
       // });
-      const respuesta = await ObtenerRegistrosCollection();
+      const respuesta = await ObtenerRegistrosCollection(id);
       setPost(respuesta);
       setLoadingPost(false);
     } catch (error) {
@@ -96,16 +117,96 @@ export default function BlogPostPage() {
     }
   }, [title]);
 
-  useEffect(() => {
-    getRecentPosts();
-  }, [getRecentPosts]);
+  const [todayrecord, setTodayrecord] = useState();
+
 
   useEffect(() => {
-
     if (title) {
-      getPost();
+      getPost(title);
     }
   }, [getPost, title]);
+
+  // obtener el titulo del registro
+  useEffect(() => {
+    // buscar registro del dia de hoy 
+    const obtenerTitulo = async (id) => {
+      try {
+      
+        const respuesta = await ObtenerRegistrosId(id);
+        setTitulo(respuesta);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    obtenerTitulo(title);
+
+
+  }, []);
+
+  // obtener el registro del dia de hoy
+  useEffect(() => {
+    // buscar registro del dia de hoy
+    const obtenerRegistro = async () => {
+      try {
+        const respuesta = await ObtenerRegistrosCollectionToday(title);
+        console.log('esta es la respuesta del registro del dia de hoy' + JSON.stringify(respuesta))
+        setTodayrecord(respuesta);
+        setCount(respuesta.cantidad);
+        
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    obtenerRegistro();
+  }, [title]);
+
+  // sumar o restar contador\
+  useEffect(() => {
+    console.log(count);
+    // verificar si existe registro en todayrecord
+    if (todayrecord?.id) {
+      // editar registro
+      const EditarRegistrosFront = async () => {
+        try{
+          //funcion para editar el registro segun id y cantidad
+          var respuesta = await EditarRegistrosCollection(title,todayrecord.id,count)
+          console.log('esta es la respuesta de editar' + JSON.stringify(respuesta))
+
+        }catch(error){console.log(error)}
+
+      }
+      EditarRegistrosFront();
+    } else {
+      // guardar registro
+      const CrearRegistrosFront = async () => {
+        try {
+          // fecha de hoy 
+          var today = new Date();
+          // crear registro
+          var newRegistro = {
+            cantidad: count,
+            fecha: new Date(),
+            dia: today.getDate(),
+            mes: today.getMonth() + 1,
+            ano: today.getFullYear(),
+            fecha_codigo: `${today.getDate()}${(today.getMonth() + 1)}${today.getFullYear()}`,
+          };
+          console.log('paso por la respuesta');
+          var respuesta = await CrearRegistrosCollection(title,newRegistro)
+          // si la respuesta es null 
+          if (respuesta == null) {
+            alert("Error al guardar el registro")
+          } else {
+            alert("Registro guardado")
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      // CrearRegistrosFront();
+    }
+    }, [count]);
+
 
   return (
     <>
@@ -122,21 +223,34 @@ export default function BlogPostPage() {
               href: PATH_DASHBOARD.root,
             },
             {
-              name: 'Blog',
+              name: 'Registros',
               href: PATH_DASHBOARD.blog.root,
             },
             {
-              name: post?.title,
+              name: titulo?.title,
             },
           ]}
         />
 
         <Container sx={{ my: 10 }}>
+
+          <Grid container spacing={3}>
+            {/* <Grid item xs={12} sm={6} md={3}>
+              <AnalyticsWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} ></AnalyticsWidgetSummary>
+            </Grid> */}
+            <Grid item xs={12} sm={6} md={3}>
+              <CardDiente title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} ></CardDiente>
+            </Grid>
+          </Grid>
           <Stack spacing={5}>
             <Card>
               <CardHeader title="Basic" sx={{ mb: 2 }} />
               <Box sx={{ height: 390 }}>
-                <DataGridBasic data={_dataGrid} registros={post} />
+                {
+
+                  post.length > 0 &&
+                  <DataGridBasic data={_dataGrid} registros={post} />
+                }
               </Box>
             </Card>
           </Stack>
@@ -148,7 +262,7 @@ export default function BlogPostPage() {
 
         {loadingPost && <SkeletonPostDetails />}
 
-        {!!recentPosts.length && (
+        {/* {!!recentPosts.length && (
           <>
             <Typography variant="h4" sx={{ my: 5 }}>
               Recent posts
@@ -168,7 +282,7 @@ export default function BlogPostPage() {
               ))}
             </Box>
           </>
-        )}
+        )} */}
       </Container>
     </>
   );

@@ -65,8 +65,8 @@ obtenerResponse();
           }}
         >
           {listasRegistros.map((user) => (
-            
-            <Button component="a" href={PATH_DASHBOARD.registros.view(paramCase(user.title))} style={{display:'unset'}}>
+             
+            <Button component="a" href={PATH_DASHBOARD.registros.view(user.id,user.title)} style={{display:'unset'}}>
             <UserCard key={user.id} user={user} />
             </Button>
           ))}
