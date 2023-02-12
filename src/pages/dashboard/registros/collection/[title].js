@@ -4,14 +4,19 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
 // import {Card as CardDiente} from '../componentes/Card';
-import { Box, Divider, Stack, Container, Typography, Pagination, Card, CardHeader } from '@mui/material';
+import { Box, Divider, Stack, Container, Typography, Pagination, Card, CardHeader, Button } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import axios from '../../../../utils/axios';
 // layouts
 import DashboardLayout from '../../../../layouts/dashboard'
-
+//next 
+import NextLink from 'next/link';
+// Iconify
+import Iconify from  "../../../../components/iconify";
+//Registro Form 
+import RegistrosForm from './RegistrosForm';
 
 // components
 import Markdown from '../../../../components/markdown';
@@ -21,7 +26,7 @@ import { SkeletonPostDetails } from '../../../../components/skeleton';
 import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection,EditarRegistrosCollection } from 'src/functions/registros_db';
 import _mock, { randomInArray } from 'src/_mock';
 import DataGridBasic from './DataGridEstructura';
-import { Grid } from '@mui/material';
+import { Grid,Dialog,DialogTitle } from '@mui/material';
 
 
 // sections
@@ -34,6 +39,7 @@ import {
 } from '../../../../sections/@dashboard/blog';
 import { AnalyticsWidgetSummary } from 'src/sections/@dashboard/general/analytics';
 import CardDiente from '../componentes/CardDiente';
+import { RegistroForm } from 'src/sections/@dashboard/registros';
 
 // ----------------------------------------------------------------------
 
@@ -88,6 +94,8 @@ export default function BlogPostPage() {
   const [loadingPost, setLoadingPost] = useState(true);
 
   const [error, setError] = useState(null);
+  
+  const [openModal, setOpenModal] = useState(true);
 
   const getPost = useCallback(async (id) => {
 
@@ -207,6 +215,17 @@ export default function BlogPostPage() {
     }
     }, [count]);
 
+ 
+
+
+    const handleOpenModal = () => {
+      setOpenModal(true);
+    };
+
+    const handleCloseModal = () => {
+      setOpenModal(false);
+    };
+
 
   return (
     <>
@@ -216,7 +235,7 @@ export default function BlogPostPage() {
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Post Details"
+          heading="Registros"
           links={[
             {
               name: 'Dashboard',
@@ -230,6 +249,13 @@ export default function BlogPostPage() {
               name: titulo?.title,
             },
           ]}
+          action={
+            <NextLink href={PATH_DASHBOARD.eCommerce.new} passHref>
+              <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                Nuevo Registro
+              </Button>
+            </NextLink>
+          }
         />
 
         <Container sx={{ my: 10 }}>
@@ -284,6 +310,17 @@ export default function BlogPostPage() {
           </>
         )} */}
       </Container>
+
+      <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Titulo de Registros </DialogTitle>
+        <RegistrosForm>
+
+        </RegistrosForm>
+
+      
+      </Dialog>
+
+
     </>
   );
 }
