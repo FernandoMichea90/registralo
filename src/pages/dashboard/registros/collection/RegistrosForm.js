@@ -8,7 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
+import { MobileDateTimePicker,MobileDatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../../components/hook-form';
@@ -17,12 +17,8 @@ import FormProvider, { RHFTextField, RHFSwitch } from '../../../../components/ho
 
 const getInitialValues = (event, range) => {
   const initialEvent = {
-    title: '',
-    description: '',
-    textColor: '#1890FF',
-    allDay: false,
-    start: range ? new Date(range.start).toISOString() : new Date().toISOString(),
-    end: range ? new Date(range.end).toISOString() : new Date().toISOString(),
+    fecha:'',
+    cantidad:''
   };
 
   if (event || range) {
@@ -36,105 +32,87 @@ const getInitialValues = (event, range) => {
 
 CalendarForm.propTypes = {
   event: PropTypes.object,
-  range: PropTypes.object,
-  onCancel: PropTypes.func,
-  onDeleteEvent: PropTypes.func,
-  onCreateUpdateEvent: PropTypes.func,
-  colorOptions: PropTypes.arrayOf(PropTypes.string),
+//   range: PropTypes.object,
+//   onCancel: PropTypes.func,
+//   onDeleteEvent: PropTypes.func,
+//   onCreateUpdateEvent: PropTypes.func,
+//   colorOptions: PropTypes.arrayOf(PropTypes.string),
+  guardarRegistro: PropTypes.func,
 };
 
-export default function CalendarForm({ event, range, colorOptions, onCreateUpdateEvent, onDeleteEvent, onCancel }) {
+export default function CalendarForm({ event,guardarRegistro }) {
   const hasEventData = !!event;
-
   const EventSchema = Yup.object().shape({
-    title: Yup.string().max(255).required('Title is required'),
-    description: Yup.string().max(5000),
+    cantidad: Yup.string().max(255).required('Title is required'),
   });
 
   const methods = useForm({
     resolver: yupResolver(EventSchema),
-    defaultValues: getInitialValues(event, range),
+    defaultValues: getInitialValues(event),
   });
 
   const {
-    reset,
-    watch,
+    // reset,
+    // watch,
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
+// const values = watch();
 
   const onSubmit = async (data) => {
     try {
-      const newEvent = {
-        title: data.title,
-        description: data.description,
-        textColor: data.textColor,
-        allDay: data.allDay,
-        start: data.start,
-        end: data.end,
-      };
 
-      onCreateUpdateEvent(newEvent);
 
-      onCancel();
+        
 
-      reset();
+        guardarRegistro();
+        // const newEvent = {
+        // title: data.title,
+        // description: data.description,
+        // textColor: data.textColor,
+        // allDay: data.allDay,
+        // start: data.start,
+        // end: data.end,
+        // };
+
+        // onCreateUpdateEvent(newEvent);
+
+        // onCancel();
+
+        // reset();
     } catch (error) {
       console.error(error);
     }
   };
 
-  const isDateError =
-    !values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
+//   const isDateError =
+//     !values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3} sx={{ px: 3 }}>
-        <RHFTextField name="title" label="Title" />
 
-        <RHFTextField name="description" label="Description" multiline rows={3} />
-
-        <RHFSwitch name="allDay" label="All day" />
-
-        <Controller
-          name="start"
+      <Controller
+          name="cantidad"
           control={control}
           render={({ field }) => (
-            <MobileDateTimePicker
+            <MobileDatePicker
               {...field}
               onChange={(newValue) => field.onChange(newValue)}
-              label="Start date"
-              inputFormat="dd/MM/yyyy hh:mm a"
+              label="Fecha"
+              inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField {...params} fullWidth />}
             />
           )}
         />
 
-        <Controller
-          name="end"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              onChange={(newValue) => field.onChange(newValue)}
-              label="End date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  error={!!isDateError}
-                  helperText={isDateError && 'End date must be later than start date'}
-                />
-              )}
-            />
-          )}
-        />
 
-       
+
+        <RHFTextField name="cantiddad" label="Cantidad" />
+
+
       </Stack>
 
       <DialogActions>
@@ -148,12 +126,12 @@ export default function CalendarForm({ event, range, colorOptions, onCreateUpdat
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancel
+        <Button variant="outlined" color="inherit">
+          Cancelar
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          {hasEventData ? 'Update' : 'Add'}
+          {hasEventData ? 'Update' : 'Guardar test'}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

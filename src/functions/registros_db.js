@@ -146,7 +146,7 @@ export const CrearRegistrosCollection=async(id,evento)=>{
 }
 
 // actualizar el registro del dia de hoy segun el id
-export const EditarRegistrosCollection=async(idRegistro,idCollection,cantidad)=>{
+export const EditarRegistrosCollection=async(idRegistro,idCollection,cantidad,fecha=new Date())=>{
   try{
     const docRef=await doc(DB,"Registros",idRegistro,"collection",idCollection);
     await updateDoc(docRef,{

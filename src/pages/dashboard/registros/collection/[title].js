@@ -14,7 +14,7 @@ import DashboardLayout from '../../../../layouts/dashboard'
 //next 
 import NextLink from 'next/link';
 // Iconify
-import Iconify from  "../../../../components/iconify";
+import Iconify from "../../../../components/iconify";
 //Registro Form 
 import RegistrosForm from './RegistrosForm';
 
@@ -23,10 +23,10 @@ import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 import { SkeletonPostDetails } from '../../../../components/skeleton';
-import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection,EditarRegistrosCollection } from 'src/functions/registros_db';
+import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection, EditarRegistrosCollection } from 'src/functions/registros_db';
 import _mock, { randomInArray } from 'src/_mock';
 import DataGridBasic from './DataGridEstructura';
-import { Grid,Dialog,DialogTitle } from '@mui/material';
+import { Grid, Dialog, DialogTitle } from '@mui/material';
 
 
 // sections
@@ -79,7 +79,7 @@ function useCounter() {
 
 export default function BlogPostPage() {
   const { themeStretch } = useSettingsContext();
-  const [count, increment, decrement,setCount] = useCounter();
+  const [count, increment, decrement, setCount] = useCounter();
   const [titulo, setTitulo] = useState([]);
 
 
@@ -94,7 +94,7 @@ export default function BlogPostPage() {
   const [loadingPost, setLoadingPost] = useState(true);
 
   const [error, setError] = useState(null);
-  
+
   const [openModal, setOpenModal] = useState(true);
 
   const getPost = useCallback(async (id) => {
@@ -139,7 +139,7 @@ export default function BlogPostPage() {
     // buscar registro del dia de hoy 
     const obtenerTitulo = async (id) => {
       try {
-      
+
         const respuesta = await ObtenerRegistrosId(id);
         setTitulo(respuesta);
       } catch (error) {
@@ -160,7 +160,7 @@ export default function BlogPostPage() {
         console.log('esta es la respuesta del registro del dia de hoy' + JSON.stringify(respuesta))
         setTodayrecord(respuesta);
         setCount(respuesta.cantidad);
-        
+
       } catch (error) {
         console.log(error)
       }
@@ -175,12 +175,12 @@ export default function BlogPostPage() {
     if (todayrecord?.id) {
       // editar registro
       const EditarRegistrosFront = async () => {
-        try{
+        try {
           //funcion para editar el registro segun id y cantidad
-          var respuesta = await EditarRegistrosCollection(title,todayrecord.id,count)
+          var respuesta = await EditarRegistrosCollection(title, todayrecord.id, count)
           console.log('esta es la respuesta de editar' + JSON.stringify(respuesta))
 
-        }catch(error){console.log(error)}
+        } catch (error) { console.log(error) }
 
       }
       EditarRegistrosFront();
@@ -200,7 +200,7 @@ export default function BlogPostPage() {
             fecha_codigo: `${today.getDate()}${(today.getMonth() + 1)}${today.getFullYear()}`,
           };
           console.log('paso por la respuesta');
-          var respuesta = await CrearRegistrosCollection(title,newRegistro)
+          var respuesta = await CrearRegistrosCollection(title, newRegistro)
           // si la respuesta es null 
           if (respuesta == null) {
             alert("Error al guardar el registro")
@@ -213,18 +213,19 @@ export default function BlogPostPage() {
       }
       // CrearRegistrosFront();
     }
-    }, [count]);
+  }, [count]);
 
- 
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
 
-    const handleOpenModal = () => {
-      setOpenModal(true);
-    };
-
-    const handleCloseModal = () => {
-      setOpenModal(false);
-    };
+  const guardarRegistro = async () => {
+      alert("Registro guardado");
+  }
 
 
   return (
@@ -259,11 +260,7 @@ export default function BlogPostPage() {
         />
 
         <Container sx={{ my: 10 }}>
-
           <Grid container spacing={3}>
-            {/* <Grid item xs={12} sm={6} md={3}>
-              <AnalyticsWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} ></AnalyticsWidgetSummary>
-            </Grid> */}
             <Grid item xs={12} sm={6} md={3}>
               <CardDiente title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} ></CardDiente>
             </Grid>
@@ -273,7 +270,6 @@ export default function BlogPostPage() {
               <CardHeader title="Basic" sx={{ mb: 2 }} />
               <Box sx={{ height: 390 }}>
                 {
-
                   post.length > 0 &&
                   <DataGridBasic data={_dataGrid} registros={post} />
                 }
@@ -281,43 +277,13 @@ export default function BlogPostPage() {
             </Card>
           </Stack>
         </Container>
-
-
-
         {error && !loadingPost && <Typography variant="h6">404 {error}</Typography>}
-
         {loadingPost && <SkeletonPostDetails />}
-
-        {/* {!!recentPosts.length && (
-          <>
-            <Typography variant="h4" sx={{ my: 5 }}>
-              Recent posts
-            </Typography>
-
-            <Box
-              gap={3}
-              display="grid"
-              gridTemplateColumns={{
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(4, 1fr)',
-              }}
-            >
-              {recentPosts.slice(recentPosts.length - 4).map((post) => (
-                <BlogPostCard key={post.id} post={post} />
-              ))}
-            </Box>
-          </>
-        )} */}
       </Container>
-
       <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Titulo de Registros </DialogTitle>
-        <RegistrosForm>
-
+        <RegistrosForm guardarRegistro={guardarRegistro}>
         </RegistrosForm>
-
-      
       </Dialog>
 
 
