@@ -107,7 +107,11 @@ export const PATH_DASHBOARD = {
     view: (title) => path(ROOTS_DASHBOARD, `/blog/post/${title}`),
     demoView: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
   },
-};
+  reserva: {
+    root: path(ROOTS_DASHBOARD, '/reserva'),
+    new: path(ROOTS_DASHBOARD, '/reserva/new'),
+},
+}
 
 export const PATH_DOCS = {
   root: 'https://docs.minimals.cc',
