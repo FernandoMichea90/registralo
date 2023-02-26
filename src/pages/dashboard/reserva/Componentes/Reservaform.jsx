@@ -27,13 +27,20 @@ UserNewEditForm.propTypes = {
   currentUser: PropTypes.object,
 };
 
-export default function UserNewEditForm({ isEdit = false, currentUser,setReserva,handleNext }) {
+export default function UserNewEditForm({ isEdit = false, currentUser, setReserva, handleNext }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
+    checkin: Yup.date().required('Checkin is required'),
+    checkout: Yup.date().required('Checkout is required'),
+    noches: Yup.number().required('Noches is required'),
+    precio_por_noche: Yup.number().required('Precio por noche is required'),
+    precio_total: Yup.number().required('Precio total is required'),
+    tipohabitacion: Yup.string().required('Tipo de habitacion is required'),
+    habitacion: Yup.string().required('Habitacion is required'),
+    motordereserva: Yup.string().required('Procedencia de reserva is required'),
   });
 
   const defaultValues = useMemo(
@@ -54,7 +61,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setReserva
     watch,
     control,
     setValue,
-    handleSubmit ,
+    handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
@@ -73,6 +80,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setReserva
   const onSubmit = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
+      setReserva(values);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       handleNext();
     } catch (error) {
@@ -109,28 +117,38 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setReserva
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Check in" />
-              <RHFTextField name="email" label="Check out" />
-              <RHFSelect name="country" label="Tipo Habitacion" placeholder="Country">
+              
+              <RHFTextField name="checkin" label="Check in" />
+              <RHFTextField name="checkout" label="Check out" />
+              <RHFSelect name="tipohabitacion" label="Tipo de Habitacion" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (
                   <option key={option.code} value={option.label}>
                     {option.label}
                   </option>
                 ))}
-                </RHFSelect>
-                <RHFSelect name="country" label="Habitacion" placeholder="Country">
-                  <option value="" />
-                  {countries.map((option) => (
-                    <option key={option.code} value={option.label}>
-                      {option.label}
-                    </option>
-                  ))}
-                </RHFSelect>
+              </RHFSelect>
 
-                <RHFTextField name="state" label="Noches" />
-                <RHFTextField name="city" label="Valor por noche( IVA incluido )" />
-               
+              <RHFSelect name="habitacion" label="Habitacion" placeholder="Country">
+                <option value="" />
+                {countries.map((option) => (
+                  <option key={option.code} value={option.label}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
+
+              <RHFSelect name="motordereserva" label="Procedencia" placeholder="Country">
+                <option value="" />
+                {countries.map((option) => (
+                  <option key={option.code} value={option.label}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
+              <RHFTextField name="precio_por_noche" label="precio por noche" />
+              <RHFTextField name="noches" label="noches" />
+              <RHFTextField name="precio_total" label="Precio Total" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>

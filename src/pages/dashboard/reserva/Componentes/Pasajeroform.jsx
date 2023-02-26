@@ -112,7 +112,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setCliente
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(guardarCliente)}>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container  spacing={3}  justifyContent="center" sx={{marginTop:"25px"}}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
