@@ -19,15 +19,17 @@ import { countries } from '../../../../assets/data';
 import Label from '../../../../components/label';
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-
+import StepperButton from './Stepper';
 // ----------------------------------------------------------------------
 
 UserNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
+  children: PropTypes.node, // Agregar prop children
+
 };
 
-export default function UserNewEditForm({ isEdit = false, currentUser,setCliente,handleNext,guardarCliente }) {
+export default function UserNewEditForm({children, isEdit = false, currentUser,setCliente,handleNext,guardarClientePrueba,valuesPasajero,methodsPasajero}) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -96,23 +98,11 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setCliente
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      const newFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      if (file) {
-        setValue('avatarUrl', newFile);
-      }
-    },
-    [setValue]
-  );
+ 
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <>
+    <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
       <Grid container  spacing={3}  justifyContent="center" sx={{marginTop:"25px"}}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
@@ -129,7 +119,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setCliente
               <RHFTextField name="email" label="Email Address" />
               <RHFTextField name="phoneNumber" label="Phone Number" />
 
-              <RHFSelect name="country" label="Country" placeholder="Country">
+              <RHFSelect name="pais" label="Country" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (
                   <option key={option.code} value={option.label}>
@@ -141,7 +131,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setCliente
               <RHFTextField name="state" label="State/Region" />
               <RHFTextField name="city" label="City" />
               <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="RUT/Pasaporte" />
+              <RHFTextField name="rut_pasaporte" label="RUT/Pasaporte" />
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
@@ -152,6 +142,9 @@ export default function UserNewEditForm({ isEdit = false, currentUser,setCliente
           </Card>
         </Grid>
       </Grid>
-    </FormProvider>
+    </Typography>
+     {/* colocar los hijos */}
+      {children}
+      </>
   );
 }

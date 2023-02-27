@@ -8,21 +8,25 @@ import Typography from '@mui/material/Typography';
 import Pasajeroform from './Pasajeroform';
 import Reservaform from './Reservaform';
 import Reciboform from './Reciboform';
-import StepperButton from './Stepper';
 import { useForm, Controller } from 'react-hook-form';
-
+import { PasajeroYupTest } from './Yupfolder/PasajeroYUP';
+import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { ReservaYupTest } from './Yupfolder/ReservaYUP';
 
 
 const steps = ['Registro Pasajero', 'Fecha y Habitacion', 'Recibo de reserva'];
 
 
+
 export default function HorizontalNonLinearStepper() {
+  const { methodsPasajero, valuesPasajero } = PasajeroYupTest();
+  const {methodsReserva,valuesReserva}=ReservaYupTest();
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   // crear un estado para guardar los datos del cliente
-   const [cliente, setCliente] = React.useState({});
-   // crear un estado para guarda los datos de la reserva
-    const [reserva, setReserva] = React.useState({});
+  const [cliente, setCliente] = React.useState({});
+  // crear un estado para guarda los datos de la reserva
+  const [reserva, setReserva] = React.useState({});
 
   const totalSteps = () => {
     return steps.length;
@@ -45,22 +49,28 @@ export default function HorizontalNonLinearStepper() {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
         ? // It's the last step, but not all steps have been completed,
-          // find the first step that has been completed
-          steps.findIndex((step, i) => !(i in completed))
+        // find the first step that has been completed
+        steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
     setActiveStep(newActiveStep);
   };
 
   // esta es una prueba
 
-
-
-
-  const guardarCliente = () => {
-    console.log("paso por aca");
-    console.log(values);
-
+  const guardarClientePrueba = () => {
+    console.log(valuesPasajero)
+    setPasajero(valuesPasajero)
   }
+
+  //  Guardar Reserva 
+  const guardarReserva=()=>{
+    console.log(valuesReserva)
+    setReserva(valuesReserva)
+  }
+
+  // funcion para guardar la 
+
+
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -71,14 +81,10 @@ export default function HorizontalNonLinearStepper() {
   };
 
   const handleComplete = () => {
-    console.log("Cliente:");
-    console.log(cliente);
-    console.log("Reserva:");
-    console.log(reserva);
-    // const newCompleted = completed;
-    // newCompleted[activeStep] = true;
-    // setCompleted(newCompleted);
-    // handleNext();
+    const newCompleted = completed;
+    newCompleted[activeStep] = true;
+    setCompleted(newCompleted);
+    handleNext();
   };
 
   const handleReset = () => {
@@ -88,16 +94,78 @@ export default function HorizontalNonLinearStepper() {
 
   const switchForm = (step) => {
     switch (step) {
-        case 1:
-            return <Pasajeroform guardarCliente={guardarCliente} setCliente={setCliente} currentUser={cliente} handleNext={handleNext}></Pasajeroform>
-        case 2:
-            return <Reservaform setReserva={setReserva} currentUser={reserva} handleNext={handleNext} ></Reservaform>
-        case 3:
-            return <Reciboform></Reciboform>
-        default:
-            return <div>Formulario Default</div>
+      case 1:
+        return <FormProvider methods={methodsPasajero} onSubmit={methodsPasajero.handleSubmit(guardarClientePrueba)}>
+          <Pasajeroform guardarClientePrueba={guardarClientePrueba} setCliente={setCliente} currentUser={cliente} handleNext={handleNext} valuesPasajero={valuesPasajero} methodsPasajero={methodsPasajero}>
+            <StepperButton></StepperButton>
+          </Pasajeroform>
+        </FormProvider>
+      case 2:
+        return <FormProvider methods={methodsReserva} onSubmit={methodsReserva.handleSubmit(guardarReserva)}>
+           <Reservaform setReserva={setReserva} currentUser={reserva} handleNext={handleNext} >
+              <StepperButton></StepperButton>
+           </Reservaform>
+        </FormProvider>
+      case 3:
+        return <Reciboform></Reciboform>
+      default:
+        return <div>Formulario Default</div>
     }
-}
+  }
+
+  // crear useEffect 
+
+  React.useEffect(() => {
+   
+    // pedir tipos de habitaciones a firestore
+    const pedirhabitaciones=()=>{
+
+    }
+    
+    pedirhabitaciones()
+
+  }, [])
+  
+
+
+  // crear el componenente stepper
+  const StepperButton = () => {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+        <Button
+          color="inherit"
+          disabled={activeStep === 0}
+          onClick={handleBack}
+          sx={{ mr: 1 }}
+        >
+          Back
+        </Button>
+        <Box sx={{ flex: '1 1 auto' }} />
+        <Button type="submit" sx={{ mr: 1 }}>
+          Next
+        </Button>
+        {activeStep !== steps.length &&
+          (completed[activeStep] ? (
+            <Typography variant="caption" sx={{ display: 'inline-block' }}>
+              Step {activeStep + 1} already completed
+            </Typography>
+          ) : (
+            <Button onClick={handleComplete}>
+              {completedSteps() === totalSteps() - 1
+                ? 'Finish'
+                : 'Complete Step'}
+            </Button>
+          ))}
+      </Box>
+    )
+  }
+
+  // funcion parar determinar el submit del formulario
+  const onSubmitSwitch = () => {
+    console.log('submit')
+    handleNext();
+  }
+
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -123,36 +191,10 @@ export default function HorizontalNonLinearStepper() {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                {switchForm(activeStep+1)}
-            </Typography>
-            {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: '1 1 auto' }} />
-              <Button onClick={handleNext} sx={{ mr: 1 }}>
-                Next
-              </Button>
-              {activeStep !== steps.length &&
-                (completed[activeStep] ? (
-                  <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                    Step {activeStep + 1} already completed
-                  </Typography>
-                ) : (
-                  <Button onClick={handleComplete}>
-                    {completedSteps() === totalSteps() - 1
-                      ? 'Finish'
-                      : 'Complete Step'}
-                  </Button>
-                ))}
-            </Box> */}
-            <StepperButton completed={completed} totalSteps={totalSteps} completedSteps={completedSteps} steps={steps} activeStep={activeStep} handleNext={handleNext} handleBack={handleBack} handleComplete={handleComplete}></StepperButton>
+
+            {switchForm(activeStep + 1)}
+
+            {/* <StepperButton completed={completed} totalSteps={totalSteps} completedSteps={completedSteps} steps={steps} activeStep={activeStep} handleNext={handleNext} handleBack={handleBack} handleComplete={handleComplete}></StepperButton> */}
           </React.Fragment>
         )}
       </div>

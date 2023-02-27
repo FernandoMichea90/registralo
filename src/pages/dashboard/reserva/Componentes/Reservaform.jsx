@@ -8,7 +8,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel,TextField } from '@mui/material';
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // routes
@@ -19,15 +19,17 @@ import { countries } from '../../../../assets/data';
 import Label from '../../../../components/label';
 import { useSnackbar } from '../../../../components/snackbar';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { MobileDatePicker } from '@mui/x-date-pickers';
 
 // ----------------------------------------------------------------------
 
 UserNewEditForm.propTypes = {
   isEdit: PropTypes.bool,
   currentUser: PropTypes.object,
+  children: PropTypes.node, // Agregar prop children
 };
 
-export default function UserNewEditForm({ isEdit = false, currentUser, setReserva, handleNext }) {
+export default function UserNewEditForm({ children, isEdit = false, currentUser, setReserva, handleNext }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -45,7 +47,16 @@ export default function UserNewEditForm({ isEdit = false, currentUser, setReserv
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
+
+      checkin: currentUser?.checkin || new Date(),
+      checkout: currentUser?.checkout || new Date(),
+      noches: currentUser?.noches || 0,
+      precio_por_noche: currentUser?.precio_por_noche || 0,
+      precio_total: currentUser?.precio_total || 0,
+      tipohabitacion: currentUser?.tipohabitacion || '',
+      habitacion: currentUser?.habitacion || '',
+      motordereserva: currentUser?.motordereserva || '',
+
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser]
@@ -79,10 +90,13 @@ export default function UserNewEditForm({ isEdit = false, currentUser, setReserv
 
   const onSubmit = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) =>{
+       setTimeout(resolve, 500)
+     
       setReserva(values);
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       handleNext();
+    })
     } catch (error) {
       console.error(error);
     }
@@ -104,7 +118,7 @@ export default function UserNewEditForm({ isEdit = false, currentUser, setReserv
   );
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+     <>
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
@@ -118,8 +132,32 @@ export default function UserNewEditForm({ isEdit = false, currentUser, setReserv
               }}
             >
               
-              <RHFTextField name="checkin" label="Check in" />
-              <RHFTextField name="checkout" label="Check out" />
+              <Controller
+                name="checkin"
+                control={control}
+                render={({ field }) => (
+                  <MobileDatePicker
+                    {...field}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    label="Fecha"
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                  />
+                )}
+              />
+               <Controller
+                name="checkout"
+                control={control}
+                render={({ field }) => (
+                  <MobileDatePicker
+                    {...field}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    label="Fecha"
+                    inputFormat="dd/MM/yyyy"
+                    renderInput={(params) => <TextField {...params} fullWidth />}
+                  />
+                )}
+              />
               <RHFSelect name="tipohabitacion" label="Tipo de Habitacion" placeholder="Country">
                 <option value="" />
                 {countries.map((option) => (
@@ -159,6 +197,8 @@ export default function UserNewEditForm({ isEdit = false, currentUser, setReserv
           </Card>
         </Grid>
       </Grid>
-    </FormProvider>
+      {children}
+      </>
+   
   );
 }
