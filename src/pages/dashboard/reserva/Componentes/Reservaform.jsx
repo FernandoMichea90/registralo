@@ -29,7 +29,7 @@ UserNewEditForm.propTypes = {
   children: PropTypes.node, // Agregar prop children
 };
 
-export default function UserNewEditForm({ children, isEdit = false, currentUser, setReserva, handleNext }) {
+export default function UserNewEditForm({tipohabitacion, children, isEdit = false, currentUser, setReserva, handleNext }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -160,10 +160,10 @@ export default function UserNewEditForm({ children, isEdit = false, currentUser,
               />
               <RHFSelect name="tipohabitacion" label="Tipo de Habitacion" placeholder="Country">
                 <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
+                  {tipohabitacion.map((option) => (
+                    <option key={option.id} value={option.tipo_habitacion}>
+                      {option.tipo_habitacion}
+                    </option>
                 ))}
               </RHFSelect>
 
@@ -178,9 +178,9 @@ export default function UserNewEditForm({ children, isEdit = false, currentUser,
 
               <RHFSelect name="motordereserva" label="Procedencia" placeholder="Country">
                 <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
+                {tipohabitacion.map((option) => (
+                  <option key={option.id} value={option.tipo_habitacion}>
+                    {option.tipo_habitacion}
                   </option>
                 ))}
               </RHFSelect>

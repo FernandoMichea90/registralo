@@ -3,6 +3,26 @@ import {DB} from '../auth/FirebaseContext'
 import { collection, addDoc,doc,getDoc,query,where,getDocs } from "firebase/firestore";
 
 
+// obtener tipo de habitaciones 
+
+export const obtenerTipoHabitaciones=async()=>{
+  try {
+    const q = query(collection(DB, "Tipo_habitacion"));
+    const querySnapshot = await getDocs(q);
+    const response=[];
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      response.push({id:doc.id,...doc.data()})
+    });
+    
+    return response;
+  } catch (error) {
+    console.log(error)
+  }
+
+}
+
 export const CrearRegistros=async(evento)=>{
     try {
         const docRef = await addDoc(collection(DB, "Registros"),evento);
