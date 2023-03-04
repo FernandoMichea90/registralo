@@ -29,7 +29,7 @@ UserNewEditForm.propTypes = {
 
 };
 
-export default function UserNewEditForm({children, isEdit = false, currentUser,setCliente,handleNext,guardarClientePrueba,valuesPasajero,methodsPasajero}) {
+export default function UserNewEditForm({setPaisPasajero,children, isEdit = false, currentUser,setCliente,handleNext,guardarClientePrueba,valuesPasajero,methodsPasajero}) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();

@@ -19,8 +19,8 @@ export  const PasajeroYupTest=()=> {
     
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || 'Fernando',
-       email: currentUser?.email || 'fmicheam@gmail.com',
+      name: currentUser?.name || '',
+       email: currentUser?.email || '',
       // phoneNumber: currentUser?.phoneNumber || '',
       // address: currentUser?.address || '',
       // country: currentUser?.country || '',

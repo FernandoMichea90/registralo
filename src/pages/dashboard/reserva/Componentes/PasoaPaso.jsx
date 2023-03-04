@@ -12,23 +12,29 @@ import { useForm, Controller } from 'react-hook-form';
 import { PasajeroYupTest } from './Yupfolder/PasajeroYUP';
 import FormProvider, { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 import { ReservaYupTest } from './Yupfolder/ReservaYUP';
-import { obtenerTipoHabitaciones } from 'src/functions/registros_db';
+import { obtenerTipoHabitaciones, obtenerHabitaciones, obtenerProcedencia,CrearReservaFs,CrearPasajero } from 'src/functions/registros_db';
+import {useSnackbar} from 'src/components/snackbar';
 
 const steps = ['Registro Pasajero', 'Fecha y Habitacion', 'Recibo de reserva'];
 
 
 
 export default function HorizontalNonLinearStepper() {
+  const {enqueueSnackbar} = useSnackbar();
   const { methodsPasajero, valuesPasajero } = PasajeroYupTest();
-  const {methodsReserva,valuesReserva}=ReservaYupTest();
+  const { methodsReserva, valuesReserva } = ReservaYupTest();
   const [activeStep, setActiveStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
   // crear un estado para guardar los datos del cliente
   const [cliente, setCliente] = React.useState({});
+  //crear el state para guardar habitaciones
+  const [habitaciones, setHabitaciones] = React.useState([]);
   // crear un estado para guarda los datos de la reserva
   const [reserva, setReserva] = React.useState({});
-//crear state para guardar tipo de habitaciones
-  const [tipohabitacion,setTipoHabitacion]=React.useState([]);
+  // crear state para guardar procedencia
+  const [procedencia, setProcedencia] = React.useState([]);
+  //crear state para guardar tipo de habitaciones
+  const [tipohabitacion, setTipoHabitacion] = React.useState([]);
   const totalSteps = () => {
     return steps.length;
   };
@@ -59,18 +65,32 @@ export default function HorizontalNonLinearStepper() {
   // esta es una prueba
 
   const guardarClientePrueba = () => {
-    console.log(valuesPasajero)
-    setPasajero(valuesPasajero)
+    console.log(valuesPasajero);
+    setCliente(valuesPasajero);
+    handleComplete();
+    handleNext();
   }
 
   //  Guardar Reserva 
-  const guardarReserva=()=>{
+  const guardarReserva = () => {
     console.log(valuesReserva)
     setReserva(valuesReserva)
+    handleComplete()
+    handleNext();
   }
 
-  // funcion para guardar la 
-
+  // funcion para guardar el cliente y la reserva en firestore
+  const guardarClienteReserva = async (event) => {
+    // guardar cliente
+    event.preventDefault();
+    alert("guardar cliente y reserva")
+    const cliente_guardado = await CrearPasajero(cliente);
+    // guardar reserva 
+    const reserva_guardada = await CrearReservaFs(reserva);
+    // notificacion de exito
+    enqueueSnackbar('Reserva guardada con exito', {variant: 'success'});
+    handleComplete()
+  }
 
 
   const handleBack = () => {
@@ -89,26 +109,43 @@ export default function HorizontalNonLinearStepper() {
   };
 
   const handleReset = () => {
+    setCliente({});
+    setReserva({});
+    methodsPasajero.reset();
+    methodsReserva.reset();
     setActiveStep(0);
     setCompleted({});
   };
+  const setFechaCheckin = (fechaCheckin) => {
+   methodsReserva.setValue("checkin", fechaCheckin)
+  }
+  const setFechaCheckout = (fechaCheckout) => {
+    methodsReserva.setValue("checkout", fechaCheckout)
+  }
+  const setPaisPasajero = (pais) => {
+    methodsPasajero.setValue("pais", pais)
+  }
+
+
 
   const switchForm = (step) => {
     switch (step) {
       case 1:
         return <FormProvider methods={methodsPasajero} onSubmit={methodsPasajero.handleSubmit(guardarClientePrueba)}>
-          <Pasajeroform  guardarClientePrueba={guardarClientePrueba} setCliente={setCliente} currentUser={cliente} handleNext={handleNext} valuesPasajero={valuesPasajero} methodsPasajero={methodsPasajero}>
+          <Pasajeroform setPaisPasajero={setPaisPasajero} guardarClientePrueba={guardarClientePrueba} setCliente={setCliente} currentUser={cliente} handleNext={handleNext} valuesPasajero={valuesPasajero} methodsPasajero={methodsPasajero}>
             <StepperButton></StepperButton>
           </Pasajeroform>
         </FormProvider>
       case 2:
         return <FormProvider methods={methodsReserva} onSubmit={methodsReserva.handleSubmit(guardarReserva)}>
-           <Reservaform  tipohabitacion={tipohabitacion} setReserva={setReserva} currentUser={reserva} handleNext={handleNext} >
-              <StepperButton></StepperButton>
-           </Reservaform>
+          <Reservaform setFechaCheckin={setFechaCheckin}  setFechaCheckout={setFechaCheckout}  habitaciones={habitaciones} procedencia={procedencia} tipohabitacion={tipohabitacion} setReserva={setReserva} currentUser={reserva} handleNext={handleNext} >
+            <StepperButton></StepperButton>
+          </Reservaform>
         </FormProvider>
       case 3:
-        return <Reciboform></Reciboform>
+        return<form onSubmit={guardarClienteReserva}> 
+        <Reciboform cliente={cliente} habitaciones={habitaciones} reserva={reserva}></Reciboform>
+        </form>
       default:
         return <div>Formulario Default</div>
     }
@@ -117,18 +154,35 @@ export default function HorizontalNonLinearStepper() {
   // crear useEffect 
 
   React.useEffect(() => {
-   
+
     // pedir tipos de habitaciones a firestore
-    const pedirhabitaciones=async()=>{
-      const query_tipo_habitaciones=await obtenerTipoHabitaciones();
-      console.log(query_tipo_habitaciones) 
+    const pedirtipohabitaciones = async () => {
+      const query_tipo_habitaciones = await obtenerTipoHabitaciones();
+      console.log(query_tipo_habitaciones)
       setTipoHabitacion(query_tipo_habitaciones);
     }
-    
+
+    const pedirhabitaciones = async () => {
+      console.log("inicio: pedir habitaciones")
+      const query_habitaciones = await obtenerHabitaciones();
+      console.log(query_habitaciones)
+      setHabitaciones(query_habitaciones);
+      console.log("final: pedir habitaciones")
+    }
+    // crear una funcion para pedir procedencia 
+    const pedirprocedencia = async () => {
+      console.log("inicio: pedir procedencia")
+      const query_procedencia = await obtenerProcedencia();
+      console.log(query_procedencia)
+      setProcedencia(query_procedencia);
+      console.log("final: pedir procedencia")
+    }
+    pedirprocedencia()
     pedirhabitaciones()
+    pedirtipohabitaciones()
 
   }, [])
-  
+
 
 
   // crear el componenente stepper

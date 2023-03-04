@@ -29,7 +29,7 @@ UserNewEditForm.propTypes = {
   children: PropTypes.node, // Agregar prop children
 };
 
-export default function UserNewEditForm({tipohabitacion, children, isEdit = false, currentUser, setReserva, handleNext }) {
+export default function UserNewEditForm({setFechaCheckin,setFechaCheckout,habitaciones,procedencia,tipohabitacion, children, isEdit = false, currentUser, setReserva, handleNext }) {
   const { push } = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -138,7 +138,10 @@ export default function UserNewEditForm({tipohabitacion, children, isEdit = fals
                 render={({ field }) => (
                   <MobileDatePicker
                     {...field}
-                    onChange={(newValue) => field.onChange(newValue)}
+                    onChange={(newValue) =>{ 
+                    
+                    setFechaCheckin(newValue)
+                    field.onChange(newValue)}}
                     label="Fecha"
                     inputFormat="dd/MM/yyyy"
                     renderInput={(params) => <TextField {...params} fullWidth />}
@@ -151,7 +154,9 @@ export default function UserNewEditForm({tipohabitacion, children, isEdit = fals
                 render={({ field }) => (
                   <MobileDatePicker
                     {...field}
-                    onChange={(newValue) => field.onChange(newValue)}
+                    onChange={(newValue) => {
+                      setFechaCheckout(newValue)
+                      field.onChange(newValue)}}
                     label="Fecha"
                     inputFormat="dd/MM/yyyy"
                     renderInput={(params) => <TextField {...params} fullWidth />}
@@ -161,7 +166,7 @@ export default function UserNewEditForm({tipohabitacion, children, isEdit = fals
               <RHFSelect name="tipohabitacion" label="Tipo de Habitacion" placeholder="Country">
                 <option value="" />
                   {tipohabitacion.map((option) => (
-                    <option key={option.id} value={option.tipo_habitacion}>
+                    <option key={option.id} value={option.id}>
                       {option.tipo_habitacion}
                     </option>
                 ))}
@@ -169,18 +174,18 @@ export default function UserNewEditForm({tipohabitacion, children, isEdit = fals
 
               <RHFSelect name="habitacion" label="Habitacion" placeholder="Country">
                 <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
+                {habitaciones.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.id + '-' + option.nombre}
                   </option>
                 ))}
               </RHFSelect>
 
               <RHFSelect name="motordereserva" label="Procedencia" placeholder="Country">
                 <option value="" />
-                {tipohabitacion.map((option) => (
-                  <option key={option.id} value={option.tipo_habitacion}>
-                    {option.tipo_habitacion}
+                {procedencia.map((option) => (
+                  <option key={option.id} value={option.nombre}>
+                    {option.nombre}
                   </option>
                 ))}
               </RHFSelect>
