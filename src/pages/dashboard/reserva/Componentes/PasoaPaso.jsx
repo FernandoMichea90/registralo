@@ -86,7 +86,7 @@ export default function HorizontalNonLinearStepper() {
     alert("guardar cliente y reserva")
     const cliente_guardado = await CrearPasajero(cliente);
     // guardar reserva 
-    const reserva_guardada = await CrearReservaFs(reserva);
+    const reserva_guardada = await CrearReservaFs({...reserva, cliente: cliente_guardado});
     // notificacion de exito
     enqueueSnackbar('Reserva guardada con exito', {variant: 'success'});
     handleComplete()
