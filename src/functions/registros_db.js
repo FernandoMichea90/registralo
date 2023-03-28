@@ -162,7 +162,20 @@ export const EditarRegistrosCollection=async(idRegistro,idCollection,cantidad,fe
   }
 
 }
+//obetener el registro  por fecha 
+export const ObtenerRegistrosCollectionFecha=async(id,fecha)=>{
+  try{
+    const docRef=await doc(DB,"Registros",id,"collection",fecha);
+    const docSnap=await getDoc(docRef);
+    if(docSnap.exists()){
+      console.log('Document data: ',docSnap.data());
+      return docSnap.data();
+    }
+  }catch(error){
+    console.log(error);
+  }
 
+}
 // obtener la fecha del dia de hoy 
 export const ObtenerFecha=()=>{
   const date = new Date();

@@ -95,7 +95,7 @@ export default function BlogPostPage() {
 
   const [error, setError] = useState(null);
 
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   const getPost = useCallback(async (id) => {
 
@@ -251,11 +251,11 @@ export default function BlogPostPage() {
             },
           ]}
           action={
-            <NextLink href={PATH_DASHBOARD.eCommerce.new} passHref>
-              <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+           
+              <Button onClick={()=>setOpenModal(true)} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                 Nuevo Registro
               </Button>
-            </NextLink>
+           
           }
         />
 
@@ -282,7 +282,7 @@ export default function BlogPostPage() {
       </Container>
       <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Titulo de Registros </DialogTitle>
-        <RegistrosForm guardarRegistro={guardarRegistro}>
+        <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal}>
         </RegistrosForm>
       </Dialog>
 

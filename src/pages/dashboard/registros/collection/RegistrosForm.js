@@ -38,9 +38,10 @@ CalendarForm.propTypes = {
 //   onCreateUpdateEvent: PropTypes.func,
 //   colorOptions: PropTypes.arrayOf(PropTypes.string),
   guardarRegistro: PropTypes.func,
+  setOpenModal: PropTypes.func
 };
 
-export default function CalendarForm({ event,guardarRegistro }) {
+export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
     cantidad: Yup.string().max(255).required('Title is required'),
@@ -64,9 +65,6 @@ export default function CalendarForm({ event,guardarRegistro }) {
   const onSubmit = async (data) => {
     try {
 
-
-        
-
         guardarRegistro();
         // const newEvent = {
         // title: data.title,
@@ -87,6 +85,11 @@ export default function CalendarForm({ event,guardarRegistro }) {
     }
   };
 
+  const onChangeFecha = (newValue) => {
+    alert(newValue);
+  }
+
+
 //   const isDateError =
 //     !values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
 
@@ -95,12 +98,14 @@ export default function CalendarForm({ event,guardarRegistro }) {
       <Stack spacing={3} sx={{ px: 3 }}>
 
       <Controller
-          name="cantidad"
+          name="fecha"
           control={control}
           render={({ field }) => (
             <MobileDatePicker
               {...field}
-              onChange={(newValue) => field.onChange(newValue)}
+              onChange={(newValue) => {
+                onChangeFecha(newValue);
+                field.onChange(newValue)}}
               label="Fecha"
               inputFormat="dd/MM/yyyy"
               renderInput={(params) => <TextField {...params} fullWidth />}
@@ -110,7 +115,7 @@ export default function CalendarForm({ event,guardarRegistro }) {
 
 
 
-        <RHFTextField name="cantiddad" label="Cantidad" />
+        <RHFTextField name="cantidad" label="Cantidad" />
 
 
       </Stack>
@@ -126,7 +131,7 @@ export default function CalendarForm({ event,guardarRegistro }) {
 
         <Box sx={{ flexGrow: 1 }} />
 
-        <Button variant="outlined" color="inherit">
+        <Button variant="outlined" color="inherit" onClick={()=>setOpenModal(false)}>
           Cancelar
         </Button>
 
