@@ -170,7 +170,7 @@ export default function BlogPostPage() {
 
   // sumar o restar contador\
   useEffect(() => {
-    console.log(count);
+  
     // verificar si existe registro en todayrecord
     if (todayrecord?.id) {
       // editar registro
@@ -206,6 +206,8 @@ export default function BlogPostPage() {
             alert("Error al guardar el registro")
           } else {
             alert("Registro guardado")
+            // Guardar el registro. 
+
           }
         } catch (error) {
           console.log(error)
@@ -223,10 +225,31 @@ export default function BlogPostPage() {
     setOpenModal(false);
   };
 
-  const guardarRegistro = async () => {
+  const guardarRegistro = async (data) => {
       alert("Registro guardado");
+      console.log(data);
+      // buscar si existe el registro del dia de hoy.
+      const response = await ObtenerRegistrosCollectionToday(data)
   }
 
+  const GetRegistrosCollectionToday = async (data) => {
+    try {
+      const fechahoy = new Date();
+      // Establecer el inicio del dia de hoy 
+      const inicioDiaHoy = new Date(fechahoy.getFullYear(), fechahoy.getMonth(), fechahoy.getDate(), 0, 0, 0);
+      // Dia de hoy en timestamp (se guarda en segundos).
+      const inicioDiaHoyTimestamp = Math.floor(inicioDiaHoy.getTime() / 1000);
+      // Establecer el final del dia de hoy
+      const finalDiaHoy = new Date(fechahoy.getFullYear(), fechahoy.getMonth(), fechahoy.getDate(), 23, 59, 59);
+      // Dia de hoy final en timestamp (se guarda en segundos).
+      const finalDiaHoyTimestamp = Math.floor(finalDiaHoy.getTime() / 1000);
+      // buscar el registro del dia de hoy
+       const response = await ObtenerRegistrosCollectionToday(id);
+
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   return (
     <>

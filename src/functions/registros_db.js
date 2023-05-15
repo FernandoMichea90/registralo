@@ -91,7 +91,7 @@ export const ObtenerRegistrosId=async(id)=>{
 // obteneer el registro del dia de hoy segun la colleccion
 export const ObtenerRegistrosCollectionToday=async(id)=>{
   try {
-    var hoy = ObtenerFecha();
+    var hoy = ObtenerFechaHoy();
     console.log("hoy "+ hoy);
     console.log(id)
     const response=[];
@@ -177,7 +177,7 @@ export const ObtenerRegistrosCollectionFecha=async(id,fecha)=>{
 
 }
 // obtener la fecha del dia de hoy 
-export const ObtenerFecha=()=>{
+export const ObtenerFechaHoy=()=>{
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;

@@ -65,7 +65,7 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
   const onSubmit = async (data) => {
     try {
 
-        guardarRegistro();
+        var response = await guardarRegistro(data);
         // const newEvent = {
         // title: data.title,
         // description: data.description,
@@ -87,6 +87,9 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
 
   const onChangeFecha = (newValue) => {
     alert(newValue);
+    // buscar registros por fecha 
+  // var response = await BuscarRegistrosPorFecha(newValue);
+
   }
 
 
