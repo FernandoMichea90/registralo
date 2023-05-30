@@ -85,12 +85,12 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
     }
   };
 
-  const onChangeFecha = (newValue) => {
-    alert(newValue);
-    // buscar registros por fecha 
-  // var response = await BuscarRegistrosPorFecha(newValue);
+  // const onChangeFecha = (newValue) => {
+  //   alert(newValue);
+  //   // buscar registros por fecha 
+  // // var response = await BuscarRegistrosPorFecha(newValue);
 
-  }
+  // }
 
 
 //   const isDateError =
@@ -107,7 +107,6 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
             <MobileDatePicker
               {...field}
               onChange={(newValue) => {
-                onChangeFecha(newValue);
                 field.onChange(newValue)}}
               label="Fecha"
               inputFormat="dd/MM/yyyy"
@@ -115,14 +114,8 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
             />
           )}
         />
-
-
-
         <RHFTextField name="cantidad" label="Cantidad" />
-
-
       </Stack>
-
       <DialogActions>
         {hasEventData && (
           <Tooltip title="Delete Event">

@@ -62,26 +62,29 @@ export const _dataGrid = [...Array(36)].map((_, index) => ({
 }));
 
 
-function useCounter() {
-  const [count, setCount] = useState(0);
-
-  const increment = () => {
-    setCount(prevCount => prevCount + 1);
-  };
-
-  const decrement = () => {
-    setCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
-  };
-
-  return [count, increment, decrement, setCount];
-}
 
 
 export default function BlogPostPage() {
   const { themeStretch } = useSettingsContext();
   const [count, increment, decrement, setCount] = useCounter();
   const [titulo, setTitulo] = useState([]);
+  const [idObject, setIdObject] = useState(false);
 
+  function useCounter() {
+    const [count, setCount] = useState(0);
+  
+    const increment = async() => {
+      setCount(prevCount => prevCount + 1);
+      await getPost(title);
+    };
+  
+    const decrement = async () => {
+      setCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
+      await getPost(title);
+    };
+  
+    return [count, increment, decrement, setCount];
+  }
 
   const {
     query: { title },
@@ -106,6 +109,7 @@ export default function BlogPostPage() {
       const respuesta = await ObtenerRegistrosCollection(id);
       setPost(respuesta);
       setLoadingPost(false);
+      setIdObject(id)
     } catch (error) {
       console.error(error);
       setLoadingPost(false);
@@ -156,8 +160,7 @@ export default function BlogPostPage() {
     // buscar registro del dia de hoy
     const obtenerRegistro = async () => {
       try {
-        const respuesta = await ObtenerRegistrosCollectionToday(title);
-        console.log('esta es la respuesta del registro del dia de hoy' + JSON.stringify(respuesta))
+        const respuesta = await ObtenerRegistrosCollectionToday(new Date(),title);
         setTodayrecord(respuesta);
         setCount(respuesta.cantidad);
 
@@ -224,13 +227,51 @@ export default function BlogPostPage() {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+   
+  const adaptarRegistro= (data) => {
+    const year=data.fecha.getFullYear();
+    const month=data.fecha.getMonth()+1;
+    const day=data.fecha.getDate();
+    const fechaCodigo=`${day}${month}${year}`;
+    const cantidad=data.cantidad;
+    var objeto={
+      fecha:data.fecha,
+      fecha_codigo:fechaCodigo,
+      cantidad:cantidad,
+      day:day,
+      month:month,
+      year:year
+    }
+    return objeto;
+  }
 
   const guardarRegistro = async (data) => {
-      alert("Registro guardado");
-      console.log(data);
       // buscar si existe el registro del dia de hoy.
-      const response = await ObtenerRegistrosCollectionToday(data)
-  }
+      console.log(data);
+      const response = await ObtenerRegistrosCollectionToday(data.fecha,title);
+      console.log(response);
+      // mostrar la respuesta   
+      if (!response){
+        //  se adapta la data a guardar
+        const newRegistro = adaptarRegistro(data);
+        // se crea el nuevo registro 
+        const response_registro= await CrearRegistrosCollection(idObject,newRegistro);
+        // agregar el registro a la lista de registros
+        await getPost(title);
+        // cerrar el modal
+        handleCloseModal(); 
+        return true
+      }else{
+        // se  edita el registro de la base de datos
+       const  editRegistro =  await EditarRegistrosCollection(title,response.id,data.cantidad);
+        // ver la respuesta 
+        console.log(editRegistro);
+        // ver si puedo pedir los registros de nuevo
+        await getPost(title);
+        handleCloseModal();
+      return true;
+      }
+    }
 
   const GetRegistrosCollectionToday = async (data) => {
     try {
@@ -245,6 +286,12 @@ export default function BlogPostPage() {
       const finalDiaHoyTimestamp = Math.floor(finalDiaHoy.getTime() / 1000);
       // buscar el registro del dia de hoy
        const response = await ObtenerRegistrosCollectionToday(id);
+       if (!response){
+          // se crea el nuevo registro 
+         console.log(data);
+       }else{
+        console.log(data);
+       }
 
     }catch(error){
       console.log(error)

@@ -1,6 +1,6 @@
 
 import {DB} from '../auth/FirebaseContext'
-import { collection, addDoc,doc,getDoc,query,where,getDocs,updateDoc } from "firebase/firestore";
+import { collection, addDoc,doc,getDoc,query,where,getDocs,updateDoc,orderBy } from "firebase/firestore";
 
 
 export const CrearRegistros=async(evento)=>{
@@ -25,7 +25,6 @@ export const ObtenerRegistroName=async()=>{
     }else{
       console.log('No such document!')
     }
-       
 
   } catch (error) {
     console.log(error);
@@ -53,13 +52,16 @@ export const ObtenerRegistros=async()=>{
 // Obtener la colleccion de un Registro
 export const ObtenerRegistrosCollection=async(id)=>{
   try {
-    const q = query(collection(DB, "Registros",id,"collection"));
+    const q = query(collection(DB, "Registros",id,"collection"),
+    orderBy("year", "desc"), 
+    orderBy("month","desc"),
+    orderBy("day", "desc")
+    );
     const querySnapshot = await getDocs(q);
     const response=[];
     console.log('paso por aqui');
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
       response.push({id:doc.id,...doc.data()})
     });
     
@@ -89,22 +91,17 @@ export const ObtenerRegistrosId=async(id)=>{
 }
 
 // obteneer el registro del dia de hoy segun la colleccion
-export const ObtenerRegistrosCollectionToday=async(id)=>{
+export const ObtenerRegistrosCollectionToday=async(date=new Date(),id)=>{
   try {
-    var hoy = ObtenerFechaHoy();
-    console.log("hoy "+ hoy);
-    console.log(id)
+    var hoy = ObtenerFechaHoy(date);
     const response=[];
-    const q = query(collection(DB, "Registros",id,"collection"),where("fecha_codigo","==",hoy));
+    const q = query(collection(DB, "Registros",id,"collection"),where("fecha_codigo","==",hoy.toString()));
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
       response.push({id:doc.id,...doc.data()})
     });
-    console.log("paso por aqui today" + response);
     // verificar si el array esta vacio
-    
     if(response.length>0){
       return response[0];
     }
@@ -126,11 +123,9 @@ export const ObtenerRegistrosCollectionToday=async(id)=>{
       console.log(idRegistro);
       return {id:idRegistro,...evento};
     }
-
   } catch (error) {
     console.log(error);
     return false
- 
   }
 }
 // obtener el registro del dia de hoy segun el id
@@ -177,11 +172,12 @@ export const ObtenerRegistrosCollectionFecha=async(id,fecha)=>{
 
 }
 // obtener la fecha del dia de hoy 
-export const ObtenerFechaHoy=()=>{
-  const date = new Date();
+export const ObtenerFechaHoy=(date=new Date())=>{
+  // const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const fecha = `${day}${month}${year}`;
   return fecha;
 }
+
