@@ -1,6 +1,6 @@
 
 import {DB} from '../auth/FirebaseContext'
-import { collection, addDoc,doc,getDoc,query,where,getDocs,updateDoc,orderBy } from "firebase/firestore";
+import { collection, addDoc,doc,getDoc,query,where,getDocs,updateDoc,orderBy,deleteDoc } from "firebase/firestore";
 
 
 export const CrearRegistros=async(evento)=>{
@@ -128,7 +128,7 @@ export const ObtenerRegistrosCollectionToday=async(date=new Date(),id)=>{
     return false
   }
 }
-// obtener el registro del dia de hoy segun el id
+//  Crear un nuevo registro en la colleccion
 export const CrearRegistrosCollection=async(id,evento)=>{
   try {
       const docRef = await addDoc(collection(DB, "Registros",id,"collection"),evento);
@@ -138,6 +138,20 @@ export const CrearRegistrosCollection=async(id,evento)=>{
       console.error("Error adding document: ", e);
       return null; 
     }
+}
+// obtener registro collection por id
+export const ObtenerRegistrosCollectionId=async(id,idCollection)=>{
+  try{
+    const docRef=await doc(DB,"Registros",id,"collection",idCollection);
+    const docSnap=await getDoc(docRef);
+    if(docSnap.exists()){
+      console.log('Document data: ',docSnap.data());
+      return docSnap.data();
+    }
+  }catch(error){
+    console.log(error);
+    return false;
+  }
 }
 
 // actualizar el registro del dia de hoy segun el id
@@ -170,6 +184,19 @@ export const ObtenerRegistrosCollectionFecha=async(id,fecha)=>{
     console.log(error);
   }
 
+}
+
+// borrar registro de la colleccion
+export const BorrarRegistrosCollectionIdCollection=async(id,idCollection)=>{
+  try{
+    const docRef=await doc(DB,"Registros",id,"collection",idCollection);
+    await deleteDoc(docRef);
+    console.log("Document deleted");
+    return true;
+  }catch(error){
+    console.log(error);
+    return false;
+  }
 }
 // obtener la fecha del dia de hoy 
 export const ObtenerFechaHoy=(date=new Date())=>{

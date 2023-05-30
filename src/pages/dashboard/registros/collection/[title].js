@@ -341,7 +341,7 @@ export default function BlogPostPage() {
               <Box sx={{ height: 390 }}>
                 {
                   post.length > 0 &&
-                  <DataGridBasic data={_dataGrid} registros={post} />
+                  <DataGridBasic data={_dataGrid} registros={post} setRegistros={setPost}  title={title} />
                 }
               </Box>
             </Card>

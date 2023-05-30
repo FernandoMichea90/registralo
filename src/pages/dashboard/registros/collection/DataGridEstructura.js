@@ -9,6 +9,8 @@ import { useEffect,useState } from 'react';
 import { TableHeadCustom } from 'src/components/table';
 import DataRow from './DataRow';
 import {useTable,TableSelectedAction} from 'src/components/table';
+import { BorrarRegistrosCollectionIdCollection, ObtenerRegistrosCollectionId } from 'src/functions/registros_db';
+
 // ----------------------------------------------------------------------
 
 const columns = [
@@ -79,7 +81,7 @@ const TABLE_HEAD = [
 
 
 
-export default function DataGridBasic({ data,registros }) {
+export default function DataGridBasic({ data,registros,setRegistros,title }) {
 
   const columns2 = [
     {
@@ -153,8 +155,23 @@ export default function DataGridBasic({ data,registros }) {
   };
 
   // Borrar Registro 
-  const handleDeleteRow=(id)=>{
-    alert(id);
+  const handleDeleteRow=async(id)=>{
+  
+    const response = await BorrarRegistrosCollectionIdCollection(title,id);
+    if(response){
+      const deleteRow = registros.filter((row) => row.id !== id);
+      setSelected([]);
+      setRegistros(deleteRow);
+    }else{
+     setSelected([]);
+    }
+  }
+
+  // Editar Registro 
+  const handleEditRow=async(id)=>{
+    console.log('editar registro',id);
+    const response = await  ObtenerRegistrosCollectionId(title,id);
+    console.log('Registro obtenido',response);
   }
 
 
@@ -222,7 +239,7 @@ export default function DataGridBasic({ data,registros }) {
              selected={selected.includes(row.id)}
              onSelectRow={() => onSelectRow(row.id)}
              onDeleteRow={() => handleDeleteRow(row.id)}
-             onEditRow={() => handleEditRow(row.fecha_codigo)}
+             onEditRow={() => handleEditRow(row.id)}
              onViewRow={() => handleViewRow(row.fecha_codigo)}
              
              />
