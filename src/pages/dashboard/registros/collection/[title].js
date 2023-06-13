@@ -69,6 +69,8 @@ export default function BlogPostPage() {
   const [count, increment, decrement, setCount] = useCounter();
   const [titulo, setTitulo] = useState([]);
   const [idObject, setIdObject] = useState(false);
+  const [editando, setEditando] = useState(null);
+  const [cambioHoy, setCambioHoy] = useState(false);
 
   function useCounter() {
     const [count, setCount] = useState(0);
@@ -228,6 +230,7 @@ export default function BlogPostPage() {
     setOpenModal(false);
   };
    
+
   const adaptarRegistro= (data) => {
     const year=data.fecha.getFullYear();
     const month=data.fecha.getMonth()+1;
@@ -332,7 +335,7 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CardDiente title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} ></CardDiente>
+              <CardDiente title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} ></CardDiente>
             </Grid>
           </Grid>
           <Stack spacing={5}>
@@ -341,7 +344,14 @@ export default function BlogPostPage() {
               <Box sx={{ height: 390 }}>
                 {
                   post.length > 0 &&
-                  <DataGridBasic data={_dataGrid} registros={post} setRegistros={setPost}  title={title} />
+                  <DataGridBasic 
+                    data={_dataGrid} 
+                    registros={post} 
+                    setRegistros={setPost}  
+                    title={title} 
+                    setOpenModal={setOpenModal}
+                    setEditando={setEditando}
+                    />
                 }
               </Box>
             </Card>
@@ -352,7 +362,7 @@ export default function BlogPostPage() {
       </Container>
       <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Titulo de Registros </DialogTitle>
-        <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal}>
+        <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal} editando={editando} title={title} setCambioHoy={setCambioHoy} setCount={setCount}>
         </RegistrosForm>
       </Dialog>
 

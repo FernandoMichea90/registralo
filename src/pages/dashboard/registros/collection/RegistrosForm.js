@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import * as Yup from 'yup';
 import merge from 'lodash/merge';
 import { isBefore } from 'date-fns';
@@ -12,6 +13,9 @@ import { MobileDateTimePicker,MobileDatePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../../components/iconify';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../../components/hook-form';
+import { get } from 'lodash';
+import { use } from 'i18next';
+import { ObtenerRegistrosCollectionId } from 'src/functions/registros_db';
 
 // ----------------------------------------------------------------------
 
@@ -38,10 +42,11 @@ CalendarForm.propTypes = {
 //   onCreateUpdateEvent: PropTypes.func,
 //   colorOptions: PropTypes.arrayOf(PropTypes.string),
   guardarRegistro: PropTypes.func,
-  setOpenModal: PropTypes.func
+  setOpenModal: PropTypes.func ,
+  editando: PropTypes.bool,
 };
 
-export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
+export default function CalendarForm({ event,guardarRegistro,setOpenModal,editando,title,setCambioHoy,setCount }) {
   const hasEventData = !!event;
   const EventSchema = Yup.object().shape({
     cantidad: Yup.string().max(255).required('Title is required'),
@@ -51,39 +56,34 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
     resolver: yupResolver(EventSchema),
     defaultValues: getInitialValues(event),
   });
-
+  console.log("este es el evento inicial");
+  console.log(getInitialValues(event))
   const {
     // reset,
     // watch,
     control,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
 // const values = watch();
 
   const onSubmit = async (data) => {
-    try {
-
+    try {      
+        console.log(data);
+        // comparar si la data.fecha es igual a la fecha de hoy        
         var response = await guardarRegistro(data);
-        // const newEvent = {
-        // title: data.title,
-        // description: data.description,
-        // textColor: data.textColor,
-        // allDay: data.allDay,
-        // start: data.start,
-        // end: data.end,
-        // };
-
-        // onCreateUpdateEvent(newEvent);
-
-        // onCancel();
-
-        // reset();
+        if(data.fecha.toDateString()===new Date().toDateString()){
+         if(response){
+            setCount(data.cantidad);
+         }
+        }
     } catch (error) {
       console.error(error);
     }
   };
+
 
   // const onChangeFecha = (newValue) => {
   //   alert(newValue);
@@ -95,6 +95,31 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
 
 //   const isDateError =
 //     !values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
+
+const getFechaString=(day,month,year)=>{
+  var fecha = month+"/"+day+"/"+year;
+  var date= new Date(fecha);
+  return date;
+}
+
+
+useEffect(() => {
+  const buscarPorId = async (title,id) => {
+    var response = await ObtenerRegistrosCollectionId(title,id);
+    var data={
+      fecha: getFechaString(response.day,response.month,response.year) ,
+      cantidad:response.cantidad
+    }
+    setValue('fecha', data.fecha);
+    setValue('cantidad', data.cantidad?data.cantidad:'0');
+  }
+  if(editando){
+    // buscar registro por id
+  buscarPorId(title,editando);
+  }
+}, [editando]);
+
+
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -132,7 +157,7 @@ export default function CalendarForm({ event,guardarRegistro,setOpenModal }) {
         </Button>
 
         <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          {hasEventData ? 'Update' : 'Guardar test'}
+          {editando ? 'Update' : 'Guardar'}
         </LoadingButton>
       </DialogActions>
     </FormProvider>

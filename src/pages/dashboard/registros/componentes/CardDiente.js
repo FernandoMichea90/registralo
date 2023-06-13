@@ -7,6 +7,8 @@ import { bgGradient } from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
 // components
 import Iconify from '../../../../components/iconify';
+import { use } from 'i18next';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -18,8 +20,16 @@ AnalyticsWidgetSummary.propTypes = {
   total: PropTypes.number,
 };
 
-export default function AnalyticsWidgetSummary({ title, total,increment,decrement, icon, color = 'primary', sx, ...other }) {
+export default function AnalyticsWidgetSummary({ title, total,increment,decrement,cambioHoy,setCambioHoy, icon, color = 'primary', sx, ...other }) {
   const theme = useTheme();
+
+
+
+  useEffect(() => {
+    if (cambioHoy) {
+      setCambioHoy(false);
+    }
+  }, [cambioHoy])
 
   return (
     <Card

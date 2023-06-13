@@ -81,7 +81,7 @@ const TABLE_HEAD = [
 
 
 
-export default function DataGridBasic({ data,registros,setRegistros,title }) {
+export default function DataGridBasic({ data,registros,setRegistros,title,setOpenModal,setEditando }) {
 
   const columns2 = [
     {
@@ -170,8 +170,12 @@ export default function DataGridBasic({ data,registros,setRegistros,title }) {
   // Editar Registro 
   const handleEditRow=async(id)=>{
     console.log('editar registro',id);
+    setEditando(id);
     const response = await  ObtenerRegistrosCollectionId(title,id);
     console.log('Registro obtenido',response);
+    
+    
+    setOpenModal(true);
   }
 
 
