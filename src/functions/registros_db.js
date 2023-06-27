@@ -52,16 +52,19 @@ export const ObtenerRegistros=async()=>{
 // Obtener la colleccion de un Registro
 export const ObtenerRegistrosCollection=async(id)=>{
   try {
-    const q = query(collection(DB, "Registros",id,"collection"),
+    const q = query(collection(DB,"Registros",id,"collection"),
     orderBy("year", "desc"), 
     orderBy("month","desc"),
     orderBy("day", "desc")
     );
+    // const q = query(collection(DB,"Registros",id,"collection"));
     const querySnapshot = await getDocs(q);
     const response=[];
-    console.log('paso por aqui');
+    console.log('paso por aqui prueba 2');
+    console.log(querySnapshot.length);  
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
+      console.log(doc.data())
       response.push({id:doc.id,...doc.data()})
     });
     
@@ -93,7 +96,9 @@ export const ObtenerRegistrosId=async(id)=>{
 // obteneer el registro del dia de hoy segun la colleccion
 export const ObtenerRegistrosCollectionToday=async(date=new Date(),id)=>{
   try {
+    console.log(date);
     var hoy = ObtenerFechaHoy(date);
+    console.log(hoy)
     const response=[];
     const q = query(collection(DB, "Registros",id,"collection"),where("fecha_codigo","==",hoy.toString()));
     const querySnapshot = await getDocs(q);
@@ -106,7 +111,7 @@ export const ObtenerRegistrosCollectionToday=async(date=new Date(),id)=>{
       return response[0];
     }
     else{
-      const date = new Date();
+      // const date = new Date();
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
@@ -120,8 +125,7 @@ export const ObtenerRegistrosCollectionToday=async(date=new Date(),id)=>{
         year:year
       }
       const idRegistro=await CrearRegistrosCollection(id,evento);
-      console.log(idRegistro);
-      return {id:idRegistro,...evento};
+      return {id:idRegistro,...evento};;
     }
   } catch (error) {
     console.log(error);
@@ -155,22 +159,17 @@ export const ObtenerRegistrosCollectionId=async(id,idCollection)=>{
 }
 
 // actualizar el registro del dia de hoy segun el id
-export const EditarRegistrosCollection=async(idRegistro,idCollection,cantidad,fecha=new Date())=>{
-  try{
-    const docRef=await doc(DB,"Registros",idRegistro,"collection",idCollection);
-    await updateDoc(docRef,{
-      cantidad:cantidad
-    });
-
-    console.log("Document updated");
-    console.log(JSON.stringify(docRef));
+export const EditarRegistrosCollection = async (idRegistro, idCollection, cantidad, fecha = new Date()) => {
+  try {
+    const docRef = doc(DB, 'Registros', idRegistro, 'collection', idCollection);
+    const respuesta = await updateDoc(docRef, { cantidad });
+    console.log('Document updated:', JSON.stringify(docRef));
     return docRef;
-
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
+};
 
-}
 //obetener el registro  por fecha 
 export const ObtenerRegistrosCollectionFecha=async(id,fecha)=>{
   try{
@@ -201,6 +200,7 @@ export const BorrarRegistrosCollectionIdCollection=async(id,idCollection)=>{
 // obtener la fecha del dia de hoy 
 export const ObtenerFechaHoy=(date=new Date())=>{
   // const date = new Date();
+  console.log(date);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();

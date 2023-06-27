@@ -40,6 +40,9 @@ import {
 import { AnalyticsWidgetSummary } from 'src/sections/@dashboard/general/analytics';
 import CardDiente from '../componentes/CardDiente';
 import { RegistroForm } from 'src/sections/@dashboard/registros';
+import { set } from 'lodash';
+import { EcommerceYearlySales } from 'src/sections/@dashboard/general/e-commerce';
+import { adaptarDatosParaChart } from './ChartInterface';
 
 // ----------------------------------------------------------------------
 
@@ -71,18 +74,38 @@ export default function BlogPostPage() {
   const [idObject, setIdObject] = useState(false);
   const [editando, setEditando] = useState(null);
   const [cambioHoy, setCambioHoy] = useState(false);
+  const [loadingCount,setLoadingCount] = useState(null)
 
   function useCounter() {
     const [count, setCount] = useState(0);
   
     const increment = async() => {
-      setCount(prevCount => prevCount + 1);
-      await getPost(title);
+      setLoadingCount("increment");
+      setCount(prevCount => parseInt(prevCount) + 1);
+      const updatedPost = post.map(item => {
+        if (item.id === todayrecord.id) {
+          return {...item, cantidad: parseInt(item.cantidad) + 1 };
+        } else {
+          return item;
+        }
+      });
+      // cargar los nuevos datos 
+      reloadPostsAndChart(updatedPost);
     };
   
     const decrement = async () => {
-      setCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
-      await getPost(title);
+      
+      setLoadingCount("decrement")
+      setCount(prevCount => (parseInt(prevCount) > 0 ? parseInt(prevCount) - 1 : 0));
+      const updatedPost = post.map(item => {
+        if (item.id === todayrecord.id) {
+          return { ...item, cantidad: item.cantidad > 0 ? parseInt(item.cantidad) - 1 : 0  };
+        } else {
+          return item;
+        }
+      });
+      // cargar los nuevos datos 
+      reloadPostsAndChart(updatedPost);
     };
   
     return [count, increment, decrement, setCount];
@@ -96,11 +119,43 @@ export default function BlogPostPage() {
 
   const [post, setPost] = useState([]);
 
+  const [dataChart, setDataChart] = useState({
+    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+    series: [
+      {
+        year: '2019',
+        data: [
+          { name: 'Total Income', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
+          { name: 'Total Expenses', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
+        ],
+      },
+      {
+        year: '2020',
+        data: [
+          { name: 'Total Income', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
+          { name: 'Total Expenses', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
+        ],
+      },
+    ],
+              
+  });
+
   const [loadingPost, setLoadingPost] = useState(true);
 
   const [error, setError] = useState(null);
 
   const [openModal, setOpenModal] = useState(false);
+
+  const [todayChangeLoading,setTodayChangeLoading] = useState(true);
+
+
+  // funcion que carga los datos de posts y actualiza el chart 
+
+  const reloadPostsAndChart = (updatePosts) => {
+    setPost(updatePosts);
+    var responseDataChart=adaptarDatosParaChart(updatePosts);
+    setDataChart(responseDataChart);
+  }
 
   const getPost = useCallback(async (id) => {
 
@@ -108,8 +163,13 @@ export default function BlogPostPage() {
       // const response = await axios.get('/api/blog/post', {
       //   params: { title },
       // });
+      console.log(id);
+      console.log(title);
       const respuesta = await ObtenerRegistrosCollection(id);
-      setPost(respuesta);
+      var responseDataChart=adaptarDatosParaChart(respuesta);
+      console.log(responseDataChart);
+      setDataChart(responseDataChart);
+      await setPost(respuesta);
       setLoadingPost(false);
       setIdObject(id)
     } catch (error) {
@@ -119,18 +179,7 @@ export default function BlogPostPage() {
     }
   }, [title]);
 
-  const getRecentPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
-
-      setRecentPosts(response.data.recentPosts);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [title]);
-
+ 
   const [todayrecord, setTodayrecord] = useState();
 
 
@@ -163,8 +212,11 @@ export default function BlogPostPage() {
     const obtenerRegistro = async () => {
       try {
         const respuesta = await ObtenerRegistrosCollectionToday(new Date(),title);
+        console.log(respuesta)
         setTodayrecord(respuesta);
         setCount(respuesta.cantidad);
+        getPost(title);
+        
 
       } catch (error) {
         console.log(error)
@@ -175,15 +227,27 @@ export default function BlogPostPage() {
 
   // sumar o restar contador\
   useEffect(() => {
-  
+     
+     console.log("hola")
     // verificar si existe registro en todayrecord
     if (todayrecord?.id) {
       // editar registro
       const EditarRegistrosFront = async () => {
         try {
+          setTodayChangeLoading(true);
+          // alert("este es el count "+count+"y el todayrecord cantidad "+todayrecord.cantidad)
+          // if(count>todayrecord.cantidad){
+          //   setLoadingCount("increment")
+          // }else{
+          //   setLoadingCount("decrement")
+          // }
           //funcion para editar el registro segun id y cantidad
           var respuesta = await EditarRegistrosCollection(title, todayrecord.id, count)
-          console.log('esta es la respuesta de editar' + JSON.stringify(respuesta))
+          console.log(respuesta);
+          setLoadingCount(null)
+          setTodayChangeLoading(false);
+          return respuesta; 
+
 
         } catch (error) { console.log(error) }
 
@@ -191,8 +255,9 @@ export default function BlogPostPage() {
       EditarRegistrosFront();
     } else {
       // guardar registro
-      const CrearRegistrosFront = async () => {
+      const CrearRegistrosFront = async() => {
         try {
+         setTodayChangeLoading(true);
           // fecha de hoy 
           var today = new Date();
           // crear registro
@@ -206,20 +271,24 @@ export default function BlogPostPage() {
           };
           console.log('paso por la respuesta');
           var respuesta = await CrearRegistrosCollection(title, newRegistro)
+          console.log(newRegistro);
           // si la respuesta es null 
           if (respuesta == null) {
             alert("Error al guardar el registro")
           } else {
             alert("Registro guardado")
             // Guardar el registro. 
-
           }
+          setTodayChangeLoading(false);
         } catch (error) {
           console.log(error)
         }
       }
-      // CrearRegistrosFront();
+       if(count>0){
+       CrearRegistrosFront();
+       }
     }
+    console.log("chao")
   }, [count]);
 
   const handleOpenModal = () => {
@@ -236,7 +305,7 @@ export default function BlogPostPage() {
     const month=data.fecha.getMonth()+1;
     const day=data.fecha.getDate();
     const fechaCodigo=`${day}${month}${year}`;
-    const cantidad=data.cantidad;
+    const cantidad=parseInt(data.cantidad);
     var objeto={
       fecha:data.fecha,
       fecha_codigo:fechaCodigo,
@@ -251,6 +320,7 @@ export default function BlogPostPage() {
   const guardarRegistro = async (data) => {
       // buscar si existe el registro del dia de hoy.
       console.log(data);
+      console.log(data.fecha)
       const response = await ObtenerRegistrosCollectionToday(data.fecha,title);
       console.log(response);
       // mostrar la respuesta   
@@ -335,7 +405,14 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CardDiente title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} ></CardDiente>
+              <CardDiente loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} ></CardDiente>
+            </Grid>
+            <Grid item xs={12} sm={6} md={9}>
+            <EcommerceYearlySales
+              title="Informe"
+              subheader=""
+              chart={dataChart}
+            />
             </Grid>
           </Grid>
           <Stack spacing={5}>

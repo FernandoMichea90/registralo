@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 // @mui
 import { DataGrid } from '@mui/x-data-grid';
-import { IconButton, Table, TableBody,TableContainer,Tooltip } from '@mui/material';
+import { IconButton, Table, TableBody,TableContainer,Tooltip,Button } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
 import { useEffect,useState } from 'react';
@@ -10,9 +10,9 @@ import { TableHeadCustom } from 'src/components/table';
 import DataRow from './DataRow';
 import {useTable,TableSelectedAction} from 'src/components/table';
 import { BorrarRegistrosCollectionIdCollection, ObtenerRegistrosCollectionId } from 'src/functions/registros_db';
-
+import ConfirmDialog from 'src/components/confirm-dialog';
+import { LoadingButton } from '@mui/lab';
 // ----------------------------------------------------------------------
-
 const columns = [
   {
     field: 'id',
@@ -137,7 +137,8 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
   const [openPopover, setOpenPopover] = useState(null);
   const[cargando,setcargando] = useState(false)
   const [openConfirm, setOpenConfirm] = useState(false);
-
+  // agregar state editando 
+  const [deletingRows,setDeletingRows] = useState(false);
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -155,16 +156,39 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
   };
 
   // Borrar Registro 
-  const handleDeleteRow=async(id)=>{
-  
-    const response = await BorrarRegistrosCollectionIdCollection(title,id);
-    if(response){
-      const deleteRow = registros.filter((row) => row.id !== id);
-      setSelected([]);
-      setRegistros(deleteRow);
-    }else{
-     setSelected([]);
+  const handleDeleteRow = async (id, rows = false) => {
+    try {
+      if (!rows) {
+        setDeletingRows(true);
+      }
+      const response = await BorrarRegistrosCollectionIdCollection(title, id);
+      if (response) {
+        setRegistros((prevRegistros) => prevRegistros.filter((row) => row.id !== id));
+        setSelected([]);
+      } else {
+        setSelected([]);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      if (!rows) {
+        handlePopoverClose();
+        setDeletingRows(false);
+      }
     }
+  };
+  
+  // Borrar Varios registros 
+  const handleDeleteRows = async () => {
+    console.log('borrar varios registros', selected);
+    setDeletingRows(true);
+    // mapeo de selected
+    await Promise.all(selected.map(async (id) => {
+      console.log('deleting row', id);
+      await handleDeleteRow(id,true);
+    }));
+    handleCloseConfirm();
+    setDeletingRows(false);
   }
 
   // Editar Registro 
@@ -173,12 +197,8 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
     setEditando(id);
     const response = await  ObtenerRegistrosCollectionId(title,id);
     console.log('Registro obtenido',response);
-    
-    
     setOpenModal(true);
   }
-
-
 
   useEffect(() => {
     console.log('paso por el use effect');
@@ -245,13 +265,34 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
              onDeleteRow={() => handleDeleteRow(row.id)}
              onEditRow={() => handleEditRow(row.id)}
              onViewRow={() => handleViewRow(row.fecha_codigo)}
-             
+             loading= {deletingRows}           
              />
          ))}
        </TableBody>
      </Table>
     </TableContainer>
     }
-
+      {/* Inicio: Modal  para borrar varios registros  */}
+      <ConfirmDialog
+        open={openConfirm}
+        onClose={handleCloseConfirm}
+        title="Delete"
+        content={
+          <>
+            Are you sure want to delete <strong> {selected.length} </strong> items?
+          </>
+        }
+        action={
+          <LoadingButton
+            variant="contained"
+            color="error"
+            onClick={handleDeleteRows}
+            loading={deletingRows}
+          >
+            Delete
+          </LoadingButton>
+        }
+      />
+      {/* Fin Modal para borrar varios registros  */}
      </>)
 } 

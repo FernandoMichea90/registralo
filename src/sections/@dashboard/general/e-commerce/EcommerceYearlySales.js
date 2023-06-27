@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 // @mui
 import { Card, CardHeader, Box } from '@mui/material';
 // components
@@ -17,7 +17,7 @@ EcommerceYearlySales.propTypes = {
 export default function EcommerceYearlySales({ title, subheader, chart, ...other }) {
   const { colors, categories, series, options } = chart;
 
-  const [seriesData, setSeriesData] = useState('2019');
+  const [seriesData, setSeriesData] = useState('2023');
 
   const chartOptions = useChart({
     colors,
@@ -31,6 +31,9 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
     ...options,
   });
 
+  useEffect(() => {
+    console.log(series)
+  },[series]);
   return (
     <Card {...other}>
       <CardHeader
@@ -49,7 +52,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
 
       {series.map((item) => (
         <Box key={item.year} sx={{ mt: 3, mx: 3 }} dir="ltr">
-          {item.year === seriesData && <Chart type="area" series={item.data} options={chartOptions} height={364} />}
+          {item.year === seriesData && <Chart type="area" series={item.data} options={chartOptions} height={200 } />}
         </Box>
       ))}
     </Card>

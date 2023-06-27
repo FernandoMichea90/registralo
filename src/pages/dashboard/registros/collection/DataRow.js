@@ -1,6 +1,8 @@
 import  PropTypes from 'prop-types';
 import { useState} from 'react';
 import { sentenceCase } from 'change-case';
+import { LoadingButton } from '@mui/lab';
+
 // @mui
 import {
     Stack,
@@ -36,6 +38,7 @@ ProductTableRow.propTypes = {
     onDeleteRow,
     onEditRow,
     onViewRow,
+    loading
   }) {
     const { name, cover, createdAt, inventoryType, price } = row;
 
@@ -110,9 +113,9 @@ ProductTableRow.propTypes = {
           title="Delete"
           content="Are you sure want to delete?"
           action={
-            <Button variant="contained" color="error" onClick={onDeleteRow}>
+            <LoadingButton variant="contained" color="error" onClick={onDeleteRow} loading={loading}>
               Delete
-            </Button>
+            </LoadingButton>
           }
         />
       </>

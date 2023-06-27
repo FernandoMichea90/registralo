@@ -9,6 +9,8 @@ import { fShortenNumber } from '../../../../utils/formatNumber';
 import Iconify from '../../../../components/iconify';
 import { use } from 'i18next';
 import { useEffect } from 'react';
+import { LoadingButton } from '@mui/lab';
+
 
 // ----------------------------------------------------------------------
 
@@ -20,10 +22,11 @@ AnalyticsWidgetSummary.propTypes = {
   total: PropTypes.number,
 };
 
-export default function AnalyticsWidgetSummary({ title, total,increment,decrement,cambioHoy,setCambioHoy, icon, color = 'primary', sx, ...other }) {
+export default function AnalyticsWidgetSummary({loadingCount, title, total,increment,decrement,cambioHoy,setCambioHoy, icon, color = 'primary', sx,Loading, ...other }) {
   const theme = useTheme();
 
-
+  // loadingCount= "decrement";
+  // Loading=true;
 
   useEffect(() => {
     if (cambioHoy) {
@@ -73,24 +76,49 @@ export default function AnalyticsWidgetSummary({ title, total,increment,decremen
           p: (theme) => theme.spacing(0, 1, 1, 1),
         }}
       >
-         <Button
+         <LoadingButton
           fullWidth
           color="error"
           variant="contained"
-          startIcon={<Iconify icon="eva:close-circle-fill" />}
+          startIcon={<Iconify icon="octicon:dash-16" />}
           onClick={() => decrement()}
+          loading={loadingCount ==='increment'? false:Loading}
+          disabled={loadingCount === 'increment' || total === 0}
+
+          sx={{
+            '&.Mui-disabled': {
+              backgroundColor: (theme) => theme.palette.error.main + '!important',
+              color: loadingCount === 'decrement' ? '' : '#ffffff',
+              
+            },
+            '& .MuiLoadingButton-loadingIndicator': {
+              color: '#ffffff !important',
+            },
+          }}
         >
           
-        </Button>
-        <Button
+        </LoadingButton>
+        <LoadingButton
           fullWidth
           color="success"
           variant="contained"
-          startIcon={<Iconify icon="eva:checkmark-circle-2-fill" />}
+          startIcon={<Iconify icon="memory:plus" />}
           onClick={() => increment()}
+          loading={loadingCount ==='decrement'? false:Loading}
+          disabled={loadingCount ==='decrement'? true: false}
+          sx={{
+            '&.Mui-disabled': {
+              backgroundColor: (theme) => theme.palette.success.main + '!important',
+              color: loadingCount === 'increment' ? '' : '#ffffff',
+              
+            },
+            '&.MuiLoadingButton-loadingIndicator': {
+              color:'#ffffff !important',
+            },
+          }}
         >
           
-        </Button>
+        </LoadingButton>
 
        
       </Stack>
