@@ -194,7 +194,6 @@ export default function BlogPostPage() {
     // buscar registro del dia de hoy 
     const obtenerTitulo = async (id) => {
       try {
-
         const respuesta = await ObtenerRegistrosId(id);
         setTitulo(respuesta);
       } catch (error) {
@@ -202,8 +201,6 @@ export default function BlogPostPage() {
       }
     }
     obtenerTitulo(title);
-
-
   }, []);
 
   // obtener el registro del dia de hoy
@@ -216,8 +213,7 @@ export default function BlogPostPage() {
         setTodayrecord(respuesta);
         setCount(respuesta.cantidad);
         getPost(title);
-        
-
+        setTodayChangeLoading(false);      
       } catch (error) {
         console.log(error)
       }
@@ -227,14 +223,14 @@ export default function BlogPostPage() {
 
   // sumar o restar contador\
   useEffect(() => {
-     
-     console.log("hola")
+    // Loading Today Change 
+    setTodayChangeLoading(true);
     // verificar si existe registro en todayrecord
     if (todayrecord?.id) {
       // editar registro
       const EditarRegistrosFront = async () => {
         try {
-          setTodayChangeLoading(true);
+          
           // alert("este es el count "+count+"y el todayrecord cantidad "+todayrecord.cantidad)
           // if(count>todayrecord.cantidad){
           //   setLoadingCount("increment")
@@ -252,12 +248,13 @@ export default function BlogPostPage() {
         } catch (error) { console.log(error) }
 
       }
-      EditarRegistrosFront();
+       EditarRegistrosFront();
     } else {
       // guardar registro
       const CrearRegistrosFront = async() => {
         try {
-         setTodayChangeLoading(true);
+
+        //  setTodayChangeLoading(true);
           // fecha de hoy 
           var today = new Date();
           // crear registro
@@ -269,16 +266,9 @@ export default function BlogPostPage() {
             ano: today.getFullYear(),
             fecha_codigo: `${today.getDate()}${(today.getMonth() + 1)}${today.getFullYear()}`,
           };
-          console.log('paso por la respuesta');
+         
           var respuesta = await CrearRegistrosCollection(title, newRegistro)
-          console.log(newRegistro);
-          // si la respuesta es null 
-          if (respuesta == null) {
-            alert("Error al guardar el registro")
-          } else {
-            alert("Registro guardado")
-            // Guardar el registro. 
-          }
+          console.log(newRegistro);  
           setTodayChangeLoading(false);
         } catch (error) {
           console.log(error)
@@ -286,7 +276,7 @@ export default function BlogPostPage() {
       }
        if(count>0){
        CrearRegistrosFront();
-       }
+        }
     }
     console.log("chao")
   }, [count]);
