@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build-netlify"
+  command = "yarn run build-netlify"
   publish = ".next"
 
 [[plugins]]

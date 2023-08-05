@@ -9,6 +9,7 @@ const withTM = require('next-transpile-modules')([
 ]);
 
 module.exports = withTM({
+  distDir:".next"
   swcMinify: false,
   trailingSlash: true,
   env: {
