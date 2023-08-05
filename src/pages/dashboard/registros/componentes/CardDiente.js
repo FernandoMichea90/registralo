@@ -95,9 +95,8 @@ export default function AnalyticsWidgetSummary({loadingCount, title, total,incre
               color: '#ffffff !important',
             },
           }}
-        >
+        />
           
-        </LoadingButton>
         <LoadingButton
           fullWidth
           color="success"
@@ -116,9 +115,9 @@ export default function AnalyticsWidgetSummary({loadingCount, title, total,incre
               color:'#ffffff !important',
             },
           }}
-        >
+        />
           
-        </LoadingButton>
+        
 
        
       </Stack>

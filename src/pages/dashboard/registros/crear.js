@@ -95,9 +95,9 @@ export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
             onCancel={cerrarVentanaModal}
             registro={registro}
             colorOptions={COLOR_OPTIONS?COLOR_OPTIONS:COLOR_OPTIONS_DEFAULT}
-          >
+          />
 
-          </RegistroForm>
+          
 
        
 
@@ -107,9 +107,7 @@ export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
             registro={registro}
             onCrear={funcionPrueba}
             onCancel={cerrarVentanaModal}
-          >
-
-          </RegistroForm>
+          />
         </Dialog>
 
       </Container>

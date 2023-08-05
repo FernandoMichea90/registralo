@@ -1,6 +1,5 @@
-import { useState } from "react";
 
-export function adaptarDatosParaChart(registros) {
+export const adaptarDatosParaChart=(registros)=> {
     // Crear un objeto vacío para almacenar los datos adaptados
     const datosAdaptados = {
       categories: [],
@@ -9,7 +8,7 @@ export function adaptarDatosParaChart(registros) {
           year: '2023',
           data: [
             { name: 'Registro Dental ', data: [] },
-           
+  
           ],
         },
       ],

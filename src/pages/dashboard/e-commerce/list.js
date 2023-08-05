@@ -187,19 +187,6 @@ export default function EcommerceProductListPage() {
     setFilterStatus([]);
   };
 
-  // Modal Action 
-
-  const handleOpenModal = () => {
-   dispatch(openModal())
-  };
-
-
-
-
-
-
-
-  
 
   return (
     <>

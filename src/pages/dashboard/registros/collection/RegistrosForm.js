@@ -16,7 +16,7 @@ import Iconify from '../../../../components/iconify';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../../components/hook-form';
 import { get } from 'lodash';
 import { use } from 'i18next';
-import { ObtenerRegistrosCollectionId } from 'src/functions/registros_db';
+import { ObtenerRegistrosCollectionId } from '../../../../functions/registros_db';
 
 // ----------------------------------------------------------------------
 
@@ -158,7 +158,7 @@ export default function CalendarForm({ event, guardarRegistro, setOpenModal, edi
           <DialogActions>
             {hasEventData && (
               <Tooltip title="Delete Event">
-                <IconButton onClick={onDeleteEvent}>
+                <IconButton >
                   <Iconify icon="eva:trash-2-outline" />
                 </IconButton>
               </Tooltip>

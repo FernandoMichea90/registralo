@@ -23,8 +23,8 @@ import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 import { SkeletonPostDetails } from '../../../../components/skeleton';
-import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection, EditarRegistrosCollection, BorrarRegistros } from 'src/functions/registros_db';
-import _mock, { randomInArray } from 'src/_mock';
+import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection, EditarRegistrosCollection, BorrarRegistros } from '../../../../functions/registros_db';
+import _mock, { randomInArray } from '../../../../_mock';
 import DataGridBasic from './DataGridEstructura';
 import { Grid, Dialog, DialogTitle, IconButton } from '@mui/material';
 import { red } from '@mui/material/colors';
@@ -39,12 +39,12 @@ import {
   BlogPostCommentList,
   BlogPostCommentForm,
 } from '../../../../sections/@dashboard/blog';
-import { AnalyticsWidgetSummary } from 'src/sections/@dashboard/general/analytics';
+import { AnalyticsWidgetSummary } from '../../../../sections/@dashboard/general/analytics';
 import CardDiente from '../componentes/CardDiente';
-import { RegistroForm } from 'src/sections/@dashboard/registros';
+import { RegistroForm } from '../../../../sections/@dashboard/registros';
 import { set } from 'lodash';
-import { EcommerceYearlySales } from 'src/sections/@dashboard/general/e-commerce';
-import { adaptarDatosParaChart } from './ChartInterface';
+import { EcommerceYearlySales } from "../../../../sections/@dashboard/general/e-commerce";
+import { adaptarDatosParaChart } from '../../../../functions/ChartInterface';
 import { LoadingButton } from '@mui/lab';
 // ----------------------------------------------------------------------
 
@@ -144,7 +144,6 @@ export default function BlogPostPage() {
 
   });
 
-  const [titulo, setTitulo] = useState(null);
 
   // estado del modal 
   const [Estado, setEstado] = useState(false)
@@ -395,7 +394,7 @@ export default function BlogPostPage() {
       // Dia de hoy final en timestamp (se guarda en segundos).
       const finalDiaHoyTimestamp = Math.floor(finalDiaHoy.getTime() / 1000);
       // buscar el registro del dia de hoy
-      const response = await ObtenerRegistrosCollectionToday(id);
+      const response = await ObtenerRegistrosCollectionToday(title);
       if (!response) {
         // se crea el nuevo registro 
         console.log(data);
@@ -453,7 +452,7 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CardDiente loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} ></CardDiente>
+              <CardDiente loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} />
             </Grid>
             <Grid item xs={12} sm={6} md={9}>
               <EcommerceYearlySales
@@ -487,8 +486,7 @@ export default function BlogPostPage() {
       </Container>
       <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Titulo de Registros </DialogTitle>
-        <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal} editando={editando} title={title} setCambioHoy={setCambioHoy} setCount={setCount}>
-        </RegistrosForm>
+        <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal} editando={editando} title={title} setCambioHoy={setCambioHoy} setCount={setCount}/>
       </Dialog>
       {/* Modal Borrar Registros  */}
       <Dialog fullWidth open={openModalDelete} onClose={handleCloseDeleteModal}>

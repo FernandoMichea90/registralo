@@ -1,10 +1,10 @@
 import React from 'react'
-import DashboardLayout from 'src/layouts/dashboard/DashboardLayout';
+import DashboardLayout from '../../../../layouts/dashboard/DashboardLayout';
 import RegistrosCrear from '../crear';
 import { useRouter } from 'next/router';
-import { ObtenerRegistrosId } from 'src/functions/registros_db';
+import { ObtenerRegistrosId } from '../../../../functions/registros_db';
 import { isLength, set } from 'lodash';
-import { COLOR_OPTIONS } from 'src/data/colores';
+import { COLOR_OPTIONS } from '../../../../data/colores';
 
 EditarRegistro.getLayout= (page) => <DashboardLayout>{page}</DashboardLayout>;
 
@@ -27,7 +27,7 @@ export default  function EditarRegistro () {
     obtenerRegistroporId();
   }, [id]);
   return (
-    <RegistrosCrear registro={registro} COLOR_OPTIONS={COLOR_OPTIONS} ></RegistrosCrear>
+    <RegistrosCrear registro={registro} COLOR_OPTIONS={COLOR_OPTIONS} />
   )
 }
 

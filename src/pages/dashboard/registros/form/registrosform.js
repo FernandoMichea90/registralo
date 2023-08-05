@@ -15,7 +15,7 @@ import FormProvider, { RHFTextField, RHFSwitch } from '../../../../components/ho
 
 // obtener  la funcion  
 
-import { CrearRegistros, guardarRegistroCollection } from 'src/functions/registros_db';
+import { CrearRegistros, CrearRegistrosCollection } from '../../../../functions/registros_db';
 // ----------------------------------------------------------------------
 
 const getInitialValues = (event, range) => {
@@ -93,7 +93,7 @@ export default function RegistroForm({ event, range, colorOptions, onCreateUpdat
             };
             // onCreateUpdateEvent(newEvent);
 
-            const response = await guardarRegistroCollection(registroId,newEvent);
+            const response = await CrearRegistrosCollection(registroId,newEvent);
             console.log(response);
             onCancel();
             reset();

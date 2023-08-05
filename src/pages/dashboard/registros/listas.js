@@ -14,9 +14,9 @@ import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 // sections
 import { UserCard } from '../../../sections/@dashboard/user/cards';
 import { useEffect,useState } from 'react';
-import { ObtenerRegistros } from 'src/functions/registros_db';
+import { ObtenerRegistros } from '../../../functions/registros_db';
 import { paramCase } from 'change-case';
-import RegistroCard from 'src/sections/@dashboard/registros/RegistroCard';
+import RegistroCard from '../../../sections/@dashboard/registros/RegistroCard';
 
 // ----------------------------------------------------------------------
 
@@ -65,9 +65,9 @@ obtenerResponse();
             md: 'repeat(3, 1fr)',
           }}
         >
-          {listasRegistros.map((user) => (
+          {listasRegistros.map((user,key) => (
              
-            <Button component="a" href={PATH_DASHBOARD.registros.view(user.id,user.title)} style={{display:'unset'}}>
+            <Button key={key} component="a" href={PATH_DASHBOARD.registros.view(user.id,user.title)} style={{display:'unset'}}>
             <RegistroCard key={user.id} user={user} />
             </Button>
           ))}

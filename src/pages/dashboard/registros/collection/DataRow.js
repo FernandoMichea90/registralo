@@ -14,12 +14,12 @@ import {
     IconButton,
     Link,
   } from '@mui/material';
-  import { fDate } from 'src/utils/formatTime';
-  import Label from 'src/components/label/Label';
-  import Image from 'src/components/image/Image';
-  import Iconify from 'src/components/iconify/Iconify';
-  import ConfirmDialog from 'src/components/confirm-dialog/ConfirmDialog';
-  import MenuPopover from 'src/components/menu-popover/MenuPopover';
+  import { fDate } from '../../../../utils/formatTime';
+  import Label from '../../../../components/label/Label';
+  import Image from '../../../../components/image/Image';
+  import Iconify from '../../../../components/iconify/Iconify';
+  import ConfirmDialog from '../../../../components/confirm-dialog/ConfirmDialog';
+  import MenuPopover from '../../../../components/menu-popover/MenuPopover';
 
 
 ProductTableRow.propTypes = {
@@ -40,7 +40,7 @@ ProductTableRow.propTypes = {
     onViewRow,
     loading
   }) {
-    const { name, cover, createdAt, inventoryType, price } = row;
+    // const { name, cover, createdAt, inventoryType, price } = row;
 
     const [openConfirm, setOpenConfirm] = useState(false);
   
@@ -68,9 +68,9 @@ ProductTableRow.propTypes = {
           <TableCell padding="checkbox">
             <Checkbox checked={selected} onClick={onSelectRow} />
           </TableCell>
-         <TableCell align="center">{row.fecha_codigo}</TableCell>
+         <TableCell align="center">{row?.fecha_codigo}</TableCell>
           <TableCell align="center">
-            {row.cantidad}
+            {row?.cantidad}
           </TableCell>     
           <TableCell align="center">
             <IconButton color={openPopover ? 'primary' : 'default'} onClick={handleOpenPopover}>

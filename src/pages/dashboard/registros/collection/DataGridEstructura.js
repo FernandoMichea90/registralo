@@ -2,15 +2,14 @@ import PropTypes from 'prop-types';
 
 // @mui
 import { DataGrid } from '@mui/x-data-grid';
-import { IconButton, Table, TableBody,TableContainer,Tooltip,Button } from '@mui/material';
+import { IconButton, Table, TableBody, TableContainer, Tooltip, Button } from '@mui/material';
 // components
 import Iconify from '../../../../components/iconify';
-import { useEffect,useState } from 'react';
-import { TableHeadCustom } from 'src/components/table';
+import { useEffect, useState } from 'react';
+import { TableHeadCustom, useTable, TableSelectedAction } from '../../../../components/table';
 import DataRow from './DataRow';
-import {useTable,TableSelectedAction} from 'src/components/table';
-import { BorrarRegistrosCollectionIdCollection, ObtenerRegistrosCollectionId } from 'src/functions/registros_db';
-import ConfirmDialog from 'src/components/confirm-dialog';
+import { BorrarRegistrosCollectionIdCollection, ObtenerRegistrosCollectionId } from '../../../../functions/registros_db';
+import ConfirmDialog from '../../../../components/confirm-dialog';
 import { LoadingButton } from '@mui/lab';
 // ----------------------------------------------------------------------
 const columns = [
@@ -63,40 +62,38 @@ const columns = [
 ];
 
 
-DataGridBasic.propTypes = {
-  data: PropTypes.array,
-};
+
 
 
 const TABLE_HEAD = [
 
   { id: 'fecha', label: 'Fecha', align: 'center' },
   { id: 'cantidad', label: 'Cantidad', align: 'center' },
-  { id: 'action', label: 'Action', align: 'center'},
- 
- 
+  { id: 'action', label: 'Action', align: 'center' },
+
+
 ];
 
 
 
 
 
-export default function DataGridBasic({ data,registros,setRegistros,title,setOpenModal,setEditando }) {
+export default function DataGridBasic({ data, registros, setRegistros, title, setOpenModal, setEditando }) {
 
   const columns2 = [
     {
-      field:'fecha_codigo',
-      headerName:'Fecha',
-      width:120,
-      editable:false
+      field: 'fecha_codigo',
+      headerName: 'Fecha',
+      width: 120,
+      editable: false
     },
     {
-      field:'cantidad',
-      headerName:'Cantidad',
-      width:120,
-      editable:false
+      field: 'cantidad',
+      headerName: 'Cantidad',
+      width: 120,
+      editable: false
     },
-      {
+    {
       field: 'action',
       headerName: ' ',
       width: 80,
@@ -109,7 +106,7 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
         </IconButton>
       ),
     }
-  
+
   ];
   //---------------------------------------------------------------------------------
   const {
@@ -135,10 +132,10 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
   //---------------------------------------------------------------------------------
   const [columnas, setcolumnas] = useState([])
   const [openPopover, setOpenPopover] = useState(null);
-  const[cargando,setcargando] = useState(false)
+  const [cargando, setcargando] = useState(false)
   const [openConfirm, setOpenConfirm] = useState(false);
   // agregar state editando 
-  const [deletingRows,setDeletingRows] = useState(false);
+  const [deletingRows, setDeletingRows] = useState(false);
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -177,7 +174,7 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
       }
     }
   };
-  
+
   // Borrar Varios registros 
   const handleDeleteRows = async () => {
     console.log('borrar varios registros', selected);
@@ -185,114 +182,121 @@ export default function DataGridBasic({ data,registros,setRegistros,title,setOpe
     // mapeo de selected
     await Promise.all(selected.map(async (id) => {
       console.log('deleting row', id);
-      await handleDeleteRow(id,true);
+      await handleDeleteRow(id, true);
     }));
     handleCloseConfirm();
     setDeletingRows(false);
   }
 
   // Editar Registro 
-  const handleEditRow=async(id)=>{
-    console.log('editar registro',id);
+  const handleEditRow = async (id) => {
+    console.log('editar registro', id);
     setEditando(id);
-    const response = await  ObtenerRegistrosCollectionId(title,id);
-    console.log('Registro obtenido',response);
+    const response = await ObtenerRegistrosCollectionId(title, id);
+    console.log('Registro obtenido', response);
     setOpenModal(true);
   }
 
   useEffect(() => {
     console.log('paso por el use effect');
-    if(registros?.length > 0){
-    console.log('registros',registros[0]);
-    Object.keys(registros[0]).forEach((key) => {
-      console.log('key',key);
-      columnas.push({
-        field: key,
-        headerName: key,
-        width: 120,
-        editable: true,
+    if (registros?.length > 0) {
+      console.log('registros', registros[0]);
+      Object.keys(registros[0]).forEach((key) => {
+        console.log('key', key);
+        columnas.push({
+          field: key,
+          headerName: key,
+          width: 120,
+          editable: true,
+        });
       });
-    });
-    setcargando(true)
+      setcargando(true)
     }
-    
-    
+
+
   }, [registros]);
-   
+
 
   return (<>
-  {cargando &&
-  
-  <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-  <TableSelectedAction
-    dense={dense}
-    numSelected={selected.length}
-    rowCount={registros.length}
-    onSelectAllRows={(checked) =>
-      onSelectAllRows(
-        checked,
-        registros.map((row) => row.id)
-      )
-    }
-    action={
-      <Tooltip title="Delete">
-        <IconButton color="primary" onClick={handleOpenConfirm}>
-          <Iconify icon="eva:trash-2-outline" />
-        </IconButton>
-      </Tooltip>
-    }
-  />
+    {cargando &&
 
-     <Table sx={{minWidth:960}}>
-       <TableHeadCustom
-         headLabel={TABLE_HEAD}
-         rowCount={registros?.length}
-         onSelectAllRows={(checked)=>
-          onSelectAllRows(
-            checked,
-            registros?.map((row) => row.id)
-          )
-         }
-       >
-       </TableHeadCustom>
-       <TableBody>
-        {registros?.map((row) => (
-           <DataRow 
-             key={row.id}
-             row={row} 
-             selected={selected.includes(row.id)}
-             onSelectRow={() => onSelectRow(row.id)}
-             onDeleteRow={() => handleDeleteRow(row.id)}
-             onEditRow={() => handleEditRow(row.id)}
-             onViewRow={() => handleViewRow(row.fecha_codigo)}
-             loading= {deletingRows}           
-             />
-         ))}
-       </TableBody>
-     </Table>
-    </TableContainer>
+      <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+        <TableSelectedAction
+          dense={dense}
+          numSelected={selected.length}
+          rowCount={registros.length}
+          onSelectAllRows={(checked) =>
+            onSelectAllRows(
+              checked,
+              registros.map((row) => row.id)
+            )
+          }
+          action={
+            <Tooltip title="Delete">
+              <IconButton color="primary" onClick={handleOpenConfirm}>
+                <Iconify icon="eva:trash-2-outline" />
+              </IconButton>
+            </Tooltip>
+          }
+        />
+
+        <Table sx={{ minWidth: 960 }}>
+          <TableHeadCustom
+            headLabel={TABLE_HEAD}
+            rowCount={registros?.length}
+            onSelectAllRows={(checked) =>
+              onSelectAllRows(
+                checked,
+                registros?.map((row) => row.id)
+              )
+            }
+          />
+          <TableBody>
+            {registros?.map((row) => (
+              <DataRow
+                key={row.id}
+                row={row}
+                selected={selected.includes(row.id)}
+                onSelectRow={() => onSelectRow(row.id)}
+                onDeleteRow={() => handleDeleteRow(row.id)}
+                onEditRow={() => handleEditRow(row.id)}
+                loading={deletingRows}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     }
-      {/* Inicio: Modal  para borrar varios registros  */}
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content={
-          <>
-            Are you sure want to delete <strong> {selected.length} </strong> items?
-          </>
-        }
-        action={
-          <LoadingButton
-            variant="contained"
-            color="error"
-            onClick={handleDeleteRows}
-            loading={deletingRows}
-          >
-            Delete
-          </LoadingButton>
-        }
-      />
-      {/* Fin Modal para borrar varios registros  */}
-     </>)
-} 
+    {/* Inicio: Modal  para borrar varios registros  */}
+    <ConfirmDialog
+      open={openConfirm}
+      onClose={handleCloseConfirm}
+      title="Delete"
+      content={
+        <>
+          Are you sure want to delete <strong> {selected.length} </strong> items?
+        </>
+      }
+      action={
+        <LoadingButton
+          variant="contained"
+          color="error"
+          onClick={handleDeleteRows}
+          loading={deletingRows}
+        >
+          Delete
+        </LoadingButton>
+      }
+    />
+    {/* Fin Modal para borrar varios registros  */}
+  </>)
+}
+
+DataGridBasic.propTypes = {
+  data: PropTypes.array,
+  registros: PropTypes.array, // Add propTypes validation for registros
+  setRegistros: PropTypes.func, // Add propTypes validation for setRegistros
+  title: PropTypes.string, // Add propTypes validation for title
+  setOpenModal: PropTypes.func, // Add propTypes validation for setOpenModal
+  setEditando: PropTypes.func, // Add propTypes validation for setEditando
+};
