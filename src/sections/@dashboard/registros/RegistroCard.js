@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography, Stack, IconButton } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Stack, IconButton, ThemeProvider as theme, Paper } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 // _mock
@@ -10,18 +10,14 @@ import { _socials } from '../../../_mock/arrays';
 import Image from '../../../components/image';
 import Iconify from '../../../components/iconify';
 import SvgColor from '../../../components/svg-color';
+import { grey } from '@mui/material/colors';
+import { Emoji } from 'emoji-picker-react';
+
 
 // ----------------------------------------------------------------------
 
-const StyledOverlay = styled('div')(({ theme }) => ({
-  top: 0,
-  left: 0,
-  zIndex: 8,
-  width: '100%',
-  height: '100%',
-  position: 'absolute',
-  backgroundColor: alpha(theme.palette.grey[900], 0.64),
-}));
+
+
 
 // ----------------------------------------------------------------------
 
@@ -30,60 +26,28 @@ RegistroCard.propTypes = {
 };
 
 export default function RegistroCard({ user }) {
-  const { title, cover, role, follower, totalPosts, avatarUrl, following } = user;
+  const { title,icono,color, cover, role, follower, totalPosts, avatarUrl, following } = user;
 
   return (
-    <Card sx={{ textAlign: 'center' }}>
-      <Box sx={{ position: 'relative',height:'60px' }}>
-        {/* <SvgColor
-          src="/assets/shape_avatar.svg"
-          sx={{
-            width: 144,
-            height: 62,
-            zIndex: 10,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            mx: 'auto',
-            position: 'absolute',
-            color: 'background.paper',
-          }}
-        /> */}
-
-        {/* <Avatar
-          alt={title}
-          src={avatarUrl}
-        /> */}
-
-        <StyledOverlay />
-
-        {/* <Image src={cover} alt={cover} ratio="16/9" /> */}
-      </Box>
-
-      <Typography variant="subtitle1" sx={{ mt: 3, mb: 0.5 }}>
+    <Paper elevation={10}>
+    <Card sx={{ textAlign: 'center'}}>
+      <Card  style={{backgroundColor:color?color:"#9e9e9e",margin:"auto",
+      borderBottomLeftRadius: '0',
+      borderBottomRightRadius: '0',
+      padding:'5px',
+    }}>
+      {
+       icono &&
+        <Avatar style={{margin:'auto',position:'absolute',top:'12px'}}>
+          <Emoji unified={icono}   size={22} />
+       </Avatar>
+      }
+      
+      <Typography  variant="subtitle1" sx={{ mt: 2, mb: 2,color:grey[50] }}>
         {title}
       </Typography>
 
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {role}
-      </Typography>
-
-      {/* <Stack direction="row" alignItems="center" justifyContent="center" sx={{ mt: 1, mb: 3 }}>
-        {_socials.map((social) => (
-          <IconButton
-            key={social.title}
-            sx={{
-              color: social.color,
-              '&:hover': {
-                bgcolor: alpha(social.color, 0.08),
-              },
-            }}
-          >
-            <Iconify icon={social.icon} />
-          </IconButton>
-        ))}
-      </Stack> */}
-
+      </Card>
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" sx={{ py: 3 }}>
@@ -110,5 +74,6 @@ export default function RegistroCard({ user }) {
         </div>
       </Box>
     </Card>
+    </Paper>
   );
 }

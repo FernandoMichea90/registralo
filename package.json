@@ -43,6 +43,7 @@
     "axios": "^1.1.2",
     "change-case": "^4.1.2",
     "date-fns": "^2.29.3",
+    "emoji-picker-react": "^4.4.10",
     "firebase": "^9.12.1",
     "framer-motion": "^7.5.3",
     "highlight.js": "^11.6.0",

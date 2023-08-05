@@ -1,5 +1,6 @@
 
 // next
+import PropTypes from 'prop-types';
 import Head from 'next/head';
 import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
 import { Card, Button, Container, DialogTitle, Dialog } from '@mui/material';
@@ -8,13 +9,14 @@ import { useSettingsContext } from '../../../components/settings';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 import Iconify from '../../../components/iconify';
 import { useDispatch, useSelector } from '../../../redux/store';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // sections
 import {
   RegistroForm,
 } from '../../../sections/@dashboard/registros';
 
 import { CrearRegistros } from '../../../functions/registros_db'
+import {COLOR_OPTIONS as COLOR_OPTIONS_DEFAULT } from  "../../../data/colores"
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -23,7 +25,12 @@ RegistrosCrear.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 // ----------------------------------------------------------------------
 
-export default function RegistrosCrear() {
+RegistrosCrear.propTypes = {
+  registros: PropTypes.object,
+  COLOR_OPTIONS: PropTypes.arrayOf(PropTypes.string),
+};
+
+export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
   const { themeStretch } = useSettingsContext();
   //  colocar el state
   const [Estado, setEstado] = useState(false)
@@ -61,30 +68,42 @@ export default function RegistrosCrear() {
             },
             {
               name: 'Registros',
+              href: PATH_DASHBOARD.registros.list,
             },
+            {
+              name: 'Crear Registro',
+              href: PATH_DASHBOARD.registros.crear,
+            }
+            
+
           ]}
           //   moreLink={['https://fullcalendar.io/docs/react']}
           action={
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={abrirVentanaModal}>
+            <>
+            {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={abrirVentanaModal}>
               Crear Registros
-            </Button>
+            </Button> */}
+            </>
           }
         />
 
-        <Card sx={{ p: 3 }}>
+       
 
           <RegistroForm
             onCrear={funcionPrueba}
             onCancel={cerrarVentanaModal}
+            registro={registro}
+            colorOptions={COLOR_OPTIONS?COLOR_OPTIONS:COLOR_OPTIONS_DEFAULT}
           >
 
           </RegistroForm>
 
-        </Card>
+       
 
         <Dialog fullWidth maxWidth="xs" open={Estado} onClose={cerrarVentanaModal}>
           <DialogTitle>Crear Registro</DialogTitle>
           <RegistroForm
+            registro={registro}
             onCrear={funcionPrueba}
             onCancel={cerrarVentanaModal}
           >

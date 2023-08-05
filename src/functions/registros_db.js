@@ -14,6 +14,33 @@ export const CrearRegistros=async(evento)=>{
       }
 }
 
+// Editar Registros 
+export const EditarRegistros=async(id,evento)=>{
+  try {
+    // Actualizar el registro 
+    const docRef = doc(DB, "Registros", id);
+    const response=await updateDoc(docRef, evento);
+    console.log("Document written with ID: ", response);
+    return response;
+  } catch (e) {
+    console.error("Error adding document: ", e);
+    return null;
+  }
+}
+
+// Borrar Registro 
+export const BorrarRegistros=async(id)=>{
+  try {
+    // Borrar el registro 
+    const docRef = doc(DB, "Registros", id);
+    const response=await deleteDoc(docRef);
+    return response;
+  } catch (e) {
+    console.error("Error adding document: ", e);
+    return null;
+  }
+}
+
 export const ObtenerRegistroName=async()=>{
   try {
     

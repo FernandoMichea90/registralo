@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 // @mui
 // import {Card as CardDiente} from '../componentes/Card';
-import { Box, Divider, Stack, Container, Typography, Pagination, Card, CardHeader, Button } from '@mui/material';
+import { Box, Divider, Stack, Container, Typography, Pagination, Card, CardHeader, Button, DialogActions, DialogContent, DialogContentText } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -23,10 +23,12 @@ import Markdown from '../../../../components/markdown';
 import CustomBreadcrumbs from '../../../../components/custom-breadcrumbs';
 import { useSettingsContext } from '../../../../components/settings';
 import { SkeletonPostDetails } from '../../../../components/skeleton';
-import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection, EditarRegistrosCollection } from 'src/functions/registros_db';
+import { ObtenerRegistrosCollection, ObtenerRegistrosId, ObtenerRegistrosCollectionToday, CrearRegistros, CrearRegistrosCollection, EditarRegistrosCollection, BorrarRegistros } from 'src/functions/registros_db';
 import _mock, { randomInArray } from 'src/_mock';
 import DataGridBasic from './DataGridEstructura';
-import { Grid, Dialog, DialogTitle } from '@mui/material';
+import { Grid, Dialog, DialogTitle, IconButton } from '@mui/material';
+import { red } from '@mui/material/colors';
+
 
 
 // sections
@@ -43,7 +45,7 @@ import { RegistroForm } from 'src/sections/@dashboard/registros';
 import { set } from 'lodash';
 import { EcommerceYearlySales } from 'src/sections/@dashboard/general/e-commerce';
 import { adaptarDatosParaChart } from './ChartInterface';
-
+import { LoadingButton } from '@mui/lab';
 // ----------------------------------------------------------------------
 
 BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -74,17 +76,17 @@ export default function BlogPostPage() {
   const [idObject, setIdObject] = useState(false);
   const [editando, setEditando] = useState(null);
   const [cambioHoy, setCambioHoy] = useState(false);
-  const [loadingCount,setLoadingCount] = useState(null)
+  const [loadingCount, setLoadingCount] = useState(null)
 
   function useCounter() {
     const [count, setCount] = useState(0);
-  
-    const increment = async() => {
+
+    const increment = async () => {
       setLoadingCount("increment");
       setCount(prevCount => parseInt(prevCount) + 1);
       const updatedPost = post.map(item => {
         if (item.id === todayrecord.id) {
-          return {...item, cantidad: parseInt(item.cantidad) + 1 };
+          return { ...item, cantidad: parseInt(item.cantidad) + 1 };
         } else {
           return item;
         }
@@ -92,14 +94,14 @@ export default function BlogPostPage() {
       // cargar los nuevos datos 
       reloadPostsAndChart(updatedPost);
     };
-  
+
     const decrement = async () => {
-      
+
       setLoadingCount("decrement")
       setCount(prevCount => (parseInt(prevCount) > 0 ? parseInt(prevCount) - 1 : 0));
       const updatedPost = post.map(item => {
         if (item.id === todayrecord.id) {
-          return { ...item, cantidad: item.cantidad > 0 ? parseInt(item.cantidad) - 1 : 0  };
+          return { ...item, cantidad: item.cantidad > 0 ? parseInt(item.cantidad) - 1 : 0 };
         } else {
           return item;
         }
@@ -107,13 +109,15 @@ export default function BlogPostPage() {
       // cargar los nuevos datos 
       reloadPostsAndChart(updatedPost);
     };
-  
+
     return [count, increment, decrement, setCount];
   }
 
   const {
     query: { title },
   } = useRouter();
+
+  const router = useRouter();
 
   const [recentPosts, setRecentPosts] = useState([]);
 
@@ -137,23 +141,26 @@ export default function BlogPostPage() {
         ],
       },
     ],
-              
+
   });
 
   const [loadingPost, setLoadingPost] = useState(true);
 
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
   const [error, setError] = useState(null);
 
   const [openModal, setOpenModal] = useState(false);
+  const [openModalDelete, setOpenModalDelete] = useState(false);
 
-  const [todayChangeLoading,setTodayChangeLoading] = useState(true);
+  const [todayChangeLoading, setTodayChangeLoading] = useState(true);
 
 
   // funcion que carga los datos de posts y actualiza el chart 
 
   const reloadPostsAndChart = (updatePosts) => {
     setPost(updatePosts);
-    var responseDataChart=adaptarDatosParaChart(updatePosts);
+    var responseDataChart = adaptarDatosParaChart(updatePosts);
     setDataChart(responseDataChart);
   }
 
@@ -166,7 +173,7 @@ export default function BlogPostPage() {
       console.log(id);
       console.log(title);
       const respuesta = await ObtenerRegistrosCollection(id);
-      var responseDataChart=adaptarDatosParaChart(respuesta);
+      var responseDataChart = adaptarDatosParaChart(respuesta);
       console.log(responseDataChart);
       setDataChart(responseDataChart);
       await setPost(respuesta);
@@ -179,13 +186,16 @@ export default function BlogPostPage() {
     }
   }, [title]);
 
- 
+
   const [todayrecord, setTodayrecord] = useState();
 
 
   useEffect(() => {
     if (title) {
       getPost(title);
+    }
+    else{
+      router.push(PATH_DASHBOARD.registros)
     }
   }, [getPost, title]);
 
@@ -208,12 +218,12 @@ export default function BlogPostPage() {
     // buscar registro del dia de hoy
     const obtenerRegistro = async () => {
       try {
-        const respuesta = await ObtenerRegistrosCollectionToday(new Date(),title);
+        const respuesta = await ObtenerRegistrosCollectionToday(new Date(), title);
         console.log(respuesta)
         setTodayrecord(respuesta);
         setCount(respuesta.cantidad);
         getPost(title);
-        setTodayChangeLoading(false);      
+        setTodayChangeLoading(false);
       } catch (error) {
         console.log(error)
       }
@@ -230,7 +240,7 @@ export default function BlogPostPage() {
       // editar registro
       const EditarRegistrosFront = async () => {
         try {
-          
+
           // alert("este es el count "+count+"y el todayrecord cantidad "+todayrecord.cantidad)
           // if(count>todayrecord.cantidad){
           //   setLoadingCount("increment")
@@ -242,19 +252,19 @@ export default function BlogPostPage() {
           console.log(respuesta);
           setLoadingCount(null)
           setTodayChangeLoading(false);
-          return respuesta; 
+          return respuesta;
 
 
         } catch (error) { console.log(error) }
 
       }
-       EditarRegistrosFront();
+      EditarRegistrosFront();
     } else {
       // guardar registro
-      const CrearRegistrosFront = async() => {
+      const CrearRegistrosFront = async () => {
         try {
 
-        //  setTodayChangeLoading(true);
+          //  setTodayChangeLoading(true);
           // fecha de hoy 
           var today = new Date();
           // crear registro
@@ -266,17 +276,17 @@ export default function BlogPostPage() {
             ano: today.getFullYear(),
             fecha_codigo: `${today.getDate()}${(today.getMonth() + 1)}${today.getFullYear()}`,
           };
-         
+
           var respuesta = await CrearRegistrosCollection(title, newRegistro)
-          console.log(newRegistro);  
+          console.log(newRegistro);
           setTodayChangeLoading(false);
         } catch (error) {
           console.log(error)
         }
       }
-       if(count>0){
-       CrearRegistrosFront();
-        }
+      if (count > 0) {
+        CrearRegistrosFront();
+      }
     }
     console.log("chao")
   }, [count]);
@@ -288,53 +298,74 @@ export default function BlogPostPage() {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-   
 
-  const adaptarRegistro= (data) => {
-    const year=data.fecha.getFullYear();
-    const month=data.fecha.getMonth()+1;
-    const day=data.fecha.getDate();
-    const fechaCodigo=`${day}${month}${year}`;
-    const cantidad=parseInt(data.cantidad);
-    var objeto={
-      fecha:data.fecha,
-      fecha_codigo:fechaCodigo,
-      cantidad:cantidad,
-      day:day,
-      month:month,
-      year:year
+  const handleOpenDeleteModal = () => {
+    setOpenModalDelete(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setOpenModalDelete(false);
+  };
+
+
+
+  const adaptarRegistro = (data) => {
+    const year = data.fecha.getFullYear();
+    const month = data.fecha.getMonth() + 1;
+    const day = data.fecha.getDate();
+    const fechaCodigo = `${day}${month}${year}`;
+    const cantidad = parseInt(data.cantidad);
+    var objeto = {
+      fecha: data.fecha,
+      fecha_codigo: fechaCodigo,
+      cantidad: cantidad,
+      day: day,
+      month: month,
+      year: year
     }
     return objeto;
   }
 
   const guardarRegistro = async (data) => {
-      // buscar si existe el registro del dia de hoy.
-      console.log(data);
-      console.log(data.fecha)
-      const response = await ObtenerRegistrosCollectionToday(data.fecha,title);
-      console.log(response);
-      // mostrar la respuesta   
-      if (!response){
-        //  se adapta la data a guardar
-        const newRegistro = adaptarRegistro(data);
-        // se crea el nuevo registro 
-        const response_registro= await CrearRegistrosCollection(idObject,newRegistro);
-        // agregar el registro a la lista de registros
-        await getPost(title);
-        // cerrar el modal
-        handleCloseModal(); 
-        return true
-      }else{
-        // se  edita el registro de la base de datos
-       const  editRegistro =  await EditarRegistrosCollection(title,response.id,data.cantidad);
-        // ver la respuesta 
-        console.log(editRegistro);
-        // ver si puedo pedir los registros de nuevo
-        await getPost(title);
-        handleCloseModal();
+    // buscar si existe el registro del dia de hoy.
+    console.log(data);
+    console.log(data.fecha)
+    const response = await ObtenerRegistrosCollectionToday(data.fecha, title);
+    console.log(response);
+    // mostrar la respuesta   
+    if (!response) {
+      //  se adapta la data a guardar
+      const newRegistro = adaptarRegistro(data);
+      // se crea el nuevo registro 
+      const response_registro = await CrearRegistrosCollection(idObject, newRegistro);
+      // agregar el registro a la lista de registros
+      await getPost(title);
+      // cerrar el modal
+      handleCloseModal();
+      return true
+    } else {
+      // se  edita el registro de la base de datos
+      const editRegistro = await EditarRegistrosCollection(title, response.id, data.cantidad);
+      // ver la respuesta 
+      console.log(editRegistro);
+      // ver si puedo pedir los registros de nuevo
+      await getPost(title);
+      handleCloseModal();
       return true;
-      }
     }
+  }
+
+  const eliminarRegistro = async (id) => {
+    setLoadingDelete(true);
+    // eliminar el registro de la base de datos
+    try{
+      const response = await BorrarRegistros(id);
+      setLoadingDelete(false);
+      router.push(PATH_DASHBOARD.registros.list);
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   const GetRegistrosCollectionToday = async (data) => {
     try {
@@ -348,17 +379,20 @@ export default function BlogPostPage() {
       // Dia de hoy final en timestamp (se guarda en segundos).
       const finalDiaHoyTimestamp = Math.floor(finalDiaHoy.getTime() / 1000);
       // buscar el registro del dia de hoy
-       const response = await ObtenerRegistrosCollectionToday(id);
-       if (!response){
-          // se crea el nuevo registro 
-         console.log(data);
-       }else{
+      const response = await ObtenerRegistrosCollectionToday(id);
+      if (!response) {
+        // se crea el nuevo registro 
         console.log(data);
-       }
+      } else {
+        console.log(data);
+      }
 
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
+  }
+  const toEditCollection = (id) => {
+    router.push(PATH_DASHBOARD.registros.editar(id));
   }
 
   return (
@@ -377,18 +411,26 @@ export default function BlogPostPage() {
             },
             {
               name: 'Registros',
-              href: PATH_DASHBOARD.blog.root,
+              href: PATH_DASHBOARD.registros.list,
             },
             {
               name: titulo?.title,
             },
           ]}
           action={
-           
-              <Button onClick={()=>setOpenModal(true)} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            <>
+              <IconButton sx={{ color: red[900] }} onClick={() => handleOpenDeleteModal()}>
+                <Iconify icon="ion:trash-outline" />
+              </IconButton>
+              <IconButton onClick={() => toEditCollection(title)}>
+                <Iconify icon="icon-park-solid:setting" />
+              </IconButton>
+              <Button onClick={() => setOpenModal(true)} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
                 Nuevo Registro
               </Button>
-           
+            </>
+
+
           }
         />
 
@@ -398,11 +440,11 @@ export default function BlogPostPage() {
               <CardDiente loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} ></CardDiente>
             </Grid>
             <Grid item xs={12} sm={6} md={9}>
-            <EcommerceYearlySales
-              title="Informe"
-              subheader=""
-              chart={dataChart}
-            />
+              <EcommerceYearlySales
+                title="Informe"
+                subheader=""
+                chart={dataChart}
+              />
             </Grid>
           </Grid>
           <Stack spacing={5}>
@@ -411,14 +453,14 @@ export default function BlogPostPage() {
               <Box sx={{ height: 390 }}>
                 {
                   post.length > 0 &&
-                  <DataGridBasic 
-                    data={_dataGrid} 
-                    registros={post} 
-                    setRegistros={setPost}  
-                    title={title} 
+                  <DataGridBasic
+                    data={_dataGrid}
+                    registros={post}
+                    setRegistros={setPost}
+                    title={title}
                     setOpenModal={setOpenModal}
                     setEditando={setEditando}
-                    />
+                  />
                 }
               </Box>
             </Card>
@@ -431,6 +473,23 @@ export default function BlogPostPage() {
         <DialogTitle>Titulo de Registros </DialogTitle>
         <RegistrosForm guardarRegistro={guardarRegistro} setOpenModal={setOpenModal} editando={editando} title={title} setCambioHoy={setCambioHoy} setCount={setCount}>
         </RegistrosForm>
+      </Dialog>
+      {/* Modal Borrar Registros  */}
+      <Dialog fullWidth open={openModalDelete} onClose={handleCloseDeleteModal}>
+        <DialogTitle> Registro: {titulo?.title}. </DialogTitle>
+        <DialogContent>
+           <DialogContentText>
+            Si estás seguro de que deseas borrar el registro  haz click en el botón "Borrar".
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteModal}  variant="secondary">
+            Cancelar
+          </Button>
+          <LoadingButton onClick={()=>eliminarRegistro(title)}  variant="outlined" color="error" loading={loadingDelete}>
+            Borrar
+          </LoadingButton>
+        </DialogActions>
       </Dialog>
 
 

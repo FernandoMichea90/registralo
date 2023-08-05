@@ -83,8 +83,9 @@ export const PATH_DASHBOARD = {
   },
     registros: {
     root: path(ROOTS_DASHBOARD, '/registros'),
+    editar:(id)=> path(ROOTS_DASHBOARD, '/registros/editar/'+id),
     crear: path(ROOTS_DASHBOARD, '/registros/crear'),
-    list: path(ROOTS_DASHBOARD, '/registros/listas'),
+    list: path(ROOTS_DASHBOARD, '/registros/listas'), 
     checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
     new: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
     view: (id,title) => path(ROOTS_DASHBOARD, `/registros/collection/${id}`),
