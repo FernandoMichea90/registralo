@@ -88,8 +88,7 @@ export default function CalendarForm({ event, range, colorOptions, onCreateUpdat
     }
   };
 
-  const isDateError =
-    !values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
+  const isDateError =!values.allDay && values.start && values.end ? isBefore(new Date(values.end), new Date(values.start)) : false;
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>

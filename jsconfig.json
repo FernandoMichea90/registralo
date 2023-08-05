@@ -4,7 +4,7 @@
   },
   "include": [
     "src/**/*"
-  ],
+, "src/pages/dashboard/registros/collection/[title].js"  ],
   "exclude": [
     "node_modules"
   ]

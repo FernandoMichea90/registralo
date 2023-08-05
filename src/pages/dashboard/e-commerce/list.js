@@ -5,7 +5,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 // @mui
-import { Card, Table, Button, Tooltip, TableBody, Container, IconButton, TableContainer } from '@mui/material';
+import { Card, Table, Button, Tooltip, TableBody, Container, IconButton, TableContainer ,Dialog,DialogTitle } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../../redux/store';
 import { getProducts } from '../../../redux/slices/product';
@@ -92,6 +92,8 @@ export default function EcommerceProductListPage() {
   const [filterStatus, setFilterStatus] = useState([]);
 
   const [openConfirm, setOpenConfirm] = useState(false);
+  // use state para abrir y cerrra modal. 
+  const [openModal,setOpenModal] = useState(true);
 
   useEffect(() => {
     dispatch(getProducts());
@@ -121,6 +123,10 @@ export default function EcommerceProductListPage() {
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);     
+  }
 
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
@@ -180,6 +186,20 @@ export default function EcommerceProductListPage() {
     setFilterName('');
     setFilterStatus([]);
   };
+
+  // Modal Action 
+
+  const handleOpenModal = () => {
+   dispatch(openModal())
+  };
+
+
+
+
+
+
+
+  
 
   return (
     <>
@@ -317,6 +337,9 @@ export default function EcommerceProductListPage() {
           </Button>
         }
       />
+      <Dialog fullWidth maxWidth="xs" open={openModal} onClose={handleCloseModal}>
+        <DialogTitle>Guardar Registro </DialogTitle>
+      </Dialog>
     </>
   );
 }

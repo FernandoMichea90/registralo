@@ -16,6 +16,7 @@ import { UserCard } from '../../../sections/@dashboard/user/cards';
 import { useEffect,useState } from 'react';
 import { ObtenerRegistros } from 'src/functions/registros_db';
 import { paramCase } from 'change-case';
+import RegistroCard from 'src/sections/@dashboard/registros/RegistroCard';
 
 // ----------------------------------------------------------------------
 
@@ -65,9 +66,9 @@ obtenerResponse();
           }}
         >
           {listasRegistros.map((user) => (
-            
-            <Button component="a" href={PATH_DASHBOARD.registros.view(user.id)} style={{display:'unset'}}>
-            <UserCard key={user.id} user={user} />
+             
+            <Button component="a" href={PATH_DASHBOARD.registros.view(user.id,user.title)} style={{display:'unset'}}>
+            <RegistroCard key={user.id} user={user} />
             </Button>
           ))}
         </Box>
