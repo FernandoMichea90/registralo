@@ -6,11 +6,12 @@
   "private": true,
   "scripts": {
     "lint": "next lint",
+    "build-no-error": "next build 2>/dev/null || true",
     "lint:es": "eslint --ext .js,.jsx .",
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "dev": "next dev -p 3000",
     "start": "next start",
-    "build": "next build --no-err-on-errors",
+    "build": "next build",
     "build-netlify": "next build && cp -r .next _next && mv _next .next/",
     "export": "yarn build && next export -o _static",
     "clear-all": "rm -rf .next .swc _static node_modules",
