@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import merge from 'lodash/merge';
 import { isBefore } from 'date-fns';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions, Grid, Card } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton, DialogActions, Grid, Card } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
 // components
 import Iconify from '../../../components/iconify';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
@@ -18,7 +16,6 @@ import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-
 
 import { CrearRegistros, EditarRegistros } from 'src/functions/registros_db';
 import { ColorSinglePicker } from 'src/components/color-utils';
-import Picker, { Emoji, EmojiStyle } from 'emoji-picker-react';
 import RegistroIcono from './RegistroIcono';
 // ----------------------------------------------------------------------
 

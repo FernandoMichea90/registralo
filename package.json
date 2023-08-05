@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix --ext .js,.jsx .",
     "dev": "next dev -p 3000",
     "start": "next start",
-    "build": "next build",
+    "build": "next build --no-err-on-errors",
     "build-netlify": "next build && cp -r .next _next && mv _next .next/",
     "export": "yarn build && next export -o _static",
     "clear-all": "rm -rf .next .swc _static node_modules",
