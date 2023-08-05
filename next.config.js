@@ -9,7 +9,7 @@ const withTM = require('next-transpile-modules')([
 ]);
 
 module.exports = withTM({
-  distDir:".next"
+  distDir:".next",
   swcMinify: false,
   trailingSlash: true,
   env: {
@@ -25,6 +25,7 @@ module.exports = withTM({
     FIREBASE_MESSAGING_SENDER_ID: '883808704738',
     FIREBASE_APPID: '1:883808704738:web:da5e5e542888bee464e6bb',
     FIREBASE_MEASUREMENT_ID: 'G-9N0G8QDG4W',
+    NETLIFY_NEXT_PLUGIN_SKIP: true,
 
     // AWS COGNITO
     AWS_COGNITO_USER_POOL_ID: '',
