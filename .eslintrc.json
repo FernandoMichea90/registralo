@@ -4,6 +4,7 @@
     "es2021": true
   },
   "extends": [
+    "next",
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@next/next/recommended",
@@ -30,7 +31,8 @@
     "react/self-closing-comp": 2,
     "react/react-in-jsx-scope": 0,
     "@next/next/no-img-element": 0,
-    "react/no-unescaped-entities": 0,
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off",
     "import/no-useless-path-segments": 1,
     "no-unused-vars": [
       1,
