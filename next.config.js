@@ -10,6 +10,7 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withTM({
   distDir:".next",
+  basePath: '/registro_personal',
   swcMinify: false,
   trailingSlash: true,
   env: {
