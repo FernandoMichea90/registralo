@@ -206,6 +206,7 @@ export default function BlogPostPage() {
   }
 
   useEffect(() => {
+    alert("paso por aca")
     if (title) {
       getPost(title);
     }
