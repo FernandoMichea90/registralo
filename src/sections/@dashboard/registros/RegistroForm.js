@@ -10,6 +10,7 @@ import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-
 import { CrearRegistros, EditarRegistros } from '../../../functions/registros_db';
 import { ColorSinglePicker } from '../../../components/color-utils';
 import RegistroIcono from './RegistroIcono';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 const getInitialValues = (registro) => ({
   title: registro?.title || '',
@@ -28,6 +29,7 @@ RegistroForm.propTypes = {
 
 export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, registro }) {
   const hasEventData = !!registro;
+  const {user} =useAuthContext();
 
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
@@ -57,14 +59,14 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
         description: data.description,
         color: data.color,
         icono: data.icono,
+        user: user.profile,
       };
-
       if (registro) {
         await EditarRegistros(registro.id, newEvent);
       } else {
+        console.log(newEvent);
         await CrearRegistros(newEvent);
       }
-
       onCancel();
       reset();
     } catch (error) {

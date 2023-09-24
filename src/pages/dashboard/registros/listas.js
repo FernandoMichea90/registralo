@@ -18,6 +18,7 @@ import { ObtenerRegistros } from '../../../functions/registros_db';
 import { paramCase } from 'change-case';
 import RegistroCard from '../../../sections/@dashboard/registros/RegistroCard';
 import Link from 'next/link';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 // ----------------------------------------------------------------------
 
@@ -27,18 +28,21 @@ UserCardsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function UserCardsPage() {
   const { themeStretch } = useSettingsContext();
+  // obtener el usuario 
+  const {user} =useAuthContext();
   const [listasRegistros, setListasRegistros] = useState([])
 
 useEffect(() => {
 
 const obtenerResponse=async()=>{
-   var respuesta=await ObtenerRegistros();
-   console.log(respuesta);
+  if(user){
+   var respuesta=await ObtenerRegistros(user.profile);
    setListasRegistros(respuesta);
+  }
 }
 obtenerResponse();
 
-}, [])
+}, [user])
 
 
   return (

@@ -58,9 +58,13 @@ export const ObtenerRegistroName=async()=>{
   }
 }
 
-export const ObtenerRegistros=async()=>{
+export const ObtenerRegistros=async(user)=>{
   try {
-    const q = query(collection(DB, "Registros"));
+    // mostrar user 
+    console.log(user)
+    // buscar segun user 
+    const q = query(collection(DB, "Registros"),where("user.uid","==",user.uid));
+    // const q = query(collection(DB, "Registros"));
     const querySnapshot = await getDocs(q);
     const response=[];
     querySnapshot.forEach((doc) => {
@@ -68,7 +72,7 @@ export const ObtenerRegistros=async()=>{
       console.log(doc.id, " => ", doc.data());
       response.push({id:doc.id,...doc.data()})
     });
-    
+      
     return response;
   } catch (error) {
     console.log(error);
@@ -186,10 +190,10 @@ export const ObtenerRegistrosCollectionId=async(id,idCollection)=>{
 }
 
 // actualizar el registro del dia de hoy segun el id
-export const EditarRegistrosCollection = async (idRegistro, idCollection, cantidad, fecha = new Date()) => {
+export const EditarRegistrosCollection = async (idRegistro, idCollection, cantidad,profile=null,fecha = new Date()) => {
   try {
     const docRef = doc(DB, 'Registros', idRegistro, 'collection', idCollection);
-    const respuesta = await updateDoc(docRef, { cantidad });
+    const respuesta = await updateDoc(docRef, { cantidad,profile:profile });
     console.log('Document updated:', JSON.stringify(docRef));
     return docRef;
   } catch (error) {

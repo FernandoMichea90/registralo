@@ -25,3 +25,10 @@ export function fToNow(date) {
       })
     : '';
 }
+
+export function fDateDayMonthYear(day, month, year) {
+  const fm = "dd MMM";
+  const date = new Date(year, month - 1, day); 
+  return date ? format(new Date(date), fm) : '';
+  
+}

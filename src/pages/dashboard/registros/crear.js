@@ -17,6 +17,7 @@ import {
 
 import { CrearRegistros } from '../../../functions/registros_db'
 import {COLOR_OPTIONS as COLOR_OPTIONS_DEFAULT } from  "../../../data/colores"
+import { useAuthContext } from 'src/auth/useAuthContext';
 // ----------------------------------------------------------------------
 
 // ----------------------------------------------------------------------
@@ -32,6 +33,7 @@ RegistrosCrear.propTypes = {
 
 export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
   const { themeStretch } = useSettingsContext();
+  const {user}=useAuthContext();
   //  colocar el state
   const [Estado, setEstado] = useState(false)
   // abrir ventana modal  
@@ -45,7 +47,11 @@ export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
   }
 
   const funcionPrueba = (evento) => {
-    CrearRegistros(evento);
+    alert('Estado')
+    if(user){
+    console.log(user)
+    CrearRegistros(evento,user.profile);
+    }
   }
 
   useEffect(() => {

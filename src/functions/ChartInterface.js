@@ -7,7 +7,7 @@ export const adaptarDatosParaChart=(registros)=> {
         {
           year: '2023',
           data: [
-            { name: 'Registro Dental ', data: [] },
+            { name: 'Registros', data: [] },
   
           ],
         },
@@ -26,7 +26,7 @@ export const adaptarDatosParaChart=(registros)=> {
       // Agregar la fecha al array de categorías
       datosAdaptados.categories.push(fechaFormateada);
   
-      // Actualizar los datos de 'Total Income' y 'Total Expenses'
+      // Actualizar los datos de 
       datosAdaptados.series[0].data[0].data.push(parseInt(registro.cantidad));
     });
   

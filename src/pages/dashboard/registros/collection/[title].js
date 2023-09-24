@@ -40,12 +40,13 @@ import {
   BlogPostCommentForm,
 } from '../../../../sections/@dashboard/blog';
 import { AnalyticsWidgetSummary } from '../../../../sections/@dashboard/general/analytics';
-import CardDiente from '../componentes/CardDiente';
+import IconWidget from '../componentes/Card';
 import { RegistroForm } from '../../../../sections/@dashboard/registros';
 import { set } from 'lodash';
 import { EcommerceYearlySales } from "../../../../sections/@dashboard/general/e-commerce";
 import { adaptarDatosParaChart } from '../../../../functions/ChartInterface';
 import { LoadingButton } from '@mui/lab';
+import { fDateDayMonthYear } from 'src/utils/formatTime';
 // ----------------------------------------------------------------------
 
 BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -176,8 +177,13 @@ export default function BlogPostPage() {
       // });
       console.log(id);
       console.log(title);
-      const respuesta = await ObtenerRegistrosCollection(id);
+      var  respuesta = await ObtenerRegistrosCollection(id);
       var responseDataChart = adaptarDatosParaChart(respuesta);
+      console.log(respuesta)
+      respuesta = respuesta.map((item) => {
+        return { ...item, fecha_ddmmm: fDateDayMonthYear(item.day,item.month,item.year) }
+      })
+      console.log(respuesta)
       console.log(responseDataChart);
       setDataChart(responseDataChart);
       await setPost(respuesta);
@@ -206,7 +212,7 @@ export default function BlogPostPage() {
   }
 
   useEffect(() => {
-    alert("paso por aca")
+   
     if (title) {
       getPost(title);
     }
@@ -279,9 +285,6 @@ export default function BlogPostPage() {
       // guardar registro
       const CrearRegistrosFront = async () => {
         try {
-
-          //  setTodayChangeLoading(true);
-          // fecha de hoy 
           var today = new Date();
           // crear registro
           var newRegistro = {
@@ -292,7 +295,6 @@ export default function BlogPostPage() {
             ano: today.getFullYear(),
             fecha_codigo: `${today.getDate()}${(today.getMonth() + 1)}${today.getFullYear()}`,
           };
-
           var respuesta = await CrearRegistrosCollection(title, newRegistro)
           console.log(newRegistro);
           setTodayChangeLoading(false);
@@ -304,7 +306,6 @@ export default function BlogPostPage() {
         CrearRegistrosFront();
       }
     }
-    console.log("chao")
   }, [count]);
 
   const handleOpenModal = () => {
@@ -453,11 +454,12 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <CardDiente loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo.title} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} />
+              <IconWidget loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} />
             </Grid>
             <Grid item xs={12} sm={6} md={9}>
               <EcommerceYearlySales
                 title="Informe"
+                color={titulo.color}
                 subheader=""
                 chart={dataChart}
               />

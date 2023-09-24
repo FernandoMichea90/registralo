@@ -20,7 +20,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
   const [seriesData, setSeriesData] = useState('2023');
 
   const chartOptions = useChart({
-    colors,
+    colors:[other.color],
     legend: {
       position: 'top',
       horizontalAlign: 'right',
@@ -52,7 +52,7 @@ export default function EcommerceYearlySales({ title, subheader, chart, ...other
 
       {series.map((item) => (
         <Box key={item.year} sx={{ mt: 3, mx: 3 }} dir="ltr">
-          {item.year === seriesData && <Chart type="area" series={item.data} options={chartOptions} height={200 } />}
+          {item.year === seriesData && <Chart type="area"  series={item.data} options={chartOptions} height={200 } />}
         </Box>
       ))}
     </Card>

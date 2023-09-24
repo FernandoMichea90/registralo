@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
+import React from 'react';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
 import { Box, Card, Avatar, Divider, Typography, Stack, IconButton, ThemeProvider as theme, Paper, Button,makeStyles } from '@mui/material';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { fNumber, fShortenNumber } from '../../../utils/formatNumber';
 // _mock
 import { _socials } from '../../../_mock/arrays';
 // components
@@ -13,6 +14,11 @@ import SvgColor from '../../../components/svg-color';
 import { grey } from '@mui/material/colors';
 import { Emoji } from 'emoji-picker-react';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { ObtenerRegistrosCollectionToday,EditarRegistrosCollection } from 'src/functions/registros_db';
+import { SpinnerCustom } from 'src/utils/spinner';
+import { useCounter } from 'src/functions/Counter';
+import { useAuthContext } from 'src/auth/useAuthContext';
 
 
 const BotonMasMenos=styled(Button)(({theme})=>({
@@ -29,7 +35,67 @@ RegistroCard.propTypes = {
 };
 
 export default function RegistroCard({ user, href }) {
-  const { title, icono, color, cover, role, follower, totalPosts, avatarUrl, following = 5 } = user;
+  const {user:userContext} = useAuthContext();
+  const { id, description, color, title,icono, follower = 5 } = user;
+  // today total counts 
+  // const [count, setCount] = React.useState(0);
+  // today record  
+  const [todayRecord,setTodayRecord]=React.useState({});
+  // state cargando 
+  const [cargando,setCargando]=React.useState(false);
+  // usar la funcion useCounter 
+  const [count, increment, decrement, setCount] = useCounter();
+ 
+
+  // Guardar nueva cantidad en la collection de hoy 
+
+const guardarCantidadCollection=async(count)=>{
+try {
+  console.log(userContext.profile)
+  if(userContext){
+  const response = await EditarRegistrosCollection(id,todayRecord.id,count,userContext.profile );
+  console.log(response);
+  setCargando(false);
+}
+} catch (error) {
+  console.log(error);
+}
+}
+
+
+// useEffect para count 
+useEffect(() => {
+setCargando(true);
+try {
+  const response =  guardarCantidadCollection(count);
+  console.log(response);
+} catch (error) {
+  console.log(error);
+  setCargando(false);
+}
+
+}, [count])
+
+
+  useEffect(() => {
+    const obtenerRegistroDeHoy=async()=>{
+      try {
+       const respuesta = await ObtenerRegistrosCollectionToday(new Date(),id);
+       console.log(respuesta);
+       setTodayRecord(respuesta);
+       console.log(respuesta.cantidad);
+       setCount(respuesta.cantidad);
+       setCargando(false);
+      } catch (error) {
+        console.log(error);
+        setCargando(false);
+      }
+    }
+    setCargando(true);
+    obtenerRegistroDeHoy();
+
+  },[user]);
+
   return (
     <Paper elevation={10}>
       <Card sx={{ textAlign: 'center' }}>
@@ -57,16 +123,19 @@ export default function RegistroCard({ user, href }) {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" sx={{ p: 3 }}>
-          <BotonMasMenos onClick={() => alert("Menos")} >
+          <BotonMasMenos disabled={cargando?true:false} onClick={() => decrement()} >
             <div>
               <Typography variant="caption" component="div" sx={{ color: 'text.disabled' }}>
                 ➖
               </Typography>
-              <Typography variant="subtitle1">{fShortenNumber(follower)}</Typography>
             </div>
           </BotonMasMenos>
-          <Typography style={{margin:"auto"}} variant="subtitle1">{fShortenNumber(6)}</Typography>
-          <BotonMasMenos onClick={() => alert("mas")}>
+          {cargando?
+          <SpinnerCustom/>
+          :
+          <Typography style={{margin:"auto"}} variant="subtitle1">{fNumber(count)}</Typography>
+          }
+          <BotonMasMenos disabled={cargando?true:false} onClick={() =>increment()}>
             <div>
               <Typography variant="caption" component="div" sx={{ color: 'text.disabled' }}>
                 ➕

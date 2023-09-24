@@ -72,11 +72,17 @@ export function AuthProvider({ children }) {
       onAuthStateChanged(AUTH, async (user) => {
         if (user) {
           const userRef = doc(DB, 'users', user.uid);
-
           const docSnap = await getDoc(userRef);
-
           const profile = docSnap.data();
-
+          console.log(profile);
+          if(!profile) {
+            // agregar datos a firebase 
+            await setDoc(userRef, {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName,
+            });
+          }
           dispatch({
             type: 'INITIAL',
             payload: {
@@ -84,8 +90,9 @@ export function AuthProvider({ children }) {
               user: {
                 ...user,
                 ...profile,
-                role: 'admin',
-              },
+                role: 'client',
+                profile: profile
+              } 
             },
           });
         } else {

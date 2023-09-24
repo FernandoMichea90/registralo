@@ -68,7 +68,7 @@ ProductTableRow.propTypes = {
           <TableCell padding="checkbox">
             <Checkbox checked={selected} onClick={onSelectRow} />
           </TableCell>
-         <TableCell align="center">{row?.fecha_codigo}</TableCell>
+         <TableCell align="center">{row?.fecha_ddmmm}</TableCell>
           <TableCell align="center">
             {row?.cantidad}
           </TableCell>     
