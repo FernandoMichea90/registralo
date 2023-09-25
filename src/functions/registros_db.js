@@ -36,7 +36,7 @@ export const BorrarRegistros=async(id)=>{
     const response=await deleteDoc(docRef);
     return response;
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error delete document: ", e);
     return null;
   }
 }

@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Stack, Button, Tooltip, IconButton, DialogActions, Grid, Card } from '@mui/material';
+import { Box, Stack, Button, Tooltip, IconButton, DialogActions, Grid, Card, Switch } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/iconify';
 import FormProvider, { RHFTextField, RHFSwitch } from '../../../components/hook-form';
-import { CrearRegistros, EditarRegistros } from '../../../functions/registros_db';
+import { CrearRegistros, EditarRegistros,BorrarRegistros } from '../../../functions/registros_db';
 import { ColorSinglePicker } from '../../../components/color-utils';
 import RegistroIcono from './RegistroIcono';
 import { useAuthContext } from 'src/auth/useAuthContext';
@@ -29,8 +29,12 @@ RegistroForm.propTypes = {
 
 export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, registro }) {
   const hasEventData = !!registro;
-  const {user} =useAuthContext();
-
+  // pedir datos dell usuario
+  const { user } = useAuthContext();
+  //state de "seguir creando" 
+  const [seguirCreando, setSeguirCreando] = useState(false)
+  // abrir el modal borrar 
+  const [openModal, setOpenModal] = useState(false);
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
     description: Yup.string().max(5000).required('La descripcion es requerida'),
@@ -64,9 +68,9 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
       if (registro) {
         await EditarRegistros(registro.id, newEvent);
       } else {
-        console.log(newEvent);
         await CrearRegistros(newEvent);
       }
+
       onCancel();
       reset();
     } catch (error) {
@@ -76,6 +80,7 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
 
   const Cancelar = () => {
     reset();
+    setSelectedEmoji(null);
   };
 
   const onEmojiClick = (emojiObject, event) => {
@@ -89,7 +94,14 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
     setShowPicker(true);
   };
 
-
+  // cambiar seguir creando 
+  const handleSeguirCreando = (event) => {
+    setSeguirCreando(event.target.checked);
+  }
+ // Borrar Registor 
+ const borrarRegistro=() =>{
+   // abrir un modal  de mui 
+ }
   useEffect(() => {
     if (registro) {
       setValue('title', registro.title);
@@ -131,18 +143,29 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
             </Stack>
             <DialogActions>
               {hasEventData && (
-                <Tooltip title="Delete Event">
-                  <IconButton onClick={onDeleteEvent}>
-                    <Iconify icon="eva:trash-2-outline" />
-                  </IconButton>
-                </Tooltip>
+                <Box sx={{ flexGrow: 1 }}>
+                  <Tooltip title="Delete Event">
+                    <IconButton onClick={onDeleteEvent} color='error'>
+                      <Iconify icon="eva:trash-2-outline" />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
               )}
-              <Box sx={{ flexGrow: 1 }}>
-                <RHFSwitch name="continuar" label="Seguir Creando" />
-              </Box>
-              <Button variant="outlined" color="inherit" onClick={Cancelar}>
-                Cancelar
-              </Button>
+              {!hasEventData &&
+                <>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Switch
+                      checked={seguirCreando}
+                      onChange={handleSeguirCreando}
+
+                    ></Switch>
+                    <span>Seguir Creando</span>
+                  </Box>
+                  <Button variant="outlined" color="inherit" onClick={Cancelar}>
+                    Cancelar
+                  </Button>
+                </>
+              }
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {registro ? 'Editar' : 'Crear'}
               </LoadingButton>
