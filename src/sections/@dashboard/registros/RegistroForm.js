@@ -148,15 +148,6 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
               <RHFTextField name="description" label="Descripcion" multiline rows={3} />
             </Stack>
             <DialogActions>
-              {hasEventData && (
-                <Box sx={{ flexGrow: 1 }}>
-                  <Tooltip title="Delete Event">
-                    <IconButton onClick={onDeleteEvent} color='error'>
-                      <Iconify icon="eva:trash-2-outline" />
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-              )}
               {!hasEventData &&
                 <>
                   <Box sx={{ flexGrow: 1 }}>

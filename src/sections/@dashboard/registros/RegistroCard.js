@@ -109,9 +109,23 @@ try {
           }}>
             {
               icono &&
-              <Avatar style={{ margin: 'auto', position: 'absolute', top: '12px' }}>
-                <Emoji unified={icono} size={22} />
-              </Avatar>
+              <>
+                <div
+                  style={{
+                    margin: 'auto',
+                    width: '90px',
+                    height: '90px',
+                    position: 'absolute',
+                    top: '-8px',
+                    left: '-20px',
+                    background:'#ffffff',
+                    borderRadius: '50%',
+                  }}
+                ></div>
+                <Avatar style={{ margin: 'auto', position: 'absolute', top: '12px',left:"5px" }}>
+                  <Emoji unified={icono} size={25} />
+                </Avatar>
+              </>
             }
 
             <Typography variant="subtitle1" sx={{ mt: 2, mb: 2, color: grey[50] }}>
