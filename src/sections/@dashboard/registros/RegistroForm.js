@@ -11,6 +11,9 @@ import { CrearRegistros, EditarRegistros,BorrarRegistros } from '../../../functi
 import { ColorSinglePicker } from '../../../components/color-utils';
 import RegistroIcono from './RegistroIcono';
 import { useAuthContext } from 'src/auth/useAuthContext';
+// import Router de next 
+import { useRouter } from 'next/router';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 
 const getInitialValues = (registro) => ({
   title: registro?.title || '',
@@ -35,6 +38,8 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
   const [seguirCreando, setSeguirCreando] = useState(false)
   // abrir el modal borrar 
   const [openModal, setOpenModal] = useState(false);
+  // inicializar router. Obtener push 
+  const {push} = useRouter();
   const EventSchema = Yup.object().shape({
     title: Yup.string().max(255).required('Title is required'),
     description: Yup.string().max(5000).required('La descripcion es requerida'),
@@ -70,9 +75,10 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
       } else {
         await CrearRegistros(newEvent);
       }
-
-      onCancel();
-      reset();
+      Cancelar();
+      if (!seguirCreando) {
+        push(PATH_DASHBOARD.registros.list);
+      }
     } catch (error) {
       console.error(error);
     }
