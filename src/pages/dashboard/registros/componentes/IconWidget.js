@@ -1,13 +1,10 @@
-  import PropTypes from 'prop-types';
   // @mui
-  import { alpha, useTheme } from '@mui/material/styles';
+  import {  useTheme } from '@mui/material/styles';
   import { Card, Typography, Stack, Button, Box } from '@mui/material';
   // utils
-  import { bgGradient } from '../../../../utils/cssStyles';
   import { fShortenNumber } from '../../../../utils/formatNumber';
   // components
   import Iconify from '../../../../components/iconify';
-  import { use } from 'i18next';
   import { useEffect } from 'react';
   import { LoadingButton } from '@mui/lab';
   import { Emoji } from 'emoji-picker-react';
@@ -28,7 +25,6 @@
   //   }));
 
   export default function IconWidget({ loadingCount, title, total, increment, decrement, cambioHoy, setCambioHoy, icon, sx, Loading, ...other }) {
-    console.log(title);
     const theme = useTheme();
     // loadingCount= "decrement";
     // Loading=true;
