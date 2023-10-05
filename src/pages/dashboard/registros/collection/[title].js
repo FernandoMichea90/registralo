@@ -40,7 +40,7 @@ import {
   BlogPostCommentForm,
 } from '../../../../sections/@dashboard/blog';
 import { AnalyticsWidgetSummary } from '../../../../sections/@dashboard/general/analytics';
-import IconWidget from '../componentes/Card';
+// import IconWidget from '../componentes/Card';
 import { RegistroForm } from '../../../../sections/@dashboard/registros';
 import { set } from 'lodash';
 import { EcommerceYearlySales } from "../../../../sections/@dashboard/general/e-commerce";
@@ -454,7 +454,7 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              <IconWidget loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} />
+              {/* <IconWidget loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} /> */}
             </Grid>
             <Grid item xs={12} sm={6} md={9}>
               <EcommerceYearlySales
