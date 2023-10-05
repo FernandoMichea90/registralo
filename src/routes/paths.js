@@ -6,7 +6,7 @@ function path(root, sublink) {
 }
 
 const ROOTS_AUTH = `${process.env.REACT_APP_BASE_PATH}/auth`;
-const ROOTS_DASHBOARD = `${process.env.REACT_APP_BASE_PATH}/dashboard`;
+const ROOTS_DASHBOARD = `/dashboard`;
 
 // ----------------------------------------------------------------------
 
