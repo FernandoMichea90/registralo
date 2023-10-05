@@ -16,7 +16,6 @@ IconWidget.propTypes = {
   sx: PropTypes.object,
   icon: PropTypes.string,
   color: PropTypes.string,
-  title: PropTypes.object,
   total: PropTypes.number,
 };
 
@@ -34,7 +33,8 @@ export const DivPunto= styled('div')(({ theme,color }) => ({
     zIndex: 1,
   }));
 
-export default function IconWidget({ loadingCount, title, total, increment, decrement, cambioHoy, setCambioHoy, icon, color = 'primary', sx, Loading, ...other }) {
+export default function IconWidget({ loadingCount, title, total, increment, decrement, cambioHoy, setCambioHoy, icon, sx, Loading, ...other }) {
+  console.log(title);
   const theme = useTheme();
   // loadingCount= "decrement";
   // Loading=true;
