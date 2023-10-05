@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "",
+    "baseUrl": "/registro_personal",
   },
   "include": [
     "src/**/*"
