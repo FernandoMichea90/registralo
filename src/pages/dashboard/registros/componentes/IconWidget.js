@@ -122,10 +122,6 @@ export default function IconWidget({ loadingCount, title, total, increment, decr
                 },
               }}
             />
-
-
-
-
           </Stack>
         </Box>
       </Card>
