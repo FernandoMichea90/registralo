@@ -12,12 +12,6 @@ import { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Emoji } from 'emoji-picker-react';
 // ----------------------------------------------------------------------
-IconWidget.propTypes = {
-  sx: PropTypes.object,
-  icon: PropTypes.string,
-  color: PropTypes.string,
-  total: PropTypes.number,
-};
 
 import { styled } from '@mui/material/styles';
 
