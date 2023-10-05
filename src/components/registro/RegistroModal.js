@@ -13,9 +13,9 @@ const RegistroModal = ({ open = true,registro ,cancelar }) => {
                 <Emoji unified={registro.icono} size={22} emojiStyle={EmojiStyle.APPLE}></Emoji><span style={{margin:"0 5px"}}>{registro.titulo}</span>
             </p>
             <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
-                <Button variant="outlined" color="inherit" onClick={Cancelar}>
+                {/* <Button variant="outlined" color="inherit" onClick={Cancelar}>
                     Cancelar
-                </Button>
+                </Button> */}
                 <LoadingButton></LoadingButton>
             </Box>
         </Modal>
