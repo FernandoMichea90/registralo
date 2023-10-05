@@ -17,7 +17,7 @@ export default function DirectionOptions() {
       <StyledWrap>
         {OPTIONS.map((direction) => (
           <StyledCard key={direction} selected={themeDirection === direction}>
-            <SvgColor src={`/assets/icons/setting/${direction === 'rtl' ? 'ic_align_right' : 'ic_align_left'}.svg`} />
+            <SvgColor  src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/setting/${direction === 'rtl' ? 'ic_align_right' : 'ic_align_left'}.svg`} />
 
             <MaskControl value={direction} />
           </StyledCard>

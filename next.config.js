@@ -10,12 +10,14 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withTM({
   distDir:".next",
-  basePath: '',
+  basePath: '/registro_personal',
   swcMinify: false,
   trailingSlash: true,
   env: {
     // HOST
      HOST_API_KEY: 'https://api-dev-minimal-v4.vercel.app',
+    //BASEPATH
+    REACT_APP_BASE_PATH: '/registro_personal', 
     // MAPBOX
     MAPBOX_API: '',
     // FIREBASE

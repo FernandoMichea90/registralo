@@ -181,7 +181,7 @@ function CardItem({ card }) {
           <Image
             disabledEffect
             alt="credit-card"
-            src={`/assets/icons/payments/ic_${cardType === 'mastercard' ? 'mastercard' : 'visa'}.svg`}
+             src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/payments/ic_${cardType === 'mastercard' ? 'mastercard' : 'visa'}.svg`}
             sx={{ height: 24 }}
           />
 

@@ -83,7 +83,7 @@ function Content() {
           <Image
             disabledEffect
             alt="screen"
-            src={`/assets/images/home/presets_screen_${color}.png`}
+             src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/presets_screen_${color}.png`}
           />
         </m.div>
       </Box>
@@ -94,7 +94,7 @@ function Content() {
             <Image
               disabledEffect
               alt="sidebar"
-              src={`/assets/images/home/presets_block_${color}.png`}
+               src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/presets_block_${color}.png`}
             />
           </m.div>
         </m.div>
@@ -106,7 +106,7 @@ function Content() {
             <Image
               disabledEffect
               alt="sidebar"
-              src={`/assets/images/home/presets_chart_${color}.png`}
+               src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/presets_chart_${color}.png`}
             />
           </m.div>
         </m.div>
@@ -118,7 +118,7 @@ function Content() {
             <Image
               disabledEffect
               alt="sidebar"
-              src={`/assets/images/home/presets_sidebar_${color}.png`}
+               src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/presets_sidebar_${color}.png`}
             />
           </m.div>
         </m.div>

@@ -44,7 +44,7 @@ export default function HomeDarkMode() {
 
             <IconButton color={themeMode === 'dark' ? 'warning' : 'default'} onClick={onToggleMode}>
               <SvgColor
-                src={`/assets/icons/setting/ic_${themeMode === 'light' ? 'moon' : 'sun'}.svg`}
+                 src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/setting/ic_${themeMode === 'light' ? 'moon' : 'sun'}.svg`}
               />
             </IconButton>
           </Stack>

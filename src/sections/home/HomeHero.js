@@ -230,7 +230,7 @@ function Description() {
         <Stack spacing={2} direction="row" justifyContent="center">
           {['sketch', 'figma', 'js', 'ts', 'nextjs'].map((platform) => (
             <m.div key={platform} variants={varFade().in}>
-              <SvgColor src={`/assets/icons/platforms/ic_${platform}.svg`} />
+              <SvgColor  src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/platforms/ic_${platform}.svg`} />
             </m.div>
           ))}
         </Stack>
@@ -269,14 +269,14 @@ function Content() {
           component={m.img}
           animate={{ y: ['0%', '100%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
+          src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
           sx={{ position: 'absolute' }}
         />
         <Box
           component={m.img}
           animate={{ y: ['-100%', '0%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
+           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
           sx={{ position: 'absolute' }}
         />
       </Stack>
@@ -286,14 +286,14 @@ function Content() {
           component={m.img}
           animate={{ y: ['100%', '0%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
           sx={{ position: 'absolute' }}
         />
         <Box
           component={m.img}
           animate={{ y: ['0%', '-100%'] }}
           transition={transition}
-          src={`/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
+           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
           sx={{ position: 'absolute' }}
         />
       </Stack>

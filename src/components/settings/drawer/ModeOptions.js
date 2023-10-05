@@ -17,7 +17,7 @@ export default function ModeOptions() {
       <StyledWrap>
         {OPTIONS.map((mode) => (
           <StyledCard key={mode} selected={themeMode === mode}>
-            <SvgColor src={`/assets/icons/setting/${mode === 'light' ? 'ic_sun' : 'ic_moon'}.svg`} />
+            <SvgColor  src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/setting/${mode === 'light' ? 'ic_sun' : 'ic_moon'}.svg`} />
 
             <MaskControl value={mode} />
           </StyledCard>

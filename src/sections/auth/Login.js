@@ -34,7 +34,7 @@ export default function Login() {
           <Box
             component="img"
             alt={method}
-            src={`/assets/icons/auth/ic_${method}.png`}
+             src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/auth/ic_${method}.png`}
             sx={{ width: 32, height: 32, position: 'absolute', right: 0 }}
           />
         </Tooltip>

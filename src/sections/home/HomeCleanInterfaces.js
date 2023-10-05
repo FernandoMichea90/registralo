@@ -86,7 +86,7 @@ function Content() {
           <Image
             disabledEffect
             alt={`clean-${index + 1}`}
-            src={`/assets/images/home/clean_${index + 1}.png`}
+             src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/clean_${index + 1}.png`}
           />
         </Box>
       ))}

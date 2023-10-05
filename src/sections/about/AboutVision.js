@@ -36,7 +36,7 @@ export default function AboutVision() {
             <m.div key={logo} variants={varFade().in}>
               <Image
                 alt={logo}
-                src={`/assets/icons/brands/ic_brand_${logo}.svg`}
+                 src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/brands/ic_brand_${logo}.svg`}
                 sx={{
                   m: { xs: 1.5, md: 2.5 },
                   height: { xs: 24, md: 40 },

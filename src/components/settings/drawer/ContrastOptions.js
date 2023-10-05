@@ -17,7 +17,7 @@ export default function ContrastOptions() {
       <StyledWrap>
         {OPTIONS.map((contrast) => (
           <StyledCard key={contrast} selected={themeContrast === contrast}>
-            <SvgColor src={`/assets/icons/setting/${contrast === 'bold' ? 'ic_contrast_bold' : 'ic_contrast'}.svg`} />
+            <SvgColor  src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/setting/${contrast === 'bold' ? 'ic_contrast_bold' : 'ic_contrast'}.svg`} />
 
             <MaskControl value={contrast} />
           </StyledCard>
