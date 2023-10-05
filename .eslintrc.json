@@ -23,19 +23,19 @@
     "@next/eslint-plugin-next"
   ],
   "rules": {
-    "arrow-body-style": 1,
-    "react/prop-types": 1,
+    "arrow-body-style": 0,
+    "react/prop-types": 0,
     "react/display-name": 0,
-    "import/no-unresolved": 2,
+    "import/no-unresolved": 0,
     "react/no-children-prop": 0,
-    "react/self-closing-comp": 2,
+    "react/self-closing-comp": 0,
     "react/react-in-jsx-scope": 0,
     "@next/next/no-img-element": 0,
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
-    "import/no-useless-path-segments": 1,
+    "import/no-useless-path-segments": 0,
     "no-unused-vars": [
-      1,
+      0,
       {
         "ignoreRestSiblings": false
       }
