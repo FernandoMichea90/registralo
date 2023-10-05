@@ -51,7 +51,7 @@ const StyledGradientText = styled(m.h1)(({ theme }) => ({
     `300deg, ${theme.palette.primary.main} 0%, ${theme.palette.warning.main} 25%, ${theme.palette.primary.main} 50%, ${theme.palette.warning.main} 75%, ${theme.palette.primary.main} 100%`
   ),
   backgroundSize: '400%',
-  fontFamily: "'Barlow', sans-serif",
+  fontFamily: "'Pixelify Sans','Barlow', sans-serif",
   fontSize: `${64 / 16}rem`,
   textAlign: 'center',
   lineHeight: 1,
@@ -147,8 +147,8 @@ function Description() {
     <StyledDescription>
       <m.div variants={varFade().in}>
         <Typography variant="h2" sx={{ textAlign: 'center' }}>
-          Start a <br />
-          new project with
+          Empieza a <br />
+          registrarlo todo en
         </Typography>
       </m.div>
 
@@ -162,7 +162,7 @@ function Description() {
             repeat: Infinity,
           }}
         >
-          Minimal
+          Registralo
         </StyledGradientText>
       </m.div>
 

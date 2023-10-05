@@ -33,6 +33,10 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
           />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+          />
           <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@900&display=swap" rel="stylesheet" />
 
           {/* Emotion */}
