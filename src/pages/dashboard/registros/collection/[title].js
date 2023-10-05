@@ -47,6 +47,7 @@ import { EcommerceYearlySales } from "../../../../sections/@dashboard/general/e-
 import { adaptarDatosParaChart } from '../../../../functions/ChartInterface';
 import { LoadingButton } from '@mui/lab';
 import { fDateDayMonthYear } from 'src/utils/formatTime';
+import IconWidget from 'src/components/registro/IconWidget';
 // ----------------------------------------------------------------------
 
 BlogPostPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
@@ -454,7 +455,7 @@ export default function BlogPostPage() {
         <Container sx={{ my: 10 }}>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={6} md={3}>
-              {/* <IconWidget loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} /> */}
+              <IconWidget loadingCount={loadingCount} Loading={todayChangeLoading} title={titulo} total={count} increment={increment} decrement={decrement} icon={'ant-design:android-filled'} cambioHoy={cambioHoy} setCambioHoy={setCambioHoy} />
             </Grid>
             <Grid item xs={12} sm={6} md={9}>
               <EcommerceYearlySales

@@ -2,9 +2,9 @@
   import {  useTheme } from '@mui/material/styles';
   import { Card, Typography, Stack, Button, Box } from '@mui/material';
   // utils
-  import { fShortenNumber } from '../../../../utils/formatNumber';
+  import { fShortenNumber } from '../../utils/formatNumber';
   // components
-  import Iconify from '../../../../components/iconify';
+  import Iconify from '../iconify';
   import { useEffect } from 'react';
   import { LoadingButton } from '@mui/lab';
   import { Emoji } from 'emoji-picker-react';
