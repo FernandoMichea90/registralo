@@ -67,7 +67,7 @@ export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
 
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <CustomBreadcrumbs
-          heading="Registros"
+          heading="Registro"
           links={[
             {
               name: 'Dashboard',

@@ -124,24 +124,7 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={5}>
-          <Card sx={{ p: 3 }}>
-            <Stack spacing={1} sx={{ px: 3 }}>
-              <span>Seleccione Color</span>
-              <Controller
-                name="color"
-                control={control}
-                render={({ field }) => (
-                  <ColorSinglePicker value={field.value} onChange={field.onChange} colors={colorOptions} />
-                )}
-              />
-              {errors.color && <p>This is required.</p>}
-              <RegistroIcono selectedEmoji={selectedEmoji} onClickIcono={onClickIcono} onEmojiClick={onEmojiClick} showPicker={showPicker} />
-              {errors.icono && <p>This is required.</p>}
-            </Stack>
-          </Card>
-        </Grid>
-        <Grid item xs={7}>
+      <Grid item xs={12} md={7}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3} sx={{ px: 3 }}>
               <RHFTextField name="title" label="Nombre" />
@@ -167,6 +150,23 @@ export default function RegistroForm({ onCancel, onDeleteEvent, colorOptions, re
                 {registro ? 'Editar' : 'Crear'}
               </LoadingButton>
             </DialogActions>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <Card sx={{ p: 3 }}>
+            <Stack spacing={1} sx={{ px: 3 }}>
+              <span>Seleccione Color</span>
+              <Controller
+                name="color"
+                control={control}
+                render={({ field }) => (
+                  <ColorSinglePicker value={field.value} onChange={field.onChange} colors={colorOptions} />
+                )}
+              />
+              {errors.color && <p>This is required.</p>}
+              <RegistroIcono selectedEmoji={selectedEmoji} onClickIcono={onClickIcono} onEmojiClick={onEmojiClick} showPicker={showPicker} />
+              {errors.icono && <p>This is required.</p>}
+            </Stack>
           </Card>
         </Grid>
       </Grid>

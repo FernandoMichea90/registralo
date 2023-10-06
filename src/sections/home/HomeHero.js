@@ -33,6 +33,10 @@ const StyledRoot = styled('div')(({ theme }) => ({
     height: '100vh',
     position: 'fixed',
   },
+  [theme.breakpoints.down('md')]: {
+    overflow: 'hidden',
+  },
+
 }));
 
 const StyledDescription = styled('div')(({ theme }) => ({
