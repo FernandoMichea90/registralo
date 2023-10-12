@@ -17,6 +17,7 @@ import { HEADER } from '../../config';
 import SvgColor from '../../components/svg-color';
 import Iconify from '../../components/iconify';
 import { MotionContainer, varFade } from '../../components/animate';
+import RegistroCardIndex from '../@dashboard/registros/RegistroCardIndex';
 
 // ----------------------------------------------------------------------
 
@@ -128,7 +129,10 @@ export default function HomeHero() {
 
             {isDesktop && (
               <Grid item xs={12} md={6}>
-                <Content />
+                <div style={{height:"100%"}}>
+                   <Content />
+                </div>
+
               </Grid>
             )}
           </Grid>
@@ -258,49 +262,11 @@ function Content() {
   };
 
   return (
-    <Stack
-      direction="row"
-      alignItems="flex-start"
-      sx={{
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        mt: `${HEADER.H_MAIN_DESKTOP}px`,
-      }}
-    >
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative' }}>
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '100%'] }}
-          transition={transition}
-          src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
-          sx={{ position: 'absolute' }}
-        />
-        <Box
-          component={m.img}
-          animate={{ y: ['-100%', '0%'] }}
-          transition={transition}
-           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_1.png`}
-          sx={{ position: 'absolute' }}
-        />
+    <Stack sx={{margin:'auto',height:"100%  "}}>
+      <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative',margin:'auto' }}>
+        <RegistroCardIndex></RegistroCardIndex> 
       </Stack>
 
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 720, position: 'relative', ml: -2 }}>
-        <Box
-          component={m.img}
-          animate={{ y: ['100%', '0%'] }}
-          transition={transition}
-           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
-          sx={{ position: 'absolute' }}
-        />
-        <Box
-          component={m.img}
-          animate={{ y: ['0%', '-100%'] }}
-          transition={transition}
-           src={`${process.env.REACT_APP_BASE_PATH}/assets/images/home/hero_${isLight ? 'light' : 'dark'}_2.png`}
-          sx={{ position: 'absolute' }}
-        />
-      </Stack>
     </Stack>
   );
 }
