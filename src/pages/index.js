@@ -61,33 +61,17 @@ export default function HomePage() {
 
       {progress}
 
-      <HomeHero />
+      <HomeHero  />
 
-      <Box
+      {/* <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
           bgcolor: 'background.default',
         }}
       >
-        <HomeMinimal />
-
-        <HomeHugePackElements />
-
-        <HomeForDesigner />
-
-        <HomeDarkMode />
-
-        <HomeColorPresets />
-
-        <HomeCleanInterfaces />
-
-        <HomePricingPlans />
-
-        <HomeLookingFor />
-
-        <HomeAdvertisement />
-      </Box>
+         <HomeHero />
+      </Box> */}
     </>
   );
 }

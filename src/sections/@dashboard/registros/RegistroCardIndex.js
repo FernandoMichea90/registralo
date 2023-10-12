@@ -21,18 +21,7 @@ const BotonMasMenos=styled(Button)(({theme})=>({
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-const RegistroCardIndex = ({title="prueba",icono="1f4a7",color="#9e9e9e",cargando=false}) => {
+const RegistroCardIndex = ({title="prueba",icono={nombre:"diente",icono:"1f9b7"},color="#9e9e9e",cargando=false}) => {
  const [count,setCount] =React.useState(0);
   // Función para incrementar el contador
 const increment = () => {
@@ -74,13 +63,13 @@ const decrement = () => {
                 }}
               ></div>
               <Avatar style={{ margin: 'auto', position: 'absolute', top: '12px',left:"5px" }}>
-                <Emoji unified={icono} size={25} />
+                <Emoji unified={icono.icono} size={25} />
               </Avatar>
             </>
           }
 
           <Typography variant="subtitle1" sx={{ mt: 2, mb: 2, color: grey[50] }}>
-            {title}
+            {icono.nombre}
           </Typography>
 
         </Card>

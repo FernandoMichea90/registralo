@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 // @mui
 import { styled, alpha, useTheme } from '@mui/material/styles';
-import { Button, Box, Link, Container, Typography, Stack, Grid } from '@mui/material';
+import { Button, Box, Link, Container, Typography, Stack, Grid, RadioGroup, Tooltip, CardActionArea, FormControlLabel, Radio } from '@mui/material';
 // routes
 import { PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION } from '../../routes/paths';
+import { useSettingsContext } from '../../components/settings';
+import { Emoji } from 'emoji-picker-react';
 // hooks
 import useResponsive from '../../hooks/useResponsive';
 // utils
@@ -18,6 +20,101 @@ import SvgColor from '../../components/svg-color';
 import Iconify from '../../components/iconify';
 import { MotionContainer, varFade } from '../../components/animate';
 import RegistroCardIndex from '../@dashboard/registros/RegistroCardIndex';
+
+
+const data_icono=[
+  {icono:"1f9b7",nombre:"Diente"},
+  {icono:"1f4a7",nombre:"Agua"},
+  {icono:"1f6ac",nombre:"Cigarro"},
+  {icono:"2615",nombre:"Cafe"},
+  {icono:"1f48a",nombre:"IbuProfeno"}
+]
+
+
+
+
+function Options({ onChangeColor, colorName }) {
+  const { themeColorPresets, onChangeColorPresets, presetsOption } = useSettingsContext();
+
+  return (
+    <RadioGroup
+      name="themeColorPresets"
+      value={colorName}
+      onChange={
+        (event) => {
+          onChangeColor(event);
+          // onChangeColorPresets(event);
+        }
+      }
+      sx={{ my: 5 }}
+    >
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        sx={{
+          width: 100,
+          height: 88,
+          mx: 'auto',
+          position: 'relative',
+        }}
+      >
+        {presetsOption.map((color, index) => {
+          const { name, value } = color;
+          const isSelected = colorName === name;
+
+
+          return (
+            <Tooltip key={name} title={name}>
+              <CardActionArea
+                sx={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  position: 'absolute',
+                  color: 'common.white',
+                  ...(index === 0 && { bottom: 0 }),
+                  ...(index === 1 && { left: 19 }),
+                  ...(index === 2 && { right: 19 }),
+                  ...(index === 3 && { top: 0, left: 0 }),
+                  ...(index === 4 && { top: 0 }),
+                  ...(index === 5 && { top: 0, right: 0 }),
+                }}
+              >
+                <Box
+                  sx={{
+                    bgcolor: value,
+                    width: 1,
+                    height: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '50%',
+                  }}
+                >
+                  {isSelected && <Iconify icon="eva:color-picker-fill" width={16} />}
+
+                  <FormControlLabel
+                    label=""
+                    value={name}
+                    control={<Radio sx={{ display: 'none' }} />}
+                    sx={{
+                      top: 0,
+                      left: 0,
+                      margin: 0,
+                      width: 1,
+                      height: 1,
+                      position: 'absolute',
+                    }}
+                  />
+                </Box>
+              </CardActionArea>
+            </Tooltip>
+          );
+        })}
+      </Stack>
+    </RadioGroup>
+  );
+}
 
 // ----------------------------------------------------------------------
 
@@ -102,11 +199,49 @@ export default function HomeHero() {
 
   const [hide, setHide] = useState(false);
 
+  const [color, setColor] = useState("#00AB55");
+  const [colorName, setColorName] = useState("default");
+  const [icono, setIcono] = useState({nombre:"Diente",icono:"1f9b7"});
+
+  // onChangeColor 
+  const onChangeColor = (event) => {
+    var color = event.target.value;
+    switch (color) {
+      case "red":
+        setColor("#FF3030");
+        setColorName("red");
+        break;
+      case "purple":
+        setColor("#7635dc");
+        setColorName("purple");
+        break;
+      case "blue":
+        setColor("#2065D1");
+        setColorName("blue");
+        break;
+      case "orange":
+        setColor("#fda92d");
+        setColorName("orange");
+        break;
+      // celeste
+      case "cyan":
+        setColor("#078DEE");
+        setColorName("cyan");
+        break;
+      //default
+      default:
+        setColor("#00AB55");
+        setColorName("default");
+
+    }
+  }
+
+
   useEffect(
     () =>
       scrollYProgress.onChange((scrollHeight) => {
         if (scrollHeight > 0.8) {
-          setHide(true);
+          setHide(false);
         } else {
           setHide(false);
         }
@@ -121,7 +256,7 @@ export default function HomeHero() {
   return (
     <>
       <StyledRoot>
-        <Container component={MotionContainer} sx={{ height: 1 }}>
+        <Container component={MotionContainer}>
           <Grid container spacing={10} sx={{ height: 1 }}>
             <Grid item xs={12} md={6} sx={{ height: 1 }}>
               <Description />
@@ -129,8 +264,8 @@ export default function HomeHero() {
 
             {isDesktop && (
               <Grid item xs={12} md={6}>
-                <div style={{height:"100%"}}>
-                   <Content />
+                <div style={{ height: "100%" }}>
+                  <Content onChangeColor={onChangeColor} color={color} colorName={colorName} icono={icono} setIcono={setIcono} />
                 </div>
 
               </Grid>
@@ -143,7 +278,7 @@ export default function HomeHero() {
         <StyledEllipseBottom />
       </StyledRoot>
 
-      <Box sx={{ height: { md: '100vh' } }} />
+      <Box sx={{ height: { md: '80vh' } }} />
     </>
   );
 }
@@ -175,9 +310,8 @@ function Description() {
       </m.div>
 
       <m.div variants={varFade().in}>
-        <Typography variant="body2" sx={{ textAlign: 'center' }}>
-          The starting point for your next project is based on MUI.Easy customization Helps you build apps faster and
-          better.
+        <Typography variant="body1" sx={{ textAlign: 'center',fontSize:"2rem",color:"#808080" }}>
+          "Si lo puedes registrar, lo puedes controlar"
         </Typography>
       </m.div>
 
@@ -186,72 +320,46 @@ function Description() {
           <Stack alignItems="center" spacing={2}>
             <NextLink href={PATH_DASHBOARD.root} passHref>
               <Button
-                color="inherit"
+                
                 size="large"
-                variant="contained"
+                variant="outlined"
                 startIcon={<Iconify icon="eva:flash-fill" width={24} />}
                 sx={{
-                  bgcolor: 'text.primary',
-                  color: (theme) => (theme.palette.mode === 'light' ? 'common.white' : 'grey.800'),
+                  color: (theme) => (theme.palette.mode === 'light' ? 'common.purple ' : 'grey.800'),
                   '&:hover': {
                     bgcolor: 'text.primary',
                   },
                 }}
               >
-                Live Preview
+                Ver Demo
               </Button>
             </NextLink>
 
-            <Link
-              color="inherit"
-              variant="caption"
-              target="_blank"
-              rel="noopener"
-              href={PATH_FREE_VERSION}
-              sx={{ textDecoration: 'underline', display: 'inline-flex', alignItems: 'center' }}
-            >
-              <Iconify icon="eva:external-link-fill" width={16} sx={{ mr: 0.5 }} />
-              Get Free Version
-            </Link>
+           
           </Stack>
 
           <Button
             color="inherit"
             size="large"
             variant="outlined"
-            startIcon={<Iconify icon="eva:external-link-fill" width={24} />}
+            startIcon={<Iconify icon="devicon:google" width={24} />}
             target="_blank"
             rel="noopener"
             href={PATH_FIGMA_PREVIEW}
-            sx={{ borderColor: 'text.primary' }}
+            sx={{borderColor:'common.purple'}}
           >
-            Design Preview
+            Crear Cuenta
           </Button>
         </Stack>
       </m.div>
-
-      <Stack spacing={3} sx={{ textAlign: 'center', opacity: 0.4 }}>
-        <m.div variants={varFade().in}>
-          <Typography variant="overline">Available For</Typography>
-        </m.div>
-
-        <Stack spacing={2} direction="row" justifyContent="center">
-          {['sketch', 'figma', 'js', 'ts', 'nextjs'].map((platform) => (
-            <m.div key={platform} variants={varFade().in}>
-              <SvgColor  src={`${process.env.REACT_APP_BASE_PATH}/assets/icons/platforms/ic_${platform}.svg`} />
-            </m.div>
-          ))}
-        </Stack>
-      </Stack>
     </StyledDescription>
   );
 }
 
 // ----------------------------------------------------------------------
 
-function Content() {
+function Content({ onChangeColor, color, colorName,icono,setIcono }) {
   const theme = useTheme();
-
   const isLight = theme.palette.mode === 'light';
 
   const transition = {
@@ -262,11 +370,30 @@ function Content() {
   };
 
   return (
-    <Stack sx={{margin:'auto',height:"100%  "}}>
-      <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative',margin:'auto' }}>
-        <RegistroCardIndex></RegistroCardIndex> 
+    <Stack sx={{ margin: 'auto', height: '100%' }}>
+      <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative', margin: 'auto' }}>
+        <Stack spacing={2} direction="row" justifyContent="center" sx={{ marginBottom: "20px" }}>
+          {data_icono.map((platform,key) => (
+            <a key={key} onClick={(event) =>{
+              setIcono(platform);
+            } }>
+              <Stack 
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+              style={{ height: "45px", width: "45px", backgroundColor: "#ffffff3b", borderRadius: "50%",margin:"auto" }}>
+                <Emoji unified={platform.icono} size={25} />
+              </Stack>
+            </a>
+          ))}
+        </Stack>
+        <RegistroCardIndex color={color} icono={icono} />
+        <div>
+          <Options onChangeColor={onChangeColor} colorName={colorName}  />
+        </div>
       </Stack>
-
     </Stack>
   );
 }
+

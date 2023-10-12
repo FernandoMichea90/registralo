@@ -59,10 +59,11 @@ export default function Footer() {
         <Logo sx={{ mb: 1, mx: 'auto' }} />
 
         <Typography variant="caption" component="div">
-          © All rights reserved
-          <br /> made by &nbsp;
-          <Link href="https://minimals.cc/"> minimals.cc </Link>
+          <span style={{fontSize:"20px"}}>@</span> {new Date().getFullYear()} todos los derechos reservados
+          <br /> desarrollado por&nbsp;
+          <Link href="https://fernandomichea90.github.io/fernandomicheav1/">fm.cl</Link>
         </Typography>
+
       </Container>
     </Box>
   );
