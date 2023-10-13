@@ -145,7 +145,7 @@ const StyledDescription = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: theme.spacing(15, 0),
-  height: '100%',
+  height: '100vh',
 }));
 
 const StyledGradientText = styled(m.h1)(({ theme }) => ({
@@ -278,7 +278,7 @@ export default function HomeHero() {
         <StyledEllipseBottom />
       </StyledRoot>
 
-      <Box sx={{ height: { md: '80vh' } }} />
+      <Box sx={{ height: { md: '100vh' } }} />
     </>
   );
 }
@@ -289,7 +289,9 @@ function Description() {
   return (
     <StyledDescription>
       <m.div variants={varFade().in}>
-        <Typography variant="h2" sx={{ textAlign: 'center' }}>
+        <Typography variant="h2" style={{ textAlign: 'center',fontSize:"1.9rem"
+    
+      }}>
           Empieza a <br />
           registrarlo todo en
         </Typography>
@@ -310,7 +312,7 @@ function Description() {
       </m.div>
 
       <m.div variants={varFade().in}>
-        <Typography variant="body1" sx={{ textAlign: 'center',fontSize:"2rem",color:"#808080" }}>
+        <Typography variant="body1" sx={{ textAlign: 'center',fontSize:"1.9rem",color:"#808080" }}>
           "Si lo puedes registrar, lo puedes controlar"
         </Typography>
       </m.div>
@@ -372,9 +374,9 @@ function Content({ onChangeColor, color, colorName,icono,setIcono }) {
   return (
     <Stack sx={{ margin: 'auto', height: '100%' }}>
       <Stack component={m.div} variants={varFade().in} sx={{ width: 344, position: 'relative', margin: 'auto' }}>
-        <Stack spacing={2} direction="row" justifyContent="center" sx={{ marginBottom: "20px" }}>
+        <Stack spacing={2} direction="row" justifyContent="center" sx={{ marginBottom: "20px",zIndex:1,}}>
           {data_icono.map((platform,key) => (
-            <a key={key} onClick={(event) =>{
+            <a key={key} style={{cursor:"pointer" }} onClick={(event) =>{
               setIcono(platform);
             } }>
               <Stack 
@@ -382,7 +384,7 @@ function Content({ onChangeColor, color, colorName,icono,setIcono }) {
               justifyContent="center"
               alignItems="center"
               spacing={2}
-              style={{ height: "45px", width: "45px", backgroundColor: "#ffffff3b", borderRadius: "50%",margin:"auto" }}>
+              sx={{ height: "45px", width: "45px", backgroundColor: "#ffffff3b", borderRadius: "50%",margin:"auto",':hover':{boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)'} }}>
                 <Emoji unified={platform.icono} size={25} />
               </Stack>
             </a>

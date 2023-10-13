@@ -38,7 +38,7 @@ const decrement = () => {
   return (
 
     <Paper elevation={10} >
-    <Card sx={{ textAlign: 'center',margin:"auto" }}>
+    <Card sx={{ textAlign: 'center',margin:"auto",zIndex:1 }}>
    
         <Card style={{
           backgroundColor: color ? color : "#9e9e9e", margin: "auto",
@@ -62,7 +62,7 @@ const decrement = () => {
                   borderRadius: '50%',
                 }}
               ></div>
-              <Avatar style={{ margin: 'auto', position: 'absolute', top: '12px',left:"5px" }}>
+              <Avatar style={{ margin: 'auto', position: 'absolute', top: '12px',left:"5px"}}>
                 <Emoji unified={icono.icono} size={25} />
               </Avatar>
             </>
@@ -84,11 +84,9 @@ const decrement = () => {
             </Typography>
           </div>
         </BotonMasMenos>
-        {cargando?
-        <SpinnerCustom/>
-        :
+       
         <Typography style={{margin:"auto"}} variant="subtitle1">{fNumber(count)}</Typography>
-        }
+        
         <BotonMasMenos disabled={cargando?true:false} onClick={() =>increment()}>
           <div>
             <Typography variant="caption" component="div" sx={{ color: 'text.disabled' }}>
