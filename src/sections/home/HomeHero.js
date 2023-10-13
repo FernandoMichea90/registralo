@@ -196,7 +196,7 @@ const StyledEllipseBottom = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function HomeHero({showMobile = false}) {
-  const isDesktop =  showMobile? useResponsive('sm','xs'):useResponsive('up', 'md');
+  const isDesktop = useResponsive('up', 'md');
 
   const { scrollYProgress } = useScroll();
 
