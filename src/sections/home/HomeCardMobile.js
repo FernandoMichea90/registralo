@@ -129,11 +129,12 @@ const StyledRoot = styled('div')(({ theme }) => ({
     left: 0,
     width: '100%',
     height: '100vh',
-    position: 'fixed',
+    position: 'relative',
   },
   [theme.breakpoints.down('md')]: {
     overflow: 'hidden',
   },
+  padding: "50px 0px 50px 0px"
 
 }));
 
@@ -169,34 +170,13 @@ const StyledGradientText = styled(m.h1)(({ theme }) => ({
   },
 }));
 
-const StyledEllipseTop = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  width: 480,
-  height: 480,
-  top: -80,
-  right: -80,
-  borderRadius: '50%',
-  filter: 'blur(100px)',
-  WebkitFilter: 'blur(100px)',
-  backgroundColor: alpha(theme.palette.primary.darker, 0.12),
-}));
 
-const StyledEllipseBottom = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  height: 400,
-  bottom: -200,
-  left: '10%',
-  right: '10%',
-  borderRadius: '50%',
-  filter: 'blur(100px)',
-  WebkitFilter: 'blur(100px)',
-  backgroundColor: alpha(theme.palette.primary.darker, 0.08),
-}));
+
+
 
 // ----------------------------------------------------------------------
 
-export default function HomeHero({showMobile = false}) {
-  const isDesktop =  showMobile? useResponsive('sm','xs'):useResponsive('up', 'md');
+export default function HomeCardMobile() {
 
   const { scrollYProgress } = useScroll();
 
@@ -260,26 +240,17 @@ export default function HomeHero({showMobile = false}) {
     <>
       <StyledRoot>
         <Container component={MotionContainer}>
-          <Grid container spacing={10} sx={{ height: 1 }}>
+          <Grid container  spacing={10} sx={{ height: 1 }}>
             
-            <Grid item xs={12} md={6} sx={{ height: 1 }}>
-              <Description />
-            </Grid>
-
-            {isDesktop && (
               <Grid item xs={12} md={6}>
                 <div style={{ height: "100%" }}>
                   <Content onChangeColor={onChangeColor} color={color} colorName={colorName} icono={icono} setIcono={setIcono} />
                 </div>
-
               </Grid>
-            )}
+         
           </Grid>
         </Container>
 
-        <StyledEllipseTop />
-
-        <StyledEllipseBottom />
       </StyledRoot>
 
       <Box sx={{ height: { md: '100vh' } }} />

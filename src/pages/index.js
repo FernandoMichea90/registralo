@@ -18,6 +18,7 @@ import {
   HomeAdvertisement,
   HomeCleanInterfaces,
   HomeHugePackElements,
+  HomeCardMobile
 } from '../sections/home';
 
 // ----------------------------------------------------------------------
@@ -63,15 +64,16 @@ export default function HomePage() {
 
       <HomeHero  />
 
-      {/* <Box
+      <Box
         sx={{
           overflow: 'hidden',
           position: 'relative',
           bgcolor: 'background.default',
         }}
       >
-         <HomeHero />
-      </Box> */}
+         {/* <HomeHero showMobile={true} /> */}
+         <HomeCardMobile />
+      </Box>
     </>
   );
 }
