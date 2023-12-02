@@ -20,6 +20,7 @@ import {
   HomeHugePackElements,
   HomeCardMobile
 } from '../sections/home';
+import useResponsive from 'src/hooks/useResponsive';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,8 @@ export default function HomePage() {
   const theme = useTheme();
 
   const { scrollYProgress } = useScroll();
+
+  const isDesktop= useResponsive('up','md');
 
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -71,8 +74,9 @@ export default function HomePage() {
           bgcolor: 'background.default',
         }}
       >
+      
          {/* <HomeHero showMobile={true} /> */}
-         <HomeCardMobile />
+         {!isDesktop && <HomeCardMobile />}
       </Box>
     </>
   );
