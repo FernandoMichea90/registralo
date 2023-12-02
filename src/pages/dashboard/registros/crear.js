@@ -87,9 +87,9 @@ export default function RegistrosCrear({registro, COLOR_OPTIONS}) {
           //   moreLink={['https://fullcalendar.io/docs/react']}
           action={
             <>
-            {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={abrirVentanaModal}>
-              Crear Registros
-            </Button> */}
+              {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={abrirVentanaModal}>
+                Crear Registros
+              </Button> */}
             </>
           }
         />

@@ -59,6 +59,16 @@ obtenerResponse();
             { name: 'Registros', href: PATH_DASHBOARD.registros },
             { name: 'Cards' },
           ]}
+
+          action={
+            <>
+            <Button 
+              variant='contained'>
+               Fecha
+              </Button>
+
+            </>
+          }
         />
 
         <Box
