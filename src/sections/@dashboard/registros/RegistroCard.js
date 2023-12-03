@@ -32,9 +32,10 @@ const BotonMasMenos=styled(Button)(({theme})=>({
 
 RegistroCard.propTypes = {
   user: PropTypes.object,
+  fecha:PropTypes.instanceOf(Date)
 };
 
-export default function RegistroCard({ user, href }) {
+export default function RegistroCard({ user, href,fecha }) {
   const {user:userContext} = useAuthContext();
   const { id, description, color, title,icono, follower = 5 } = user;
   // today total counts 
@@ -80,7 +81,7 @@ try {
   useEffect(() => {
     const obtenerRegistroDeHoy=async()=>{
       try {
-       const respuesta = await ObtenerRegistrosCollectionToday(new Date(),id);
+       const respuesta = await ObtenerRegistrosCollectionToday(fecha,id);
        console.log(respuesta);
        setTodayRecord(respuesta);
        console.log(respuesta.cantidad);
@@ -94,7 +95,7 @@ try {
     setCargando(true);
     obtenerRegistroDeHoy();
 
-  },[user]);
+  },[user,fecha]);
 
   return (
     <Paper elevation={10}>

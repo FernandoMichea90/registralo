@@ -19,6 +19,8 @@ import { paramCase } from 'change-case';
 import RegistroCard from '../../../sections/@dashboard/registros/RegistroCard';
 import Link from 'next/link';
 import { useAuthContext } from 'src/auth/useAuthContext';
+import PickerDate from 'src/sections/_examples/mui/pickers/PickerDate';
+import DatePickerDesktopMobile from 'src/pages/components/main/DatePickerDesktopMobile';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ UserCardsPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default function UserCardsPage() {
   const { themeStretch } = useSettingsContext();
+  const [fecha,setFecha]=useState(new Date());
   // obtener el usuario 
   const {user} =useAuthContext();
   const [listasRegistros, setListasRegistros] = useState([])
@@ -60,17 +63,8 @@ obtenerResponse();
             { name: 'Cards' },
           ]}
 
-          action={
-            <>
-            <Button 
-              variant='contained'>
-               Fecha
-              </Button>
-
-            </>
-          }
         />
-
+        <DatePickerDesktopMobile fecha={fecha} setFecha={setFecha}></DatePickerDesktopMobile>
         <Box
           gap={3}
           display="grid"
@@ -81,7 +75,7 @@ obtenerResponse();
           }}
         >
           {listasRegistros.map((user,key) => (
-            <RegistroCard key={user.id} user={user} href={PATH_DASHBOARD.registros.view(user.id,user.title)} />
+            <RegistroCard  key={user.id} user={user} fecha={fecha} href={PATH_DASHBOARD.registros.view(user.id,user.title)} />
           ))}
         </Box>
       </Container>
