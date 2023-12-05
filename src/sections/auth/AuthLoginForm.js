@@ -29,7 +29,7 @@ export default function AuthLoginForm() {
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
+    email: 'demo@registralo.cl',
     password: 'demo1234',
   };
 
@@ -86,7 +86,7 @@ export default function AuthLoginForm() {
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
         <NextLink href={PATH_AUTH.resetPassword} passHref>
           <Link variant="body2" color="inherit" underline="always">
-            Forgot password?
+            ¿Olvidaste tu Contraseña?
           </Link>
         </NextLink>
       </Stack>
@@ -107,7 +107,7 @@ export default function AuthLoginForm() {
           },
         }}
       >
-        Login
+        Ingresar
       </LoadingButton>
     </FormProvider>
   );

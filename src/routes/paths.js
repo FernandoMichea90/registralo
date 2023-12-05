@@ -6,6 +6,8 @@ function path(root, sublink) {
 }
 
 const ROOTS_AUTH =`${process.env.REACT_APP_BASE_PATH}/auth`;
+const ROOTS_AUTH_SECONDARY =`/auth`;
+
 const ROOTS_DASHBOARD = `/dashboard`;
 
 // ----------------------------------------------------------------------
@@ -17,12 +19,12 @@ export const PATH_AUTH = {
   loginUnprotected: path(ROOTS_AUTH, '/login-unprotected'),
   registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
   verify: path(ROOTS_AUTH, '/verify'),
-  resetPassword: path(ROOTS_AUTH, '/reset-password'),
-  newPassword: path(ROOTS_AUTH, '/new-password'),
+  resetPassword: path(ROOTS_AUTH_SECONDARY, '/reset-password'),
+  newPassword: path(ROOTS_AUTH_SECONDARY, '/new-password'),
 };
 
 export const PATH_PAGE = {
-  root: '/',
+  root: `${process.env.REACT_APP_BASE_PATH}/`,
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',

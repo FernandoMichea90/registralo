@@ -18,6 +18,7 @@ import Label from '../../components/label';
 import NavMobile from './nav/mobile';
 import navConfig from './nav/config';
 import NavDesktop from './nav/desktop';
+import { Path } from '@react-pdf/renderer';
 
 // ----------------------------------------------------------------------
 
@@ -50,10 +51,12 @@ export default function Header() {
         }}
       >
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Logo />
+        <a href={PATH_PAGE.root} style={{fontSize:"40px",textDecoration:"unset"}}>
+              📝
+          </a>
 
           <Link href={PATH_PAGE.root} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
-            <Label color="info"> v4.0.0 </Label>
+            <Label color="info"> beta0.0.1 </Label>
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />

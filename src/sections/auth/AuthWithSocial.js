@@ -62,14 +62,6 @@ export default function AuthWithSocial() {
         <IconButton onClick={handleGoogleLogin}>
           <Iconify icon="eva:google-fill" color="#DF3E30" />
         </IconButton>
-
-        <IconButton color="inherit" onClick={handleGithubLogin}>
-          <Iconify icon="eva:github-fill" />
-        </IconButton>
-
-        <IconButton onClick={handleTwitterLogin}>
-          <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-        </IconButton>
       </Stack>
     </div>
   );

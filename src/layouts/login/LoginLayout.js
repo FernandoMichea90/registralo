@@ -29,14 +29,14 @@ export default function LoginLayout({ children, illustration, title }) {
 
       <StyledSection>
         <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
-          {title || 'Hi, Welcome back'}
+          {title || 'Hola, Bienvenido a registralo'}
         </Typography>
 
         <Image
           disabledEffect
           visibleByDefault
           alt="auth"
-          src={illustration || '/assets/illustrations/illustration_dashboard.png'}
+          src={illustration || `${process.env.REACT_APP_BASE_PATH}/assets/illustrations/illustration_dashboard.png`}
           sx={{ maxWidth: 720 }}
         />
 

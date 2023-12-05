@@ -20,14 +20,14 @@ export default function Login() {
   return (
     <LoginLayout>
       <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-        <Typography variant="h4">Sign in to Minimal</Typography>
+        <Typography variant="h4">Iniciar sesion</Typography>
 
         <Stack direction="row" spacing={0.5}>
-          <Typography variant="body2">New user?</Typography>
+          <Typography variant="body2">'¿Deseas crear una cuenta?</Typography>
 
-          <NextLink href={PATH_AUTH.register} passHref>
-            <Link variant="subtitle2">Create an account</Link>
-          </NextLink>
+          <a style={{textDecoration:"none"}} href={PATH_AUTH.register} >
+            <Link variant="subtitle2">Crear cuenta</Link>
+          </a>
         </Stack>
 
         <Tooltip title={method} placement="left">
@@ -41,7 +41,7 @@ export default function Login() {
       </Stack>
 
       <Alert severity="info" sx={{ mb: 3 }}>
-        Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+        Usar Email : <strong>demo@registralo.cl</strong> / Contraseña :<strong> demo1234</strong>
       </Alert>
 
       <AuthLoginForm />

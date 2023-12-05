@@ -6,7 +6,7 @@ import NextLink from 'next/link';
 import { styled, alpha, useTheme } from '@mui/material/styles';
 import { Button, Box, Link, Container, Typography, Stack, Grid, RadioGroup, Tooltip, CardActionArea, FormControlLabel, Radio } from '@mui/material';
 // routes
-import { PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION } from '../../routes/paths';
+import { PATH_AUTH, PATH_DASHBOARD, PATH_FIGMA_PREVIEW, PATH_FREE_VERSION } from '../../routes/paths';
 import { useSettingsContext } from '../../components/settings';
 import { Emoji } from 'emoji-picker-react';
 // hooks
@@ -329,12 +329,12 @@ function Description() {
               <Button
 
                 size="large"
-                variant="outlined"
+                variant="contained"
                 startIcon={<Iconify icon="eva:flash-fill" width={24} />}
                 sx={{
-                  color: (theme) => (theme.palette.mode === 'light' ? 'common.purple ' : 'grey.800'),
+                  color: (theme) => (theme.palette.mode === 'light' ? 'common.purple ' : 'white.800'),
                   '&:hover': {
-                    bgcolor: 'text.primary',
+                    color:(theme) => (theme.palette.mode === 'light' ? 'white.800 ' : '#000000')
                   },
                 }}
               >
@@ -350,10 +350,9 @@ function Description() {
             size="large"
             variant="outlined"
             startIcon={<Iconify icon="devicon:google" width={24} />}
-            target="_blank"
             rel="noopener"
-            href={PATH_FIGMA_PREVIEW}
-            sx={{ borderColor: 'common.purple' }}
+            href={PATH_AUTH.login}
+           
           >
             Crear Cuenta
           </Button>
