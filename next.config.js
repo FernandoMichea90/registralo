@@ -17,7 +17,7 @@ module.exports = withTM({
     // HOST
      HOST_API_KEY: 'https://api-dev-minimal-v4.vercel.app',
     //BASEPATH
-    REACT_APP_BASE_PATH: '/registro_personal', 
+    REACT_APP_BASE_PATH: '/registralo', 
     // MAPBOX
     MAPBOX_API: '',
     // FIREBASE
