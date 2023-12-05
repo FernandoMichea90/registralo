@@ -51,9 +51,7 @@ export default function Header() {
         }}
       >
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <a href={PATH_PAGE.root} style={{fontSize:"40px",textDecoration:"unset"}}>
-              📝
-          </a>
+            <Logo></Logo>
 
           <Link href={PATH_PAGE.root} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
             <Label color="info"> beta0.0.1 </Label>
