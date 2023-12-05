@@ -48,11 +48,11 @@ const navConfig = [
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
-  {
-    subheader: 'section',
-    items: [
-    ],
-  },
+    // {
+    //   subheader: 'section',
+    //   items: [
+    //   ],
+    // },
 
 ];
 

@@ -51,16 +51,16 @@ obtenerResponse();
   return (
     <>
       <Head>
-        <title> Registros: Cards | Minimal UI</title>
+        <title> Registros</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
-          heading="Registros Cards"
+          heading="Registros"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Registros', href: PATH_DASHBOARD.registros },
-            { name: 'Cards' },
+           
           ]}
 
         />

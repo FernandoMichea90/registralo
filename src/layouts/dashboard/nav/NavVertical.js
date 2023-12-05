@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 // next
 import { useRouter } from 'next/router';
 // @mui
-import { Box, Stack, Drawer } from '@mui/material';
+import { Box, Stack, Drawer, Link } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // config
@@ -16,6 +16,7 @@ import { NavSectionVertical } from '../../../components/nav-section';
 import navConfig from './config';
 import NavDocs from './NavDocs';
 import NavAccount from './NavAccount';
+import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
@@ -56,8 +57,12 @@ export default function NavVertical({ openNav, onCloseNav }) {
           flexShrink: 0,
         }}
       >
-        <Logo />
-
+        <div>
+          <Logo />
+          <Link rel="noopener" underline="none" sx={{ ml: 1 }}>
+            <Label color="info"> beta0.0.1 </Label>
+          </Link>
+        </div>
         <NavAccount />
       </Stack>
 
@@ -65,7 +70,7 @@ export default function NavVertical({ openNav, onCloseNav }) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <NavDocs />
+      {/* <NavDocs /> */}
     </Scrollbar>
   );
 

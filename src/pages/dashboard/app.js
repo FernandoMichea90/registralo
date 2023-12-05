@@ -50,8 +50,8 @@ export default function GeneralAppPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <AppWelcome
-              title={`Welcome back! Fernando  \n ${user?.displayName}`}
-              description="If you are going tooeueo use a passage of Lorem Ipsum, you need to be sure there isn't anything."
+              title={`Bienvenido!\n ${user?.displayName}`}
+              description="Registralo es una aplicación web diseñada para facilitar el registro y seguimiento de cualquier actividad que desees monitorear."
               img={
                 <SeoIllustration
                   sx={{
@@ -61,11 +61,10 @@ export default function GeneralAppPage() {
                   }}
                 />
               }
-              action={<Button variant="contained">Go Now</Button>}
             />
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <AppFeatured list={_appFeatured} />
           </Grid>
 
@@ -79,9 +78,9 @@ export default function GeneralAppPage() {
                 series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <AppWidgetSummary
               title="Total Installed"
               percent={0.2}
@@ -91,9 +90,9 @@ export default function GeneralAppPage() {
                 series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={4}>
+          {/* <Grid item xs={12} md={4}>
             <AppWidgetSummary
               title="Total Downloads"
               percent={-0.1}
@@ -103,9 +102,9 @@ export default function GeneralAppPage() {
                 series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentDownload
               title="Current Download"
               chart={{
@@ -123,8 +122,8 @@ export default function GeneralAppPage() {
                 ],
               }}
             />
-          </Grid>
-
+          </Grid> */}
+{/* 
           <Grid item xs={12} md={6} lg={8}>
             <AppAreaInstalled
               title="Area Installed"
@@ -149,9 +148,9 @@ export default function GeneralAppPage() {
                 ],
               }}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} lg={8}>
+          {/* <Grid item xs={12} lg={8}>
             <AppNewInvoice
               title="New Invoice"
               tableData={_appInvoices}
@@ -198,7 +197,7 @@ export default function GeneralAppPage() {
                 }}
               />
             </Stack>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </>

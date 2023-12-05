@@ -53,7 +53,7 @@ export default function Header() {
         <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Logo></Logo>
 
-          <Link href={PATH_PAGE.root} target="_blank" rel="noopener" underline="none" sx={{ ml: 1 }}>
+          <Link href={PATH_PAGE.root} rel="noopener" underline="none" sx={{ ml: 1 }}>
             <Label color="info"> beta0.0.1 </Label>
           </Link>
 
@@ -61,7 +61,7 @@ export default function Header() {
 
           {/* {isDesktop && <NavDesktop isOffset={isOffset} data={navConfig} />} */}
 
-          <Button variant="contained" target="_blank" rel="noopener" href={PATH_AUTH.login}>
+          <Button variant="contained" rel="noopener" href={PATH_AUTH.login}>
             Iniciar Sesion
           </Button>
 
