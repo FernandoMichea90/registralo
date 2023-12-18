@@ -139,7 +139,7 @@ export function AuthProvider({ children }) {
   // LOGOUT
   const logout = () => {
     auth0Client?.logout();
-    window.location.href = PATH_AUTH.login;
+    window.location.href = PATH_AUTH.loginTwo;
     dispatch({
       type: 'LOGOUT',
     });
