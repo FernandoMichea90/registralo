@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Typography, Stack } from '@mui/material';
+import { Typography, Stack, Grid } from '@mui/material';
 // components
 import Logo from '../../components/logo';
 import Image from '../../components/image';
 //
 import { StyledRoot, StyledSectionBg, StyledSection, StyledContent } from './styles';
+import { HomeCardMobile, HomeHero } from 'src/sections/home';
+import RegistroDemo from 'src/components/registro/RegistroDemo';
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +19,7 @@ LoginLayout.propTypes = {
 
 export default function LoginLayout({ children, illustration, title }) {
   return (
-    <StyledRoot>
+    <div id='prueba' style={{height:"100vh",width:"100vw"}}>
       <Logo
         sx={{
           zIndex: 9,
@@ -25,27 +27,25 @@ export default function LoginLayout({ children, illustration, title }) {
           mt: { xs: 1.5, md: 5 },
           ml: { xs: 2, md: 5 },
         }}
-      />
+      >
+      </Logo>
+      
+      <Grid container>
 
-      <StyledSection>
-        <Typography variant="h3" sx={{ mb: 10, maxWidth: 480, textAlign: 'center' }}>
-          {title || 'Hola, Bienvenido a registralo'}
-        </Typography>
+        <Grid item xs={12} md={7}>
+          <div style={{}}>
+          {/* <Typography variant="h3" sx={{ mt: 10, maxWidth: 480, textAlign: 'center' }}>
+            {title || 'Hola, Bienvenido a registralo'}
+        </Typography> */}
+        <RegistroDemo/>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={5}>
+          <Stack sx={{ width: 0.7, margin:"20% 20px"}}> {children} </Stack>
+        </Grid>
 
-        <Image
-          disabledEffect
-          visibleByDefault
-          alt="auth"
-          src={illustration || `${process.env.REACT_APP_BASE_PATH}/assets/illustrations/illustration_dashboard.png`}
-          sx={{ maxWidth: 720 }}
-        />
-
-        <StyledSectionBg />
-      </StyledSection>
-
-      <StyledContent>
-        <Stack sx={{ width: 1 }}> {children} </Stack>
-      </StyledContent>
-    </StyledRoot>
+      </Grid>
+    </div>
   );
+
 }

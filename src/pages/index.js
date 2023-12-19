@@ -31,6 +31,8 @@ HomePage.getLayout = (page) => <MainLayout> {page} </MainLayout>;
 export default function HomePage() {
   const theme = useTheme();
 
+  
+
   const { scrollYProgress } = useScroll();
 
   const isDesktop= useResponsive('up','md');
